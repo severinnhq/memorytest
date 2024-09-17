@@ -100,11 +100,16 @@ export default function LandingPage() {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Powerful Features</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { title: "Responsive Design", description: "Fully responsive components that look great on any device." },
-              { title: "Customizable", description: "Easily customize and extend components to fit your needs." },
-              { title: "Accessible", description: "Built with accessibility in mind, following WCAG guidelines." },
-            ].map((feature, index) => (
+            {[{
+              title: "Responsive Design",
+              description: "Fully responsive components that look great on any device."
+            }, {
+              title: "Customizable",
+              description: "Easily customize and extend components to fit your needs."
+            }, {
+              title: "Accessible",
+              description: "Built with accessibility in mind, following WCAG guidelines."
+            }].map((feature, index) => (
               <motion.div
                 key={index}
                 className="bg-white rounded-lg shadow-md p-6"
@@ -139,8 +144,8 @@ export default function LandingPage() {
                   </CardHeader>
                   <CardContent>
                     <p className="text-gray-600 italic">
-                      "PremiumUI has revolutionized our design process. The components are not only beautiful but also
-                      highly functional and easy to implement. It's a game-changer for our team!"
+                      &quot;PremiumUI has revolutionized our design process. The components are not only beautiful but also
+                      highly functional and easy to implement. It&apos;s a game-changer for our team!&quot;
                     </p>
                   </CardContent>
                   <CardFooter>
@@ -167,11 +172,19 @@ export default function LandingPage() {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Choose Your Plan</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { name: "Starter", price: "$49", features: ["100+ Components", "Basic Support", "1 Project"] },
-              { name: "Pro", price: "$99", features: ["200+ Components", "Priority Support", "Unlimited Projects"] },
-              { name: "Enterprise", price: "Custom", features: ["Custom Components", "24/7 Support", "Dedicated Account Manager"] },
-            ].map((plan, index) => (
+            {[{
+              name: "Starter",
+              price: "$49",
+              features: ["100+ Components", "Basic Support", "1 Project"]
+            }, {
+              name: "Pro",
+              price: "$99",
+              features: ["200+ Components", "Priority Support", "Unlimited Projects"]
+            }, {
+              name: "Enterprise",
+              price: "Custom",
+              features: ["Custom Components", "24/7 Support", "Dedicated Account Manager"]
+            }].map((plan, index) => (
               <motion.div
                 key={index}
                 className="bg-white rounded-lg shadow-md overflow-hidden"
