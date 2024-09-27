@@ -4,31 +4,30 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle, XCircle, Square, Circle, Triangle } from 'lucide-react'
+import { CheckCircle, XCircle, Square, Hexagon, Octagon } from 'lucide-react'
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
 import TaskCompletionModal from '@/components/TaskCompletionModal'
 
-interface RotatingShapesSequenceProps {
+interface DimensionalShiftPuzzleProps {
   onComplete: (success: boolean) => void
   onUnlockNext: () => void
 }
 
-const GRID_SIZE = 3
+const GRID_SIZE = 4
 const TOTAL_ROUNDS = 5
 const QUALIFICATION_THRESHOLD = 3
-const SEQUENCE_LENGTH = 3
-const MEMORIZE_TIME = 5 // seconds per pattern
-const SHAPES = [Square, Circle, Triangle]
+const MEMORIZE_TIME = 15 // seconds
+const SHAPES = [Square, Hexagon, Octagon]
 const COLORS = ['text-red-500', 'text-blue-500', 'text-green-500', 'text-yellow-500']
-const ROTATIONS = [0, 90, 180, 270]
+const DIMENSIONS = ['2D', '3D'] as const
 
 type Cell = {
   shape: typeof SHAPES[number]
   color: string
-  rotation: number
+  dimension: typeof DIMENSIONS[number]
 }
 
-type Pattern = Cell[][]
+type Grid = (Cell | null)[][]
 
 function ClockTimer({ timeLeft, isCountingDown }: { timeLeft: number; isCountingDown: boolean }) {
   const formatTime = (seconds: number) => {
@@ -47,13 +46,13 @@ function ClockTimer({ timeLeft, isCountingDown }: { timeLeft: number; isCounting
   )
 }
 
-export default function RotatingShapesSequence({ onComplete, onUnlockNext }: RotatingShapesSequenceProps) {
-  const [sequence, setSequence] = useState<Pattern[]>([])
-  const [currentPatternIndex, setCurrentPatternIndex] = useState(0)
-  const [userPattern, setUserPattern] = useState<Pattern>([])
+export default function DimensionalShiftPuzzle({ onComplete, onUnlockNext }: DimensionalShiftPuzzleProps) {
+  const [originalGrid, setOriginalGrid] = useState<Grid>([])
+  const [shiftedGrid, setShiftedGrid] = useState<Grid>([])
+  const [userGrid, setUserGrid] = useState<Grid>([])
   const [currentRound, setCurrentRound] = useState(1)
   const [score, setScore] = useState(0)
-  const [gameStatus, setGameStatus] = useState<'memorize' | 'recall' | 'feedback' | 'completed'>('memorize')
+  const [gameStatus, setGameStatus] = useState<'memorize' | 'solve' | 'feedback' | 'completed'>('memorize')
   const [fingerprint, setFingerprint] = useState<string | null>(null)
   const [showCompletionModal, setShowCompletionModal] = useState(false)
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null)
@@ -69,28 +68,37 @@ export default function RotatingShapesSequence({ onComplete, onUnlockNext }: Rot
     initializeFingerprint()
   }, [])
 
-  const generatePattern = useCallback((): Pattern => {
+  const generateGrid = useCallback((): Grid => {
     return Array.from({ length: GRID_SIZE }, () =>
       Array.from({ length: GRID_SIZE }, () => ({
         shape: SHAPES[Math.floor(Math.random() * SHAPES.length)],
         color: COLORS[Math.floor(Math.random() * COLORS.length)],
-        rotation: ROTATIONS[Math.floor(Math.random() * ROTATIONS.length)]
+        dimension: DIMENSIONS[Math.floor(Math.random() * DIMENSIONS.length)]
       }))
     )
   }, [])
 
-  const generateSequence = useCallback(() => {
-    const newSequence = Array.from({ length: SEQUENCE_LENGTH }, generatePattern)
-    setSequence(newSequence)
-    setCurrentPatternIndex(0)
-    setUserPattern(Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(null)))
+  const shiftDimensions = useCallback((grid: Grid): Grid => {
+    return grid.map(row =>
+      row.map(cell => cell ? {
+        ...cell,
+        dimension: cell.dimension === '2D' ? '3D' : '2D'
+      } : null)
+    )
+  }, [])
+
+  const startNewRound = useCallback(() => {
+    const newGrid = generateGrid()
+    setOriginalGrid(newGrid)
+    setShiftedGrid(shiftDimensions(newGrid))
+    setUserGrid(Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(null)))
     setGameStatus('memorize')
     setTimeLeft(MEMORIZE_TIME)
-  }, [generatePattern])
+  }, [generateGrid, shiftDimensions])
 
   useEffect(() => {
     if (currentRound <= TOTAL_ROUNDS) {
-      generateSequence()
+      startNewRound()
     } else {
       setGameStatus('completed')
       setShowCompletionModal(true)
@@ -102,7 +110,7 @@ export default function RotatingShapesSequence({ onComplete, onUnlockNext }: Rot
         saveResult(fingerprint, score)
       }
     }
-  }, [currentRound, generateSequence, score, fingerprint, onComplete, onUnlockNext])
+  }, [currentRound, startNewRound, score, fingerprint, onComplete, onUnlockNext])
 
   useEffect(() => {
     let timer: NodeJS.Timeout
@@ -111,53 +119,43 @@ export default function RotatingShapesSequence({ onComplete, onUnlockNext }: Rot
         setTimeLeft(prev => {
           if (prev <= 1) {
             clearInterval(timer)
-            if (currentPatternIndex < SEQUENCE_LENGTH - 1) {
-              setCurrentPatternIndex(prev => prev + 1)
-              return MEMORIZE_TIME
-            } else {
-              setGameStatus('recall')
-              return 0
-            }
+            setGameStatus('solve')
+            return 0
           }
           return prev - 1
         })
       }, 1000)
     }
     return () => clearInterval(timer)
-  }, [gameStatus, timeLeft, currentPatternIndex])
+  }, [gameStatus, timeLeft])
 
   const handleCellClick = (row: number, col: number) => {
-    if (gameStatus !== 'recall') return
+    if (gameStatus !== 'solve') return
 
-    setUserPattern(prev => {
-      const newPattern = [...prev]
-      if (!newPattern[row]) newPattern[row] = []
-      const currentCell = newPattern[row][col]
-      const currentShapeIndex = currentCell ? SHAPES.indexOf(currentCell.shape) : -1
-      const currentColorIndex = currentCell ? COLORS.indexOf(currentCell.color) : -1
-      const currentRotationIndex = currentCell ? ROTATIONS.indexOf(currentCell.rotation) : -1
-      
-      const nextShapeIndex = (currentShapeIndex + 1) % SHAPES.length
-      const nextColorIndex = (currentColorIndex + 1) % COLORS.length
-      const nextRotationIndex = (currentRotationIndex + 1) % ROTATIONS.length
+    setUserGrid(prev => {
+      const newGrid = [...prev]
+      if (!newGrid[row]) newGrid[row] = []
+      const currentCell = newGrid[row][col]
+      const originalCell = originalGrid[row][col]
 
-      newPattern[row][col] = {
-        shape: SHAPES[nextShapeIndex],
-        color: COLORS[nextColorIndex],
-        rotation: ROTATIONS[nextRotationIndex]
+      if (!currentCell && originalCell) {
+        newGrid[row][col] = { ...originalCell, dimension: originalCell.dimension === '2D' ? '3D' : '2D' }
+      } else {
+        newGrid[row][col] = null
       }
-      return newPattern
+
+      return newGrid
     })
   }
 
   const handleSubmit = () => {
-    const expectedPattern = generateNextPattern(sequence)
-    const isCorrect = expectedPattern.every((row, i) =>
+    const isCorrect = shiftedGrid.every((row, i) =>
       row.every((cell, j) =>
-        userPattern[i] && userPattern[i][j] &&
-        cell.shape === userPattern[i][j].shape &&
-        cell.color === userPattern[i][j].color &&
-        cell.rotation === userPattern[i][j].rotation
+        (cell === null && userGrid[i][j] === null) ||
+        (cell !== null && userGrid[i][j] !== null &&
+         cell.shape === userGrid[i][j]!.shape &&
+         cell.color === userGrid[i][j]!.color &&
+         cell.dimension === userGrid[i][j]!.dimension)
       )
     )
     setFeedback(isCorrect ? 'correct' : 'incorrect')
@@ -172,17 +170,6 @@ export default function RotatingShapesSequence({ onComplete, onUnlockNext }: Rot
     }, 1500)
   }
 
-  const generateNextPattern = (patterns: Pattern[]): Pattern => {
-    const lastPattern = patterns[patterns.length - 1]
-    return lastPattern.map(row =>
-      row.map(cell => ({
-        shape: SHAPES[(SHAPES.indexOf(cell.shape) + 1) % SHAPES.length],
-        color: COLORS[(COLORS.indexOf(cell.color) + 1) % COLORS.length],
-        rotation: (cell.rotation + 90) % 360
-      }))
-    )
-  }
-
   const saveResult = async (visitorId: string, finalScore: number) => {
     try {
       const response = await fetch('/api/save-result', {
@@ -192,7 +179,7 @@ export default function RotatingShapesSequence({ onComplete, onUnlockNext }: Rot
         },
         body: JSON.stringify({
           visitorId,
-          taskId: 'RotatingShapesSequence',
+          taskId: 'DimensionalShiftPuzzle',
           score: finalScore,
         }),
       })
@@ -208,7 +195,7 @@ export default function RotatingShapesSequence({ onComplete, onUnlockNext }: Rot
     setCurrentRound(1)
     setScore(0)
     setShowCompletionModal(false)
-    generateSequence()
+    startNewRound()
   }
 
   const handleNextTask = () => {
@@ -218,15 +205,17 @@ export default function RotatingShapesSequence({ onComplete, onUnlockNext }: Rot
 
   const renderCell = (cell: Cell | null, onClick?: () => void) => (
     <motion.div
-      className="aspect-square rounded-lg flex items-center justify-center bg-gray-200"
+      className={`aspect-square rounded-lg flex items-center justify-center ${cell ? cell.color : 'bg-gray-200'}`}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       onClick={onClick}
     >
       {cell && (
         <motion.div
-          className={`w-8 h-8 ${cell.color}`}
-          style={{ transform: `rotate(${cell.rotation}deg)` }}
+          className={`w-8 h-8 ${cell.dimension === '3D' ? 'opacity-100' : 'opacity-50'}`}
+          initial={{ rotateY: cell.dimension === '2D' ? 0 : 180 }}
+          animate={{ rotateY: cell.dimension === '2D' ? 0 : 180 }}
+          transition={{ duration: 0.5 }}
         >
           <cell.shape />
         </motion.div>
@@ -236,14 +225,14 @@ export default function RotatingShapesSequence({ onComplete, onUnlockNext }: Rot
 
   return (
     <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full">
-      <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">Rotating Shapes Sequence</h2>
+      <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">Dimensional Shift Puzzle</h2>
       
       <div className="mb-6">
-        <div className="grid grid-cols-3 gap-2">
-          {(gameStatus === 'memorize' && sequence[currentPatternIndex] ? sequence[currentPatternIndex] : userPattern).map((row, i) =>
+        <div className="grid grid-cols-4 gap-2">
+          {(gameStatus === 'memorize' ? originalGrid : userGrid).map((row, i) =>
             row.map((cell, j) => renderCell(
               cell,
-              gameStatus === 'recall' ? () => handleCellClick(i, j) : undefined
+              gameStatus === 'solve' ? () => handleCellClick(i, j) : undefined
             ))
           )}
         </div>
@@ -252,18 +241,18 @@ export default function RotatingShapesSequence({ onComplete, onUnlockNext }: Rot
       {gameStatus === 'memorize' && (
         <div className="text-center mb-4">
           <p className="text-lg font-semibold text-indigo-600 mb-2">
-            Memorize pattern {currentPatternIndex + 1} of {SEQUENCE_LENGTH}
+            Memorize the grid, then shift dimensions!
           </p>
           <ClockTimer timeLeft={timeLeft} isCountingDown={true} />
         </div>
       )}
 
-      {gameStatus === 'recall' && (
+      {gameStatus === 'solve' && (
         <>
           <p className="text-lg font-semibold text-indigo-600 mb-4 text-center">
-            Create the next pattern in the sequence
+            Recreate the grid with shifted dimensions
           </p>
-          <Button onClick={handleSubmit} className="w-full mb-4">Submit Pattern</Button>
+          <Button onClick={handleSubmit} className="w-full mb-4">Submit Solution</Button>
         </>
       )}
 
