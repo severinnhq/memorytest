@@ -20,7 +20,7 @@ export default function Home() {
         
         <Link href="/mid-tasks" className="w-full">
           <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 text-lg">
-            Start Mid-Level Tasks
+            Start Mid-Level Taskss
           </Button>
         </Link>
         <Link href="/advanced-tasks" className="w-full">
