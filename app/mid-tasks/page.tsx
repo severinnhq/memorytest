@@ -12,8 +12,6 @@ import {
   Music,
   SwitchCamera,
   Clock,
-  Lightbulb,
-  Eye,
   ArrowLeft,
   Lock,
   CheckCircle2
@@ -26,8 +24,6 @@ import MidTask5 from '@/tasks/mid-task5'
 import MidTask6 from '@/tasks/mid-task6'
 import MidTask7 from '@/tasks/mid-task7'
 import MidTask8 from '@/tasks/mid-task8'
-import MidTask9 from '@/tasks/mid-task9'
-import MidTask10 from '@/tasks/mid-task10'
 import TaskModal from '@/components/TaskModal'
 import TaskDescriptionModal from '@/components/TaskDescriptionModal'
 
@@ -48,8 +44,6 @@ const tasks: Task[] = [
   { id: 6, name: "Auditory Sequence Mastery", description: "Remember and reproduce complex rhythms and tone sequences.", icon: Music, readinessPhrase: "Set to tune your auditory memory?" },
   { id: 7, name: "Multitasking Memory Challenge", description: "Switch between multiple memory tasks while maintaining accuracy.", icon: SwitchCamera, readinessPhrase: "Prepared to juggle mental tasks?" },
   { id: 8, name: "Time Distortion Perception", description: "Estimate time intervals while engaged in memory tasks.", icon: Clock, readinessPhrase: "Ready to bend your perception of time?" },
-  { id: 9, name: "Abstract Concept Association", description: "Create and remember associations between abstract concepts and symbols.", icon: Lightbulb, readinessPhrase: "Set to forge mental connections?" },
-  { id: 10, name: "Visual Change Detection", description: "Quickly identify subtle changes in complex visual scenes.", icon: Eye, readinessPhrase: "Prepared to spot the differences?" },
 ]
 
 const STORAGE_KEY = 'unlockedMidLevels'
@@ -94,7 +88,7 @@ const TaskCard: React.FC<{
 }
 
 export default function MidTasksPage() {
-  const [unlockedLevels, setUnlockedLevels] = useState<number>(1)  // Changed default to 1
+  const [unlockedLevels, setUnlockedLevels] = useState<number>(1)
   const [isClient, setIsClient] = useState(false)
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
   const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false)
@@ -103,7 +97,7 @@ export default function MidTasksPage() {
   useEffect(() => {
     setIsClient(true)
     const storedLevels = sessionStorage.getItem(STORAGE_KEY)
-    setUnlockedLevels(storedLevels ? parseInt(storedLevels) : 1)  // Changed default to 1
+    setUnlockedLevels(storedLevels ? parseInt(storedLevels) : 1)
   }, [])
 
   useEffect(() => {
@@ -160,10 +154,6 @@ export default function MidTasksPage() {
         return <MidTask7 onComplete={handleTaskCompletion} onUnlockNext={() => handleUnlockNext(task.id)} />
       case 8:
         return <MidTask8 onComplete={handleTaskCompletion} onUnlockNext={() => handleUnlockNext(task.id)} />
-      case 9:
-        return <MidTask9 onComplete={handleTaskCompletion} onUnlockNext={() => handleUnlockNext(task.id)} />
-      case 10:
-        return <MidTask10 onComplete={handleTaskCompletion} onUnlockNext={() => handleUnlockNext(task.id)} />
       default:
         return (
           <div className="p-4">
@@ -218,8 +208,8 @@ export default function MidTasksPage() {
         <TaskDescriptionModal
           isOpen={isDescriptionModalOpen}
           onClose={() => setIsDescriptionModalOpen(false)}
-          onSubmit={handleTaskStart}  // Changed from onReady to onSubmit
-          task={selectedTask}  // Pass the entire task object
+          onSubmit={handleTaskStart}
+          task={selectedTask}
         />
       )}
       {selectedTask && (

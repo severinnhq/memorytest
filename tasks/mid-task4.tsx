@@ -2,45 +2,45 @@
 
 import React, { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
-import { motion } from 'framer-motion'
-import { Square, Circle, Triangle, Star } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { CheckCircle, XCircle } from 'lucide-react'
+import TwoTaskCompModal from '@/components/ui/2TaskCompModal'
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
-import TaskCompletionModal from '@/components/TaskCompletionModal'
 
-interface MultiDimensionalMemoryMatrixProps {
+interface PatternRecognitionAndReconstructionProps {
   onComplete: (success: boolean) => void
   onUnlockNext: () => void
 }
 
-const shapes = [
-  { name: 'Square', component: Square },
-  { name: 'Circle', component: Circle },
-  { name: 'Triangle', component: Triangle },
-  { name: 'Star', component: Star },
+const gridSize = 4
+const colors = ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500']
+const defaultColor = 'bg-gray-200'
+const levels = [
+  { patternSize: 4, displayTime: 10000 },
+  { patternSize: 5, displayTime: 10000 },
+  { patternSize: 5, displayTime: 10000 },
 ]
 
-const colors = ['red', 'blue', 'green', 'yellow']
-const gridSize = 3
-const memorizeTime = 15000
-const maxAttempts = 3
+const MEMORIZE_TIME = 10 // 10 seconds to memorize
 
-type MatrixCell = {
-  shape: typeof shapes[number]
-  color: string
-  number: number
+const formatTime = (seconds: number) => {
+  const minutes = Math.floor(seconds / 60)
+  const remainingSeconds = seconds % 60
+  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
 }
 
-export default function MultiDimensionalMemoryMatrix({ onComplete, onUnlockNext }: MultiDimensionalMemoryMatrixProps) {
-  const [matrix, setMatrix] = useState<MatrixCell[][]>([])
-  const [userMatrix, setUserMatrix] = useState<Partial<MatrixCell>[][]>([])
-  const [phase, setPhase] = useState<'memorize' | 'recall' | 'result'>('memorize')
-  const [attempts, setAttempts] = useState(0)
-  const [timeLeft, setTimeLeft] = useState(memorizeTime / 1000)
-  const [selectedCell, setSelectedCell] = useState<{ row: number; col: number } | null>(null)
-  const [selectionType, setSelectionType] = useState<'shape' | 'color' | 'number'>('shape')
+export default function PatternRecognitionAndReconstruction({ onComplete, onUnlockNext }: PatternRecognitionAndReconstructionProps) {
+  const [pattern, setPattern] = useState<string[][]>([])
+  const [userPattern, setUserPattern] = useState<string[][]>([])
+  const [isDisplaying, setIsDisplaying] = useState(false)
+  const [currentLevel, setCurrentLevel] = useState(0)
+  const [gameState, setGameState] = useState<'displaying' | 'input' | 'complete'>('displaying')
+  const [feedback, setFeedback] = useState<string | null>(null)
+  const [animateScore, setAnimateScore] = useState(false)
+  const [score, setScore] = useState(0)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [timeLeft, setTimeLeft] = useState(MEMORIZE_TIME)
   const [fingerprint, setFingerprint] = useState<string | null>(null)
-  const [showCompletionModal, setShowCompletionModal] = useState(false)
-  const [score, setScore] = useState(0)  // Add this line to track the score
 
   useEffect(() => {
     const initializeFingerprint = async () => {
@@ -52,104 +52,130 @@ export default function MultiDimensionalMemoryMatrix({ onComplete, onUnlockNext 
     initializeFingerprint()
   }, [])
 
+  const generatePattern = (patternSize: number) => {
+    const newPattern = Array.from({ length: gridSize }, () => Array(gridSize).fill(defaultColor))
+    let coloredCells = 0
+    while (coloredCells < patternSize) {
+      const row = Math.floor(Math.random() * gridSize)
+      const col = Math.floor(Math.random() * gridSize)
+      if (newPattern[row][col] === defaultColor) {
+        newPattern[row][col] = colors[Math.floor(Math.random() * colors.length)]
+        coloredCells++
+      }
+    }
+    return newPattern
+  }
+
+  const startGame = () => {
+    const newPattern = generatePattern(levels[currentLevel].patternSize)
+    setPattern(newPattern)
+    setUserPattern(Array.from({ length: gridSize }, () => Array(gridSize).fill(defaultColor)))
+    setGameState('displaying')
+    setFeedback(null)
+    setTimeLeft(MEMORIZE_TIME)
+  }
+
+  const displayPattern = async () => {
+    setIsDisplaying(true)
+    await new Promise(resolve => setTimeout(resolve, levels[currentLevel].displayTime))
+    setIsDisplaying(false)
+    setGameState('input')
+  }
+
   useEffect(() => {
-    if (phase === 'memorize') {
-      const newMatrix = Array.from({ length: gridSize }, () =>
-        Array.from({ length: gridSize }, () => ({
-          shape: shapes[Math.floor(Math.random() * shapes.length)],
-          color: colors[Math.floor(Math.random() * colors.length)],
-          number: Math.floor(Math.random() * 4) + 1,
-        }))
-      )
-      setMatrix(newMatrix)
-      setUserMatrix(Array.from({ length: gridSize }, () => Array(gridSize).fill({})))
-      const countdown = setInterval(() => {
-        setTimeLeft((prev) => {
-          if (prev <= 1) {
-            clearInterval(countdown)
-            setPhase('recall')
-            return 0
+    startGame()
+  }, [])
+
+  useEffect(() => {
+    if (gameState === 'displaying') {
+      displayPattern()
+    }
+  }, [gameState, pattern])
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout
+    if (gameState === 'displaying') {
+      timer = setInterval(() => {
+        setTimeLeft((prevTime) => {
+          if (prevTime <= 1) {
+            clearInterval(timer)
+            setIsDisplaying(false)
+            setGameState('input')
+            return MEMORIZE_TIME
           }
-          return prev - 1
+          return prevTime - 1
         })
       }, 1000)
-      return () => clearInterval(countdown)
     }
-  }, [phase])
+    return () => clearInterval(timer)
+  }, [gameState])
 
   const handleCellClick = (row: number, col: number) => {
-    if (phase !== 'recall') return
-    setSelectedCell({ row, col })
-  }
+    if (gameState !== 'input') return
 
-  const handleSelection = (selection: string) => {
-    if (!selectedCell) return
-    const { row, col } = selectedCell
-    setUserMatrix(prev => {
-      const newMatrix = [...prev]
-      if (selectionType === 'shape') {
-        newMatrix[row][col] = { ...newMatrix[row][col], shape: shapes.find(s => s.name === selection) }
-      } else if (selectionType === 'color') {
-        newMatrix[row][col] = { ...newMatrix[row][col], color: selection }
+    setUserPattern(prevPattern => {
+      const newPattern = [...prevPattern]
+      newPattern[row] = [...newPattern[row]]
+      
+      if (newPattern[row][col] === defaultColor) {
+        newPattern[row][col] = colors[0]
       } else {
-        newMatrix[row][col] = { ...newMatrix[row][col], number: parseInt(selection) }
-      }
-      return newMatrix
-    })
-    setSelectionType(prev => {
-      if (prev === 'shape') return 'color'
-      if (prev === 'color') return 'number'
-      setSelectedCell(null)
-      return 'shape'
-    })
-  }
-
-  const handleSubmit = () => {
-    const correct = matrix.every((row, i) =>
-      row.every((cell, j) =>
-        cell.shape.name === userMatrix[i][j].shape?.name &&
-        cell.color === userMatrix[i][j].color &&
-        cell.number === userMatrix[i][j].number
-      )
-    )
-    if (correct) {
-      // Perfect completion
-      setScore(maxAttempts)  // Set the score to maximum
-      onComplete(true)
-      onUnlockNext()
-      if (fingerprint) {
-        saveResult(fingerprint, maxAttempts)
-      }
-      setShowCompletionModal(true)
-    } else {
-      setAttempts(prev => prev + 1)
-      if (attempts + 1 >= maxAttempts) {
-        // Failed all attempts
-        setScore(0)  // Set the score to 0
-        onComplete(false)
-        if (fingerprint) {
-          saveResult(fingerprint, 0)
+        const currentColorIndex = colors.indexOf(newPattern[row][col])
+        if (currentColorIndex === colors.length - 1) {
+          newPattern[row][col] = defaultColor
+        } else {
+          newPattern[row][col] = colors[currentColorIndex + 1]
         }
-        setShowCompletionModal(true)
-      } else {
-        setScore(maxAttempts - attempts - 1)  // Set the score based on remaining attempts
-        setUserMatrix(Array.from({ length: gridSize }, () => Array(gridSize).fill({})))
-        setPhase('memorize')
-        setTimeLeft(memorizeTime / 1000)
-        setShowCompletionModal(true)
       }
+      
+      return newPattern
+    })
+  }
+
+  const checkPattern = () => {
+    const isCorrect = pattern.every((row, i) =>
+      row.every((cell, j) => cell === userPattern[i][j])
+    )
+
+    setFeedback(isCorrect ? "Correct!" : "Incorrect. Try the next pattern!")
+    
+    if (isCorrect) {
+      setAnimateScore(true)
+      setScore(prevScore => prevScore + 1)
     }
+
+    setTimeout(() => {
+      setFeedback(null)
+      setAnimateScore(false)
+      
+      if (currentLevel === levels.length - 1) {
+        setGameState('complete')
+        const finalScore = score + (isCorrect ? 1 : 0)
+        onComplete(finalScore === levels.length)
+        if (finalScore === levels.length) {
+          onUnlockNext()
+        } else {
+          setIsModalOpen(true)
+        }
+        setFeedback(`Game complete! Your final score: ${finalScore} out of ${levels.length}`)
+        if (fingerprint) {
+          saveResult(fingerprint, finalScore)
+        }
+      } else {
+        setCurrentLevel(prev => prev + 1)
+        startGame()
+      }
+    }, 1500)
   }
 
   const handleTryAgain = () => {
-    setAttempts(0)
-    setPhase('memorize')
-    setTimeLeft(memorizeTime / 1000)
-    setUserMatrix(Array.from({ length: gridSize }, () => Array(gridSize).fill({})))
-    setShowCompletionModal(false)
+    setIsModalOpen(false)
+    setCurrentLevel(0)
+    setScore(0)
+    startGame()
   }
 
-  const saveResult = async (visitorId: string, score: number) => {
+  const saveResult = async (visitorId: string, finalScore: number) => {
     try {
       const response = await fetch('/api/save-result', {
         method: 'POST',
@@ -158,8 +184,8 @@ export default function MultiDimensionalMemoryMatrix({ onComplete, onUnlockNext 
         },
         body: JSON.stringify({
           visitorId,
-          taskId: 'MidTask4',
-          score,
+          taskId: 'PatternRecognitionAndReconstruction',
+          score: finalScore,
         }),
       })
       if (!response.ok) {
@@ -171,88 +197,100 @@ export default function MultiDimensionalMemoryMatrix({ onComplete, onUnlockNext 
   }
 
   return (
-    <div className="p-4 max-w-md mx-auto">
-      <h2 className="text-2xl font-bold mb-4 text-center text-indigo-800">Multi-Dimensional Memory Matrix</h2>
-     
-      {phase === 'memorize' && (
-        <div className="mb-4">
-          <p className="text-center text-lg mb-2">Memorize the pattern</p>
-          <div className="flex items-center justify-center space-x-2 text-2xl font-bold mb-4">
-            <span role="img" aria-label="clock" className="text-3xl">⏰</span>
-            <span>{`${Math.floor(timeLeft / 60).toString().padStart(2, '0')}:${(timeLeft % 60).toString().padStart(2, '0')}`}</span>
-          </div>
-          <div className="grid grid-cols-3 gap-2 mt-4">
-            {matrix.map((row, i) =>
-              row.map((cell, j) => (
-                <div key={`${i}-${j}`} className="aspect-square flex items-center justify-center bg-white rounded-lg shadow">
-                  <cell.shape.component className={`w-8 h-8 text-${cell.color}-500`} />
-                  <span className="absolute text-xs font-bold">{cell.number}</span>
-                </div>
-              ))
+    <div className="p-4 max-w-md mx-auto bg-white rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold mb-4 text-center text-primary">Pattern Recognition and Reconstruction</h2>
+      <p className="text-center mb-4">
+        Memorize the pattern and recreate it accurately. 3 levels, increasing difficulty.
+      </p>
+
+      <div className="mb-4 flex justify-between items-center">
+        <div className="text-lg font-semibold text-primary">Level: {currentLevel + 1}/{levels.length}</div>
+        <div className="flex items-center">
+          <AnimatePresence>
+            {feedback && (
+              <motion.div
+                initial={{ opacity: 0, x: feedback === "Correct!" ? -20 : 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: feedback === "Correct!" ? 20 : -20 }}
+                transition={{ duration: 0.5 }}
+                className="mr-2"
+              >
+                {feedback === "Correct!" ? (
+                  <motion.div
+                    animate={animateScore ? { x: 20, opacity: 0, scale: 0.5 } : {}}
+                    transition={{ duration: 1 }}
+                  >
+                    <CheckCircle className="w-6 h-6 text-green-500" />
+                  </motion.div>
+                ) : (
+                  <XCircle className="w-6 h-6 text-red-500" />
+                )}
+              </motion.div>
             )}
-          </div>
-        </div>
-      )}
-      {phase === 'recall' && (
-        <div>
-          <p className="text-center text-lg mb-4">Recreate the matrix by selecting the correct shape, color, and number for each cell</p>
-          <div className="grid grid-cols-3 gap-2 mb-4">
-            {userMatrix.map((row, i) =>
-              row.map((cell, j) => (
-                <motion.div
-                  key={`${i}-${j}`}
-                  className={`aspect-square flex items-center justify-center bg-white rounded-lg shadow cursor-pointer ${
-                    selectedCell?.row === i && selectedCell?.col === j ? 'ring-2 ring-indigo-500' : ''
-                  }`}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => handleCellClick(i, j)}
-                >
-                  {cell.shape && <cell.shape.component className={`w-8 h-8 ${cell.color ? `text-${cell.color}-500` : ''}`} />}
-                  {cell.number && <span className="absolute text-xs font-bold">{cell.number}</span>}
-                </motion.div>
-              ))
-            )}
-          </div>
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold mb-2">Select {selectionType}:</h3>
-            <div className="flex flex-wrap gap-2">
-              {selectionType === 'shape' && shapes.map(shape => (
-                <Button key={shape.name} onClick={() => handleSelection(shape.name)} variant="outline">
-                  <shape.component className="w-6 h-6" />
-                </Button>
-              ))}
-              {selectionType === 'color' && colors.map(color => (
-                <Button key={color} onClick={() => handleSelection(color)} variant="outline" className={`bg-${color}-500 w-8 h-8`} />
-              ))}
-              {selectionType === 'number' && Array.from({ length: 4 }, (_, i) => i + 1).map(num => (
-                <Button key={num} onClick={() => handleSelection(num.toString())} variant="outline">
-                  {num}
-                </Button>
-              ))}
-            </div>
-          </div>
-          <Button 
-            onClick={handleSubmit} 
-            disabled={userMatrix.some(row => row.some(cell => !cell.shape || !cell.color || !cell.number))}
-            className="w-full"
+          </AnimatePresence>
+          <motion.div 
+            key={currentLevel}
+            initial={{ scale: 1 }}
+            animate={{ scale: animateScore ? [1, 1.2, 1] : 1 }}
+            transition={{ duration: 0.5 }}
+            className="text-lg font-semibold text-primary"
           >
-            Submit
-          </Button>
+            Score: {score}/{currentLevel}
+          </motion.div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-4 gap-1 mb-6">
+        {(isDisplaying ? pattern : userPattern).map((row, i) =>
+          row.map((cell, j) => (
+            <motion.div
+              key={`${i}-${j}`}
+              className={`aspect-square rounded-sm ${cell}`}
+              onClick={() => handleCellClick(i, j)}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            />
+          ))
+        )}
+      </div>
+
+      {gameState === 'displaying' && (
+        <div className="text-center">
+          <p className="text-lg font-semibold text-primary mb-2">Memorize the pattern!</p>
+          <div className="flex items-center justify-center">
+            <span role="img" aria-label="clock" className="text-3xl mr-2">⏰</span>
+            <span className="text-2xl font-bold text-primary">{formatTime(timeLeft)}</span>
+          </div>
         </div>
       )}
-      {attempts > 0 && (
-        <TaskCompletionModal
-          isOpen={showCompletionModal}
-          onClose={() => setShowCompletionModal(false)}
-          success={score === maxAttempts}
-          score={score}
-          totalRounds={maxAttempts}
-          qualificationThreshold={maxAttempts}
-          onNextTask={() => onComplete(true)}
-          onTryAgain={handleTryAgain}
-        />
+
+      {gameState === 'input' && (
+        <>
+          <div className="text-center text-lg font-semibold mb-4">
+            Recreate the pattern
+          </div>
+          <p className="text-center text-sm mb-4">
+            Click to cycle through colors. Click again on the last color to unselect.
+          </p>
+          <Button onClick={checkPattern} className="w-full">
+            Submit Pattern
+          </Button>
+        </>
       )}
+
+      {gameState === 'complete' && (
+        <div className="text-center">
+          <h3 className="text-xl font-bold mb-2">Game Complete!</h3>
+          <p>Your final score: {score}/{levels.length}</p>
+        </div>
+      )}
+
+      <TwoTaskCompModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        success={false}
+        onTryAgain={handleTryAgain}
+      />
     </div>
   )
 }

@@ -6,6 +6,7 @@ import { Progress } from "@/components/ui/progress"
 import { motion } from 'framer-motion'
 import { Square, Circle, Triangle, CheckCircle, XCircle, RotateCcw } from 'lucide-react'
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 interface MidTask7Props {
   onComplete: (success: boolean) => void
@@ -32,6 +33,7 @@ export default function MidTask7({ onComplete, onUnlockNext }: MidTask7Props) {
   const [gameStatus, setGameStatus] = useState<'idle' | 'displaying' | 'input' | 'success' | 'failure' | 'completed'>('idle')
   const [currentIndex, setCurrentIndex] = useState(0)
   const [fingerprint, setFingerprint] = useState<string | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
     const initializeFingerprint = async () => {
@@ -102,14 +104,16 @@ export default function MidTask7({ onComplete, onUnlockNext }: MidTask7Props) {
         setGameStatus('idle')
       } else {
         setGameStatus('completed')
-        if (score + (isCorrect ? 1 : 0) >= QUALIFICATION_THRESHOLD) {
+        const finalScore = score + (isCorrect ? 1 : 0)
+        if (finalScore >= QUALIFICATION_THRESHOLD) {
           onComplete(true)
           onUnlockNext()
           if (fingerprint) {
-            saveResult(fingerprint, score + (isCorrect ? 1 : 0))
+            saveResult(fingerprint, finalScore)
           }
         } else {
           onComplete(false)
+          setIsModalOpen(true)
         }
       }
     }, 1500)
@@ -141,6 +145,7 @@ export default function MidTask7({ onComplete, onUnlockNext }: MidTask7Props) {
     setRound(1)
     setScore(0)
     setGameStatus('idle')
+    setIsModalOpen(false)
   }
 
   return (
@@ -205,14 +210,38 @@ export default function MidTask7({ onComplete, onUnlockNext }: MidTask7Props) {
         <span className="text-gray-600">Score: {score}/{TOTAL_ROUNDS}</span>
       </div>
 
-      {gameStatus === 'completed' && score < QUALIFICATION_THRESHOLD && (
-        <Button 
-          onClick={handleTryAgain}
-          className="mt-2 bg-blue-500 hover:bg-blue-600 text-white"
-        >
-          <RotateCcw className="mr-2 h-4 w-4" /> Try Again
-        </Button>
-      )}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="text-center text-2xl font-bold">
+              Nice Try!
+            </DialogTitle>
+          </DialogHeader>
+          <div className="mt-6 text-center">
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 260, damping: 20 }}
+            >
+              <XCircle className="w-20 h-20 mx-auto text-red-500" />
+            </motion.div>
+            <p className="mt-4 text-lg text-gray-700">
+              Don't worry! Practice makes perfect. Keep trying to improve your memory.
+            </p>
+            <p className="mt-2 text-xl font-semibold text-gray-800">
+              Your Score: {score}/{TOTAL_ROUNDS}
+            </p>
+          </div>
+          <div className="mt-8 flex justify-center">
+            <Button 
+              onClick={handleTryAgain}
+              className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 text-lg"
+            >
+              Try Again
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

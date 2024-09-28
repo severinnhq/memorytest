@@ -4,8 +4,9 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { motion } from 'framer-motion'
-import { Star, Heart, Triangle, Square, Circle, CheckCircle, XCircle, RotateCcw } from 'lucide-react'
+import { Star, Heart, Triangle, Square, Circle, RotateCcw, CheckCircle, XCircle } from 'lucide-react'
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 interface MidTask8Props {
   onComplete: (success: boolean) => void
@@ -23,6 +24,72 @@ const MAX_SEQUENCE_LENGTH = 9
 const DISPLAY_TIME = 1000
 const PAUSE_TIME = 500
 
+interface TaskCompletionModalProps {
+  isOpen: boolean
+  onClose: () => void
+  success: boolean
+  score: number
+  totalRounds: number
+  qualificationThreshold: number
+  onNextTask: () => void
+  onTryAgain: () => void
+}
+
+function TaskCompletionModal({
+  isOpen,
+  onClose,
+  success,
+  score,
+  totalRounds,
+  qualificationThreshold,
+  onNextTask,
+  onTryAgain
+}: TaskCompletionModalProps) {
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle className="text-center">
+            {success ? "Congratulations!" : "Nice Try!"}
+          </DialogTitle>
+        </DialogHeader>
+        <div className="mt-4 text-center">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 260, damping: 20 }}
+          >
+            {success ? (
+              <CheckCircle className="w-16 h-16 mx-auto text-green-500" />
+            ) : (
+              <XCircle className="w-16 h-16 mx-auto text-red-500" />
+            )}
+          </motion.div>
+          <p className="mt-2 text-gray-600">
+            {success
+              ? "Great job! You've completed this task successfully."
+              : "Don't worry! Practice makes perfect."}
+          </p>
+          <p className="mt-2 text-gray-600">
+            Your score: {score} / {totalRounds} (Threshold: {qualificationThreshold})
+          </p>
+        </div>
+        <div className="mt-6 flex justify-center">
+          {success ? (
+            <Button onClick={onNextTask} className="bg-green-500 hover:bg-green-600 text-white">
+              Next Task
+            </Button>
+          ) : (
+            <Button onClick={onTryAgain} className="bg-blue-500 hover:bg-blue-600 text-white">
+              Try Again
+            </Button>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
 export default function MidTask8({ onComplete, onUnlockNext }: MidTask8Props) {
   const [sequence, setSequence] = useState<Sequence>([])
   const [userSequence, setUserSequence] = useState<Sequence>([])
@@ -31,6 +98,7 @@ export default function MidTask8({ onComplete, onUnlockNext }: MidTask8Props) {
   const [gameStatus, setGameStatus] = useState<'idle' | 'displaying' | 'input' | 'success' | 'failure' | 'completed'>('idle')
   const [currentStep, setCurrentStep] = useState(0)
   const [fingerprint, setFingerprint] = useState<string | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
     const initializeFingerprint = async () => {
@@ -96,14 +164,10 @@ export default function MidTask8({ onComplete, onUnlockNext }: MidTask8Props) {
         setGameStatus('idle')
       } else {
         setGameStatus('completed')
-        if (score + (isCorrect ? 1 : 0) >= QUALIFICATION_THRESHOLD) {
-          onComplete(true)
-          onUnlockNext()
-          if (fingerprint) {
-            saveResult(fingerprint, score + (isCorrect ? 1 : 0))
-          }
-        } else {
-          onComplete(false)
+        setIsModalOpen(true)
+        onComplete(score + (isCorrect ? 1 : 0) >= QUALIFICATION_THRESHOLD)
+        if (fingerprint) {
+          saveResult(fingerprint, score + (isCorrect ? 1 : 0))
         }
       }
     }, 1500)
@@ -126,6 +190,7 @@ export default function MidTask8({ onComplete, onUnlockNext }: MidTask8Props) {
     setRound(1)
     setScore(0)
     setGameStatus('idle')
+    setIsModalOpen(false)
   }
 
   const renderSymbol = (symbol: Symbol, size: number) => {
@@ -211,6 +276,17 @@ export default function MidTask8({ onComplete, onUnlockNext }: MidTask8Props) {
           <RotateCcw className="mr-2 h-4 w-4" /> Try Again
         </Button>
       )}
+
+      <TaskCompletionModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        success={score >= QUALIFICATION_THRESHOLD}
+        score={score}
+        totalRounds={TOTAL_ROUNDS}
+        qualificationThreshold={QUALIFICATION_THRESHOLD}
+        onNextTask={onUnlockNext}
+        onTryAgain={handleTryAgain}
+      />
     </div>
   )
 }

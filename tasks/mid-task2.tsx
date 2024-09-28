@@ -14,7 +14,7 @@ interface MidTask2Props {
 }
 
 const SEQUENCE_LENGTH = 5
-const DISPLAY_TIME = 5000
+const DISPLAY_TIME = 10000
 const HIDE_TIME = 2000
 const TOTAL_ROUNDS = 3
 const QUALIFICATION_THRESHOLD = 2
@@ -37,6 +37,7 @@ export default function MidTask2({ onComplete, onUnlockNext }: MidTask2Props) {
   const [fingerprint, setFingerprint] = useState<string | null>(null)
   const [showCompletionModal, setShowCompletionModal] = useState(false)
   const [animateScore, setAnimateScore] = useState(false)
+  const [timeLeft, setTimeLeft] = useState(DISPLAY_TIME / 1000)
 
   useEffect(() => {
     const initializeFingerprint = async () => {
@@ -54,8 +55,22 @@ export default function MidTask2({ onComplete, onUnlockNext }: MidTask2Props) {
 
   useEffect(() => {
     let timer: NodeJS.Timeout
+    let countdown: NodeJS.Timeout
     if (gameState === 'memorize') {
+      setTimeLeft(DISPLAY_TIME / 1000)
+      countdown = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            clearInterval(countdown)
+            setShowSequences(false)
+            setGameState('hide')
+            return 0
+          }
+          return prev - 1
+        })
+      }, 1000)
       timer = setTimeout(() => {
+        clearInterval(countdown)
         setShowSequences(false)
         setGameState('hide')
       }, DISPLAY_TIME)
@@ -66,7 +81,10 @@ export default function MidTask2({ onComplete, onUnlockNext }: MidTask2Props) {
         setGameState('guess')
       }, HIDE_TIME)
     }
-    return () => clearTimeout(timer)
+    return () => {
+      clearTimeout(timer)
+      clearInterval(countdown)
+    }
   }, [gameState, sequences])
 
   const startRound = () => {
@@ -77,6 +95,7 @@ export default function MidTask2({ onComplete, onUnlockNext }: MidTask2Props) {
     setGameState('memorize')
     setUserInput(Array(sequenceCount).fill(''))
     setFeedback(null)
+    setTimeLeft(DISPLAY_TIME / 1000)
   }
 
   const handleInputChange = (index: number, value: string) => {
@@ -196,6 +215,16 @@ export default function MidTask2({ onComplete, onUnlockNext }: MidTask2Props) {
         </div>
       </div>
       
+      {gameState === 'memorize' && (
+        <div className="mb-4">
+          <p className="text-center text-lg mb-2">Memorize the sequences!</p>
+          <div className="flex items-center justify-center space-x-2 text-2xl font-bold mb-4">
+            <span role="img" aria-label="clock" className="text-3xl">⏰</span>
+            <span>{`${Math.floor(timeLeft / 60).toString().padStart(2, '0')}:${(timeLeft % 60).toString().padStart(2, '0')}`}</span>
+          </div>
+        </div>
+      )}
+
       <div className="space-y-2 mb-4">
         {sequences.map((sequence, sequenceIndex) => (
           <motion.div
@@ -229,12 +258,6 @@ export default function MidTask2({ onComplete, onUnlockNext }: MidTask2Props) {
           </motion.div>
         ))}
       </div>
-
-      {gameState === 'memorize' && (
-        <p className="text-center text-lg font-semibold text-indigo-600 mb-4">
-          Memorize the sequences! ({sequences.length} sequence{sequences.length > 1 ? 's' : ''})
-        </p>
-      )}
 
       {gameState === 'hide' && (
         <p className="text-center text-lg font-semibold text-indigo-600 mb-4">Get ready...</p>

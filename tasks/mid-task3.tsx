@@ -61,6 +61,7 @@ export default function MidTask3({ onComplete, onUnlockNext }: MidTask3Props) {
   useEffect(() => {
     let timer: NodeJS.Timeout
     if (gameState === 'memorize') {
+      setTimeLeft(MEMORIZE_TIME)
       timer = setInterval(() => {
         setTimeLeft((prevTime) => {
           if (prevTime <= 1) {
@@ -173,9 +174,9 @@ export default function MidTask3({ onComplete, onUnlockNext }: MidTask3Props) {
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md max-w-md mx-auto">
-      <h2 className="text-3xl font-bold mb-4 text-center text-indigo-800">Color Sequence Memory</h2>
+      <h2 className="text-3xl font-bold mb-4 text-center text-primary">Color Sequence Memory</h2>
       <div className="mb-4 flex justify-between items-center">
-        <div className="text-lg font-semibold text-indigo-600">Round {round}/{TOTAL_ROUNDS}</div>
+        <div className="text-lg font-semibold text-primary">Round {round}/{TOTAL_ROUNDS}</div>
         <div className="flex items-center">
           <AnimatePresence>
             {feedback && (
@@ -204,7 +205,7 @@ export default function MidTask3({ onComplete, onUnlockNext }: MidTask3Props) {
             initial={{ scale: 1 }}
             animate={{ scale: animateScore ? [1, 1.2, 1] : 1 }}
             transition={{ duration: 0.5 }}
-            className="text-lg font-semibold text-indigo-600"
+            className="text-lg font-semibold text-primary"
           >
             Score: {score}/{TOTAL_ROUNDS}
           </motion.div>
@@ -237,10 +238,10 @@ export default function MidTask3({ onComplete, onUnlockNext }: MidTask3Props) {
 
       {gameState === 'memorize' && (
         <div className="text-center">
-          <p className="text-lg font-semibold text-indigo-600 mb-2">Memorize the color sequence!</p>
+          <p className="text-lg font-semibold text-primary mb-2">Memorize the color sequence!</p>
           <div className="flex items-center justify-center">
             <span role="img" aria-label="clock" className="text-3xl mr-2">⏰</span>
-            <span className="text-2xl font-bold text-indigo-600">{timeLeft}s</span>
+            <span className="text-2xl font-bold text-primary">{formatTime(timeLeft)}</span>
           </div>
         </div>
       )}
@@ -273,7 +274,7 @@ export default function MidTask3({ onComplete, onUnlockNext }: MidTask3Props) {
               />
             ))}
           </div>
-          <p className="text-center text-lg font-semibold text-indigo-600">
+          <p className="text-center text-lg font-semibold text-primary">
             Select the colors in the correct order
           </p>
         </div>
@@ -285,6 +286,7 @@ export default function MidTask3({ onComplete, onUnlockNext }: MidTask3Props) {
         success={score >= QUALIFICATION_THRESHOLD}
         score={score}
         totalRounds={TOTAL_ROUNDS}
+        qualificationThreshold={QUALIFICATION_THRESHOLD}
         onNextTask={handleNextTask}
         onTryAgain={handleTryAgain}
       />

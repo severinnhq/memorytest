@@ -1,62 +1,36 @@
-'use client'
+"use client"
 
 import React, { useState, useEffect, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
-import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle, XCircle, Square, Hexagon, Octagon } from 'lucide-react'
+import { CheckCircle, XCircle, RotateCcw } from 'lucide-react'
+import TwoTaskCompModal from '@/components/ui/2TaskCompModal'
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
-import TaskCompletionModal from '@/components/TaskCompletionModal'
 
-interface DimensionalShiftPuzzleProps {
+interface TemporalMosaicReconstructionProps {
   onComplete: (success: boolean) => void
   onUnlockNext: () => void
 }
 
-const GRID_SIZE = 4
-const TOTAL_ROUNDS = 5
-const QUALIFICATION_THRESHOLD = 3
-const MEMORIZE_TIME = 15 // seconds
-const SHAPES = [Square, Hexagon, Octagon]
-const COLORS = ['text-red-500', 'text-blue-500', 'text-green-500', 'text-yellow-500']
-const DIMENSIONS = ['2D', '3D'] as const
+const COLORS = ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-orange-500']
+const GRID_SIZE = 3
+const DISPLAY_TIME = 1000 // 1 second per square
+const PAUSE_TIME = 500 // 0.5 second pause between squares
 
-type Cell = {
-  shape: typeof SHAPES[number]
+type MosaicTile = {
   color: string
-  dimension: typeof DIMENSIONS[number]
+  order: number
 }
 
-type Grid = (Cell | null)[][]
-
-function ClockTimer({ timeLeft, isCountingDown }: { timeLeft: number; isCountingDown: boolean }) {
-  const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60)
-    const remainingSeconds = seconds % 60
-    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`
-  }
-
-  return (
-    <div className="flex items-center justify-center space-x-2 text-2xl font-bold mb-4">
-      <span role="img" aria-label="clock" className="text-3xl">
-        {isCountingDown ? '⏰' : '🕰️'}
-      </span>
-      <span>{formatTime(timeLeft)}</span>
-    </div>
-  )
-}
-
-export default function DimensionalShiftPuzzle({ onComplete, onUnlockNext }: DimensionalShiftPuzzleProps) {
-  const [originalGrid, setOriginalGrid] = useState<Grid>([])
-  const [shiftedGrid, setShiftedGrid] = useState<Grid>([])
-  const [userGrid, setUserGrid] = useState<Grid>([])
-  const [currentRound, setCurrentRound] = useState(1)
-  const [score, setScore] = useState(0)
-  const [gameStatus, setGameStatus] = useState<'memorize' | 'solve' | 'feedback' | 'completed'>('memorize')
-  const [fingerprint, setFingerprint] = useState<string | null>(null)
+export default function TemporalMosaicReconstruction({ onComplete, onUnlockNext }: TemporalMosaicReconstructionProps) {
+  const [mosaic, setMosaic] = useState<MosaicTile[][]>([])
+  const [userMosaic, setUserMosaic] = useState<MosaicTile[][]>([])
+  const [gameStatus, setGameStatus] = useState<'showing' | 'input' | 'feedback'>('showing')
   const [showCompletionModal, setShowCompletionModal] = useState(false)
-  const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null)
-  const [timeLeft, setTimeLeft] = useState(MEMORIZE_TIME)
+  const [fingerprint, setFingerprint] = useState<string | null>(null)
+  const [currentDisplayIndex, setCurrentDisplayIndex] = useState(-1)
+  const [nextOrderNumber, setNextOrderNumber] = useState(1)
 
   useEffect(() => {
     const initializeFingerprint = async () => {
@@ -68,109 +42,97 @@ export default function DimensionalShiftPuzzle({ onComplete, onUnlockNext }: Dim
     initializeFingerprint()
   }, [])
 
-  const generateGrid = useCallback((): Grid => {
-    return Array.from({ length: GRID_SIZE }, () =>
-      Array.from({ length: GRID_SIZE }, () => ({
-        shape: SHAPES[Math.floor(Math.random() * SHAPES.length)],
-        color: COLORS[Math.floor(Math.random() * COLORS.length)],
-        dimension: DIMENSIONS[Math.floor(Math.random() * DIMENSIONS.length)]
-      }))
-    )
+  const generateMosaic = useCallback((): MosaicTile[][] => {
+    const totalTiles = GRID_SIZE * GRID_SIZE
+    const tiles = Array.from({ length: totalTiles }, (_, index) => ({
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      order: index
+    }))
+    const shuffled = tiles.sort(() => Math.random() - 0.5)
+    return Array.from({ length: GRID_SIZE }, (_, i) => shuffled.slice(i * GRID_SIZE, (i + 1) * GRID_SIZE))
   }, [])
 
-  const shiftDimensions = useCallback((grid: Grid): Grid => {
-    return grid.map(row =>
-      row.map(cell => cell ? {
-        ...cell,
-        dimension: cell.dimension === '2D' ? '3D' : '2D'
-      } : null)
-    )
-  }, [])
-
-  const startNewRound = useCallback(() => {
-    const newGrid = generateGrid()
-    setOriginalGrid(newGrid)
-    setShiftedGrid(shiftDimensions(newGrid))
-    setUserGrid(Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(null)))
-    setGameStatus('memorize')
-    setTimeLeft(MEMORIZE_TIME)
-  }, [generateGrid, shiftDimensions])
+  const startGame = useCallback(() => {
+    const newMosaic = generateMosaic()
+    setMosaic(newMosaic)
+    setUserMosaic(newMosaic.map(row => row.map(tile => ({ ...tile, order: -1 }))))
+    setGameStatus('showing')
+    setCurrentDisplayIndex(-1)
+    setNextOrderNumber(1)
+  }, [generateMosaic])
 
   useEffect(() => {
-    if (currentRound <= TOTAL_ROUNDS) {
-      startNewRound()
-    } else {
-      setGameStatus('completed')
-      setShowCompletionModal(true)
-      onComplete(score >= QUALIFICATION_THRESHOLD)
-      if (score >= QUALIFICATION_THRESHOLD) {
-        onUnlockNext()
-      }
-      if (fingerprint) {
-        saveResult(fingerprint, score)
-      }
-    }
-  }, [currentRound, startNewRound, score, fingerprint, onComplete, onUnlockNext])
+    startGame()
+  }, [startGame])
 
   useEffect(() => {
     let timer: NodeJS.Timeout
-    if (gameStatus === 'memorize' && timeLeft > 0) {
-      timer = setInterval(() => {
-        setTimeLeft(prev => {
-          if (prev <= 1) {
-            clearInterval(timer)
-            setGameStatus('solve')
-            return 0
-          }
-          return prev - 1
-        })
-      }, 1000)
-    }
-    return () => clearInterval(timer)
-  }, [gameStatus, timeLeft])
-
-  const handleCellClick = (row: number, col: number) => {
-    if (gameStatus !== 'solve') return
-
-    setUserGrid(prev => {
-      const newGrid = [...prev]
-      if (!newGrid[row]) newGrid[row] = []
-      const currentCell = newGrid[row][col]
-      const originalCell = originalGrid[row][col]
-
-      if (!currentCell && originalCell) {
-        newGrid[row][col] = { ...originalCell, dimension: originalCell.dimension === '2D' ? '3D' : '2D' }
-      } else {
-        newGrid[row][col] = null
+    if (gameStatus === 'showing') {
+      if (currentDisplayIndex < mosaic.flat().length - 1) {
+        timer = setTimeout(() => {
+          setCurrentDisplayIndex(prevIndex => prevIndex + 1)
+        }, DISPLAY_TIME + PAUSE_TIME)
+      } else if (currentDisplayIndex === mosaic.flat().length - 1) {
+        timer = setTimeout(() => {
+          setGameStatus('input')
+          setCurrentDisplayIndex(-1)
+        }, DISPLAY_TIME + PAUSE_TIME)
       }
+    }
+    return () => clearTimeout(timer)
+  }, [gameStatus, currentDisplayIndex, mosaic])
 
-      return newGrid
+  const handleTileClick = (rowIndex: number, colIndex: number) => {
+    if (gameStatus !== 'input') return
+
+    setUserMosaic(prevMosaic => {
+      const newMosaic = [...prevMosaic]
+      if (newMosaic[rowIndex][colIndex].order === -1) {
+        newMosaic[rowIndex][colIndex] = { ...newMosaic[rowIndex][colIndex], order: nextOrderNumber - 1 }
+        setNextOrderNumber(prev => prev + 1)
+      }
+      return newMosaic
     })
   }
 
   const handleSubmit = () => {
-    const isCorrect = shiftedGrid.every((row, i) =>
-      row.every((cell, j) =>
-        (cell === null && userGrid[i][j] === null) ||
-        (cell !== null && userGrid[i][j] !== null &&
-         cell.shape === userGrid[i][j]!.shape &&
-         cell.color === userGrid[i][j]!.color &&
-         cell.dimension === userGrid[i][j]!.dimension)
-      )
-    )
-    setFeedback(isCorrect ? 'correct' : 'incorrect')
+    const flatMosaic = mosaic.flat().sort((a, b) => a.order - b.order)
+    const flatUserMosaic = userMosaic.flat().filter(tile => tile.order !== -1).sort((a, b) => a.order - b.order)
+    
+    const correct = flatMosaic.length === flatUserMosaic.length &&
+      flatMosaic.every((tile, index) => tile.color === flatUserMosaic[index].color)
 
-    if (isCorrect) {
-      setScore(prevScore => prevScore + 1)
+    if (correct) {
+      endGame(true)
+    } else {
+      endGame(false)
     }
-
-    setTimeout(() => {
-      setCurrentRound(prevRound => prevRound + 1)
-      setFeedback(null)
-    }, 1500)
   }
 
-  const saveResult = async (visitorId: string, finalScore: number) => {
+  const endGame = (success: boolean) => {
+    if (success) {
+      onComplete(true)
+      onUnlockNext()
+    } else {
+      setShowCompletionModal(true)
+      onComplete(false)
+    }
+    if (fingerprint) {
+      saveResult(fingerprint, success ? 1 : 0)
+    }
+  }
+
+  const handleTryAgain = () => {
+    setShowCompletionModal(false)
+    startGame()
+  }
+
+  const handleReset = () => {
+    setUserMosaic(mosaic.map(row => row.map(tile => ({ ...tile, order: -1 }))))
+    setNextOrderNumber(1)
+  }
+
+  const saveResult = async (visitorId: string, score: number) => {
     try {
       const response = await fetch('/api/save-result', {
         method: 'POST',
@@ -179,8 +141,8 @@ export default function DimensionalShiftPuzzle({ onComplete, onUnlockNext }: Dim
         },
         body: JSON.stringify({
           visitorId,
-          taskId: 'DimensionalShiftPuzzle',
-          score: finalScore,
+          taskId: 'TemporalMosaicReconstruction',
+          score,
         }),
       })
       if (!response.ok) {
@@ -191,106 +153,64 @@ export default function DimensionalShiftPuzzle({ onComplete, onUnlockNext }: Dim
     }
   }
 
-  const handleTryAgain = () => {
-    setCurrentRound(1)
-    setScore(0)
-    setShowCompletionModal(false)
-    startNewRound()
-  }
-
-  const handleNextTask = () => {
-    onComplete(true)
-    setShowCompletionModal(false)
-  }
-
-  const renderCell = (cell: Cell | null, onClick?: () => void) => (
-    <motion.div
-      className={`aspect-square rounded-lg flex items-center justify-center ${cell ? cell.color : 'bg-gray-200'}`}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      onClick={onClick}
-    >
-      {cell && (
-        <motion.div
-          className={`w-8 h-8 ${cell.dimension === '3D' ? 'opacity-100' : 'opacity-50'}`}
-          initial={{ rotateY: cell.dimension === '2D' ? 0 : 180 }}
-          animate={{ rotateY: cell.dimension === '2D' ? 0 : 180 }}
-          transition={{ duration: 0.5 }}
-        >
-          <cell.shape />
-        </motion.div>
-      )}
-    </motion.div>
-  )
-
   return (
-    <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full">
-      <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">Dimensional Shift Puzzle</h2>
+    <div className="bg-background rounded-xl shadow-lg p-6 max-w-md w-full">
+      <h2 className="text-2xl font-bold mb-4 text-primary text-center">Temporal Mosaic Reconstruction</h2>
       
-      <div className="mb-6">
-        <div className="grid grid-cols-4 gap-2">
-          {(gameStatus === 'memorize' ? originalGrid : userGrid).map((row, i) =>
-            row.map((cell, j) => renderCell(
-              cell,
-              gameStatus === 'solve' ? () => handleCellClick(i, j) : undefined
+      <div className="mb-4">
+        <p className="text-sm font-semibold text-primary mb-2 text-center">
+          {gameStatus === 'showing' ? 'Memorize the order of colors!' : 
+           gameStatus === 'input' ? 'Reconstruct the mosaic!' : 'Feedback'}
+        </p>
+        <Progress value={(nextOrderNumber - 1) / (GRID_SIZE * GRID_SIZE) * 100} className="mb-4" />
+        <div className="grid gap-2 mb-4" style={{ gridTemplateColumns: `repeat(${GRID_SIZE}, minmax(0, 1fr))` }}>
+          {mosaic.map((row, rowIndex) =>
+            row.map((tile, colIndex) => (
+              <motion.button
+                key={`${rowIndex}-${colIndex}`}
+                className={`w-full aspect-square rounded-md ${tile.color} ${gameStatus === 'input' && userMosaic[rowIndex][colIndex].order === -1 ? 'cursor-pointer' : 'cursor-not-allowed'}`}
+                animate={gameStatus === 'showing' && currentDisplayIndex === tile.order ? { scale: [1, 1.1, 1] } : {}}
+                transition={{ duration: 0.3 }}
+                onClick={() => handleTileClick(rowIndex, colIndex)}
+                disabled={gameStatus !== 'input' || userMosaic[rowIndex][colIndex].order !== -1}
+              >
+                {gameStatus === 'input' && userMosaic[rowIndex][colIndex].order !== -1 && (
+                  <span className="text-white font-bold">{userMosaic[rowIndex][colIndex].order + 1}</span>
+                )}
+              </motion.button>
             ))
+          )}
+        </div>
+        <div className="flex justify-between mb-4">
+          {gameStatus === 'input' && (
+            <>
+              <Button onClick={handleSubmit} className="w-1/2 mr-2">Submit</Button>
+              <Button onClick={handleReset} className="w-1/2 ml-2" variant="outline">
+                <RotateCcw className="w-4 h-4 mr-2" />
+                Reset
+              </Button>
+            </>
           )}
         </div>
       </div>
 
-      {gameStatus === 'memorize' && (
-        <div className="text-center mb-4">
-          <p className="text-lg font-semibold text-indigo-600 mb-2">
-            Memorize the grid, then shift dimensions!
-          </p>
-          <ClockTimer timeLeft={timeLeft} isCountingDown={true} />
-        </div>
-      )}
-
-      {gameStatus === 'solve' && (
-        <>
-          <p className="text-lg font-semibold text-indigo-600 mb-4 text-center">
-            Recreate the grid with shifted dimensions
-          </p>
-          <Button onClick={handleSubmit} className="w-full mb-4">Submit Solution</Button>
-        </>
-      )}
-
       <AnimatePresence>
-        {feedback && (
+        {gameStatus === 'feedback' && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className={`flex justify-center items-center mt-4 ${
-              feedback === 'correct' ? 'text-green-500' : 'text-red-500'
-            }`}
+            className="flex justify-center items-center mt-2"
           >
-            {feedback === 'correct' ? (
-              <CheckCircle className="w-6 h-6 mr-2" />
-            ) : (
-              <XCircle className="w-6 h-6 mr-2" />
-            )}
-            {feedback === 'correct' ? 'Correct!' : 'Incorrect'}
+            <CheckCircle className="w-6 h-6 text-green-500" />
           </motion.div>
         )}
       </AnimatePresence>
 
-      <div className="mt-6">
-        <Progress value={(score / TOTAL_ROUNDS) * 100} className="w-full mb-2" />
-        <div className="flex justify-between items-center text-sm">
-          <span className="text-gray-600">Round: {currentRound}/{TOTAL_ROUNDS}</span>
-          <span className="text-gray-600">Score: {score}/{TOTAL_ROUNDS}</span>
-        </div>
-      </div>
-
-      <TaskCompletionModal
+      <TwoTaskCompModal
         isOpen={showCompletionModal}
         onClose={() => setShowCompletionModal(false)}
-        success={score >= QUALIFICATION_THRESHOLD}
-        score={score}
-        totalRounds={TOTAL_ROUNDS}
-        onNextTask={handleNextTask}
+        success={false}
         onTryAgain={handleTryAgain}
       />
     </div>
