@@ -7,18 +7,18 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Brain,
   Grid,
-  Palette,
+  Layers,
   Box,
-  Music,
-  SwitchCamera,
-  Clock,
-  Lightbulb,
-  Eye,
+  Zap,
   ArrowLeft,
   Lock,
   CheckCircle2
 } from 'lucide-react'
-import AdvancedTask1 from '@/tasks/advanced-task1'
+import AdvancedTask1 from '../../tasks/advanced-task1'
+import AdvancedTask2 from '../../tasks/advanced-task2'
+import AdvancedTask3 from '../../tasks/advanced-task3'
+import AdvancedTask4 from '../../tasks/advanced-task4'
+import AdvancedTask5 from '../../tasks/advanced-task5'
 import TaskModal from '@/components/TaskModal'
 import TaskDescriptionModal from '@/components/TaskDescriptionModal'
 
@@ -31,19 +31,39 @@ interface Task {
 }
 
 const tasks: Task[] = [
-  { id: 1, name: "Advanced N-Back", description: "Test your working memory with a challenging N-Back task involving shapes and positions.", icon: Brain, readinessPhrase: "Ready to push your working memory to the limit?" },
-  { id: 2, name: "Complex Pattern Recognition", description: "Identify complex visual patterns under time pressure.", icon: Grid, readinessPhrase: "Prepared to spot intricate patterns?" },
-  { id: 3, name: "Multisensory Integration", description: "Remember and recall combinations of visual and auditory cues.", icon: Palette, readinessPhrase: "Ready to sync your senses?" },
-  { id: 4, name: "Adaptive Working Memory", description: "Test your working memory capacity with an adaptive challenge.", icon: Brain, readinessPhrase: "Prepared to discover your memory limits?" },
-  { id: 5, name: "Spatial-Temporal Reasoning", description: "Predict outcomes of complex spatial transformations.", icon: Box, readinessPhrase: "Ready to navigate space and time in your mind?" },
-  { id: 6, name: "Abstract Rule Learning", description: "Identify and apply hidden rules in various contexts.", icon: Lightbulb, readinessPhrase: "Prepared to uncover abstract patterns?" },
-  { id: 7, name: "Dynamic Category Switching", description: "Rapidly switch between different categorization rules.", icon: SwitchCamera, readinessPhrase: "Ready to flex your mental agility?" },
-  { id: 8, name: "Interference Control", description: "Inhibit automatic responses in the face of conflicting information.", icon: Eye, readinessPhrase: "Prepared to resist mental interference?" },
-  { id: 9, name: "Probabilistic Sequence Learning", description: "Predict items in sequences with complex probabilistic patterns.", icon: Clock, readinessPhrase: "Ready to anticipate the unpredictable?" },
-  { id: 10, name: "Cognitive Flexibility", description: "Rapidly shift between multiple cognitive tasks and rules.", icon: Brain, readinessPhrase: "Prepared for the ultimate mental juggling act?" },
+  { id: 1, name: "Complex Pattern Recognition", description: "Identify and recreate intricate visual patterns with varying elements and rules.", icon: Brain, readinessPhrase: "Ready to challenge your pattern recognition skills?" },
+  { id: 2, name: "Multi-Modal Memory Challenge", description: "Memorize and recall information across visual, auditory, and spatial domains simultaneously.", icon: Layers, readinessPhrase: "Prepared to test your multi-modal memory?" },
+  { id: 3, name: "Adaptive N-Back Task", description: "A dynamic working memory task that adjusts difficulty based on your performance.", icon: Zap, readinessPhrase: "Ready to push your working memory to its limits?" },
+  { id: 4, name: "Spatial-Temporal Sequence Reconstruction", description: "Memorize and reconstruct complex sequences of objects in both space and time.", icon: Grid, readinessPhrase: "Prepared for a spatial-temporal memory challenge?" },
+  { id: 5, name: "Dynamic Memory Matrix", description: "Memorize and manipulate a multi-dimensional matrix of changing information.", icon: Box, readinessPhrase: "Ready to tackle a dynamic memory challenge?" }
 ]
 
-const STORAGE_KEY = 'unlockedAdvancedLevels'
+const STORAGE_KEY = 'advancedTasksUnlockedLevels'
+
+interface TaskCardProps {
+  task: Task;
+  isUnlocked: boolean;
+  onClick: () => void;
+}
+
+function TaskCard({ task, isUnlocked, onClick }: TaskCardProps) {
+  return (
+    <div
+      className={`bg-white p-6 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105 ${
+        isUnlocked ? 'cursor-pointer' : 'opacity-50'
+      }`}
+      onClick={isUnlocked ? onClick : undefined}
+    >
+      <div className="flex items-center justify-between mb-4">
+        <task.icon className="w-10 h-10 text-indigo-600" />
+        {!isUnlocked && <Lock className="w-6 h-6 text-gray-400" />}
+        {isUnlocked && <CheckCircle2 className="w-6 h-6 text-green-500" />}
+      </div>
+      <h3 className="text-xl font-semibold mb-2 text-gray-800">{task.name}</h3>
+      <p className="text-gray-600 text-sm">{task.description}</p>
+    </div>
+  )
+}
 
 export default function AdvancedTasksPage() {
   const [unlockedLevels, setUnlockedLevels] = useState<number>(1)
@@ -54,13 +74,12 @@ export default function AdvancedTasksPage() {
 
   useEffect(() => {
     setIsClient(true)
-    const storedLevels = localStorage.getItem(STORAGE_KEY)
+    const storedLevels = sessionStorage.getItem(STORAGE_KEY)
     setUnlockedLevels(storedLevels ? parseInt(storedLevels) : 1)
   }, [])
 
   useEffect(() => {
     if (isClient) {
-      localStorage.setItem(STORAGE_KEY, unlockedLevels.toString())
       sessionStorage.setItem(STORAGE_KEY, unlockedLevels.toString())
     }
   }, [unlockedLevels, isClient])
@@ -75,7 +94,7 @@ export default function AdvancedTasksPage() {
   const handleUnlockNext = (completedTaskId: number) => {
     setUnlockedLevels(prev => {
       const newLevel = Math.min(Math.max(prev, completedTaskId + 1), tasks.length)
-      localStorage.setItem(STORAGE_KEY, newLevel.toString())
+      sessionStorage.setItem(STORAGE_KEY, newLevel.toString())
       return newLevel
     })
   }
@@ -85,7 +104,7 @@ export default function AdvancedTasksPage() {
     setIsDescriptionModalOpen(true)
   }
 
-  const handleStartTask = () => {
+  const handleTaskStart = () => {
     setIsDescriptionModalOpen(false)
     setIsTaskModalOpen(true)
   }
@@ -99,7 +118,14 @@ export default function AdvancedTasksPage() {
     switch (task.id) {
       case 1:
         return <AdvancedTask1 onComplete={handleTaskCompletion} onUnlockNext={() => handleUnlockNext(task.id)} />
-      // Add cases for other advanced tasks as they are implemented
+      case 2:
+        return <AdvancedTask2 onComplete={handleTaskCompletion} onUnlockNext={() => handleUnlockNext(task.id)} />
+      case 3:
+        return <AdvancedTask3 onComplete={handleTaskCompletion} onUnlockNext={() => handleUnlockNext(task.id)} />
+      case 4:
+        return <AdvancedTask4 onComplete={handleTaskCompletion} onUnlockNext={() => handleUnlockNext(task.id)} />
+      case 5:
+        return <AdvancedTask5 onComplete={handleTaskCompletion} onUnlockNext={() => handleUnlockNext(task.id)} />
       default:
         return (
           <div className="p-4">
@@ -130,7 +156,7 @@ export default function AdvancedTasksPage() {
         >
           Advanced Memory Master
         </motion.h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <AnimatePresence>
             {tasks.map((task) => (
               <motion.div
@@ -154,7 +180,7 @@ export default function AdvancedTasksPage() {
         <TaskDescriptionModal
           isOpen={isDescriptionModalOpen}
           onClose={() => setIsDescriptionModalOpen(false)}
-          onSubmit={handleStartTask}  // Changed from onReady to onSubmit
+          onSubmit={handleTaskStart}
           task={selectedTask}
         />
       )}
@@ -167,44 +193,5 @@ export default function AdvancedTasksPage() {
         </TaskModal>
       )}
     </div>
-  )
-}
-
-const TaskCard: React.FC<{
-  task: Task;
-  isUnlocked: boolean;
-  onClick: () => void;
-}> = ({ task, isUnlocked, onClick }) => {
-  const Icon = task.icon
-  return (
-    <motion.div
-      className={`bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 h-[280px] flex flex-col ${
-        isUnlocked ? 'hover:shadow-xl hover:-translate-y-1 cursor-pointer' : 'opacity-50'
-      }`}
-      whileHover={isUnlocked ? { scale: 1.03 } : {}}
-      onClick={isUnlocked ? onClick : undefined}
-    >
-      <div className="p-6 flex flex-col h-full">
-        <div className="flex items-center justify-between mb-4">
-          <div className="text-2xl font-bold text-indigo-600">{task.name}</div>
-          {isUnlocked ? (
-            <CheckCircle2 className="w-6 h-6 text-green-500 flex-shrink-0" />
-          ) : (
-            <Lock className="w-6 h-6 text-gray-400 flex-shrink-0" />
-          )}
-        </div>
-        <div className="flex items-center justify-center mb-4">
-          <div className="p-3 bg-indigo-100 rounded-full">
-            <Icon className="w-8 h-8 text-indigo-600" />
-          </div>
-        </div>
-        <div className="text-gray-600 text-sm mb-4 flex-grow h-[72px] overflow-hidden">
-          {task.description}
-        </div>
-        <div className="text-indigo-500 text-sm font-semibold mt-auto">
-          {isUnlocked ? 'Click to start' : 'Locked'}
-        </div>
-      </div>
-    </motion.div>
   )
 }
