@@ -22,11 +22,14 @@
     "paths": {
       "@/*": ["./*"]
     },
-    "types": ["three", "react", "react-dom"],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./node_modules/@react-three",
+      "./types"
+    ],
+    "baseUrl": ".",
     "noImplicitAny": false,
-    "allowSyntheticDefaultImports": true,
-    "typeRoots": ["./node_modules/@types", "./node_modules/@react-three", "./types"],
-    "baseUrl": "."
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "next-env.d.ts",
