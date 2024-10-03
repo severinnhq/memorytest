@@ -10,10 +10,9 @@ export async function POST(request: Request) {
     const user = await db.collection("users").findOne({ email })
 
     if (user && user.password === password) {  // In a real app, use proper password hashing
-      console.log('User found:', user)  // Log for debugging
       return NextResponse.json({ 
         user: { 
-          name: user.name || email.split('@')[0], // Use email username if name is not available
+          name: user.name || email.split('@')[0],
           email: user.email 
         } 
       })

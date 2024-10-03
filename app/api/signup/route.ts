@@ -3,23 +3,29 @@ import clientPromise from '@/lib/mongodb'
 
 export async function POST(request: Request) {
   try {
-    const { username, email, password } = await request.json()
-
+    const { name, email, password } = await request.json()
     const client = await clientPromise
     const db = client.db("memento")
 
+    const existingUser = await db.collection("users").findOne({ email })
+    if (existingUser) {
+      return NextResponse.json({ error: 'Email already in use' }, { status: 400 })
+    }
+
     const result = await db.collection("users").insertOne({
-      username,
+      name,
       email,
-      password, // Note: In a real application, you should hash the password before storing it
-      createdAt: new Date()
+      password,  // In a real app, hash this password before storing
     })
 
-    console.log('User created:', { username, email, _id: result.insertedId })
-
-    return NextResponse.json({ message: 'User created successfully', userId: result.insertedId })
+    return NextResponse.json({ 
+      user: { 
+        name,
+        email 
+      } 
+    })
   } catch (e) {
-    console.error('Error creating user:', e)
-    return NextResponse.json({ error: 'An error occurred while creating the user' }, { status: 500 })
+    console.error('Sign up error:', e)
+    return NextResponse.json({ error: 'An error occurred during sign up' }, { status: 500 })
   }
 }
