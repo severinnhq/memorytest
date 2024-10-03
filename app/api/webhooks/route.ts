@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server'
 import { headers } from 'next/headers'
-import stripe from '@/lib/stripe'
-import clientPromise from '@/lib/mongodb'
-import { ObjectId } from 'mongodb'
+import Stripe from 'stripe'
 
-export const runtime = 'edge';
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: '2024-09-30.acacia',
+})
 
 export async function POST(req: Request) {
   const body = await req.text()
@@ -19,16 +19,30 @@ export async function POST(req: Request) {
   }
 
   if (event.type === 'checkout.session.completed') {
-    const session = event.data.object as any
+    const session = event.data.object as Stripe.Checkout.Session
 
-    const client = await clientPromise
-    const db = client.db("memento")
+    // Instead of updating the database directly, call another API route
+    const updateResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/update-user-payment`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: session.client_reference_id,
+        hasPaid: true,
+      }),
+    })
 
-    await db.collection("users").updateOne(
-      { _id: new ObjectId(session.client_reference_id) },
-      { $set: { hasPaid: true } }
-    )
+    if (!updateResponse.ok) {
+      console.error('Failed to update user payment status')
+    }
   }
 
   return NextResponse.json({ received: true })
+}
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
 }
