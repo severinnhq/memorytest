@@ -5,20 +5,22 @@ import { Button } from "@/components/ui/button"
 interface TaskDescriptionModalProps {
   isOpen: boolean
   onClose: () => void
-  onSubmit: () => void  // Changed from onReady to onSubmit
+  onSubmit: () => void
   task: {
     name: string
     description: string
     readinessPhrase: string
-  }
+  } | null
 }
 
 export default function TaskDescriptionModal({
   isOpen,
   onClose,
-  onSubmit,  // Changed from onReady to onSubmit
+  onSubmit,
   task
 }: TaskDescriptionModalProps) {
+  if (!task) return null
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
@@ -35,7 +37,7 @@ export default function TaskDescriptionModal({
         </div>
         <div className="mt-4">
           <Button onClick={onSubmit} className="w-full">  
-            I'm Ready
+            I&apos;m Ready
           </Button>
         </div>
       </DialogContent>

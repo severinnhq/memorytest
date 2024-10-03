@@ -1,18 +1,57 @@
 "use client"
 
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Brain, Zap, Trophy, ArrowRight, Sparkles } from 'lucide-react'
 
+interface Task {
+  name: string
+  description: string
+  readinessPhrase: string
+}
+
 export default function Home() {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [currentTask, setCurrentTask] = useState<Task | null>(null)
+
   const features = [
     { icon: Brain, title: "Cognitive Training", description: "Enhance your memory and cognitive abilities" },
     { icon: Zap, title: "Quick Sessions", description: "Improve in just minutes a day" },
     { icon: Trophy, title: "Track Progress", description: "Monitor your improvement over time" },
   ]
+
+  const tasks = [
+    {
+      name: "Mid-Level Task",
+      description: "This task is designed to challenge your memory at an intermediate level.",
+      readinessPhrase: "Are you ready to take on a mid-level memory challenge?"
+    },
+    {
+      name: "Advanced Task",
+      description: "This task will push your memory skills to their limits.",
+      readinessPhrase: "Are you prepared for an advanced memory challenge?"
+    }
+  ]
+
+  const openModal = (task: Task) => {
+    setCurrentTask(task)
+    setIsModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+    setCurrentTask(null)
+  }
+
+  const handleTaskSubmit = () => {
+    console.log("Task submitted:", currentTask?.name)
+    closeModal()
+    // Here you would typically navigate to the task page or start the task
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100">
@@ -45,7 +84,7 @@ export default function Home() {
             transition={{ duration: 0.7 }}
           >
             <h2 className="text-5xl font-extrabold text-indigo-800 mb-4">
-              Unlock Your Mind's Potential
+              Unlock Your Mind&apos;s Potential
             </h2>
             <p className="text-xl text-indigo-600 mb-8">
               Challenge yourself with our memory enhancement tasks and watch your cognitive abilities soar!
@@ -57,16 +96,18 @@ export default function Home() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="flex flex-col sm:flex-row justify-center gap-4"
           >
-            <Link href="/mid-tasks" passHref>
-              <Button className="bg-purple-600 hover:bg-purple-700 text-white py-6 px-8 text-lg rounded-full">
-                Start Mid-Level Tasks <ArrowRight className="ml-2" />
-              </Button>
-            </Link>
-            <Link href="/advanced-tasks" passHref>
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white py-6 px-8 text-lg rounded-full">
-                Start Advanced Tasks <Sparkles className="ml-2" />
-              </Button>
-            </Link>
+            <Button 
+              className="bg-purple-600 hover:bg-purple-700 text-white py-6 px-8 text-lg rounded-full"
+              onClick={() => openModal(tasks[0])}
+            >
+              Start Mid-Level Tasks <ArrowRight className="ml-2" />
+            </Button>
+            <Button 
+              className="bg-blue-600 hover:bg-blue-700 text-white py-6 px-8 text-lg rounded-full"
+              onClick={() => openModal(tasks[1])}
+            >
+              Start Advanced Tasks <Sparkles className="ml-2" />
+            </Button>
           </motion.div>
         </section>
 
@@ -121,6 +162,27 @@ export default function Home() {
           </nav>
         </div>
       </footer>
+
+      <Dialog open={isModalOpen} onOpenChange={closeModal}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>{currentTask?.name}</DialogTitle>
+          </DialogHeader>
+          <div className="mt-2">
+            <p className="text-sm text-gray-500">{currentTask?.description}</p>
+          </div>
+          <div className="mt-4 bg-blue-50 rounded-lg p-4">
+            <p className="text-blue-700 text-center font-medium">
+              {currentTask?.readinessPhrase}
+            </p>
+          </div>
+          <div className="mt-4">
+            <Button onClick={handleTaskSubmit} className="w-full">  
+              I&apos;m Ready
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
