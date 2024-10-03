@@ -181,7 +181,7 @@ export default function Home() {
         </div>
 
         <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {features.map((feature, index) => (
+          {features.map((feature) => (
             <Card key={feature.title} className="bg-white hover:shadow-lg transition-shadow duration-300">
               <CardHeader>
                 <feature.icon className="h-10 w-10 text-indigo-600 mb-2" />
@@ -251,7 +251,7 @@ export default function Home() {
                 <Zap className="h-6 w-6 text-indigo-600 mr-2" />
                 Adaptive Difficulty
               </h3>
-              <p className="text-gray-600">Games adjust to your skill level, ensuring you're always challenged but never overwhelmed.</p>
+              <p className="text-gray-600">Games adjust to your skill level, ensuring you&apos;re always challenged but never overwhelmed.</p>
             </div>
             <div>
               <h3 className="text-xl font-semibold mb-2 flex items-center">
