@@ -26,7 +26,7 @@ export default function Home() {
   }
 
   const features = [
-    { icon: Brain, title: 'Memory Games', description: 'Engage in fun and challenging memory exercises' },
+    { icon: Brain, title: 'Memory Game', description: 'Engage in fun and challenging memory exercises' },
     { icon: Zap, title: 'Quick Recall', description: 'Improve your ability to quickly recall information' },
     { icon: Trophy, title: 'Track Progress', description: 'Monitor your improvement over time' },
   ]
