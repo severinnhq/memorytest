@@ -60,7 +60,7 @@ export default function UpgradePage() {
       }
     } catch (error) {
       console.error('Error in upgrade process:', error)
-      // Here you might want to show an error message to the user
+      // Here you might want to show an error message to the user.
     } finally {
       setIsLoading(false)
     }
