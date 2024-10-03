@@ -1,7 +1,8 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -14,9 +15,25 @@ interface Task {
   readinessPhrase: string
 }
 
+interface User {
+  name?: string
+  email: string
+}
+
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [currentTask, setCurrentTask] = useState<Task | null>(null)
+  const [user, setUser] = useState<User | null>(null)
+  const router = useRouter()
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user')
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser)
+      setUser(parsedUser)
+      console.log('Retrieved user data:', parsedUser)
+    }
+  }, [])
 
   const features = [
     { icon: Brain, title: "Cognitive Training", description: "Enhance your memory and cognitive abilities" },
@@ -53,6 +70,12 @@ export default function Home() {
     // Here you would typically navigate to the task page or start the task
   }
 
+  const handleSignOut = () => {
+    localStorage.removeItem('user')
+    setUser(null)
+    router.push('/signin')
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100">
       <header className="p-6 bg-white bg-opacity-90 backdrop-blur-sm sticky top-0 z-10">
@@ -69,9 +92,22 @@ export default function Home() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <Button variant="ghost" className="text-indigo-600 hover:text-indigo-800">
-              Login
-            </Button>
+            {user ? (
+              <div className="flex items-center gap-4">
+                <span className="text-indigo-600 font-medium">
+                  Welcome, {user.name || user.email.split('@')[0]}
+                </span>
+                <Button variant="ghost" onClick={handleSignOut} className="text-indigo-600 hover:text-indigo-800">
+                  Sign Out
+                </Button>
+              </div>
+            ) : (
+              <Link href="/signin" passHref>
+                <Button variant="ghost" className="text-indigo-600 hover:text-indigo-800">
+                  Sign In
+                </Button>
+              </Link>
+            )}
           </motion.div>
         </nav>
       </header>
