@@ -12,12 +12,12 @@ export async function POST(req: Request) {
   const body = await req.text()
   const sig = headers().get('stripe-signature') as string
 
-  let event
+  let event: Stripe.Event
 
   try {
     event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!)
-  } catch (err: any) {
-    return NextResponse.json({ error: `Webhook Error: ${err.message}` }, { status: 400 })
+  } catch (err: unknown) {
+    return NextResponse.json({ error: `Webhook Error: ${err instanceof Error ? err.message : 'Unknown error'}` }, { status: 400 })
   }
 
   if (event.type === 'checkout.session.completed') {

@@ -15,7 +15,6 @@ export async function POST(request: Request) {
       throw new Error('NEXT_PUBLIC_BASE_URL is not set in the environment variables')
     }
 
-    // Replace with your actual price ID
     const priceId = process.env.STRIPE_PRICE_ID
 
     if (!priceId) {
@@ -37,8 +36,8 @@ export async function POST(request: Request) {
     })
 
     return NextResponse.json({ sessionId: session.id })
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Error creating checkout session:', err)
-    return NextResponse.json({ error: err.message }, { status: 500 })
+    return NextResponse.json({ error: err instanceof Error ? err.message : 'An unknown error occurred' }, { status: 500 })
   }
 }
