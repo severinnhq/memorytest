@@ -12,7 +12,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Email already in use' }, { status: 400 })
     }
 
-    const result = await db.collection("users").insertOne({
+    await db.collection("users").insertOne({
       name,
       email,
       password,  // In a real app, hash this password before storing
