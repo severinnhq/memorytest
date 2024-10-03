@@ -4,6 +4,8 @@ import stripe from '@/lib/stripe'
 import clientPromise from '@/lib/mongodb'
 import { ObjectId } from 'mongodb'
 
+export const runtime = 'edge';
+
 export async function POST(req: Request) {
   const body = await req.text()
   const sig = headers().get('stripe-signature') as string
@@ -29,10 +31,4 @@ export async function POST(req: Request) {
   }
 
   return NextResponse.json({ received: true })
-}
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
 }
