@@ -15,7 +15,7 @@ export async function POST(request: Request) {
       throw new Error('NEXT_PUBLIC_BASE_URL is not set in the environment variables')
     }
 
-    // This should now be your new 0.1 euro product Price ID
+    // This should now be your new 0.1 euro  not recurring product Price ID
     const priceId = process.env.STRIPE_PRICE_ID
 
     if (!priceId) {
