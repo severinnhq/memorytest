@@ -1,6 +1,7 @@
-"use client"
+'use client'
 
 import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { motion, AnimatePresence } from 'framer-motion'
@@ -26,6 +27,13 @@ import MidTask7 from '@/tasks/mid-task7'
 import MidTask8 from '@/tasks/mid-task8'
 import TaskModal from '@/components/TaskModal'
 import TaskDescriptionModal from '@/components/TaskDescriptionModal'
+
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+  hasPaid: boolean;
+}
 
 interface Task {
   id: number;
@@ -88,11 +96,32 @@ const TaskCard: React.FC<{
 }
 
 export default function MidTasksPage() {
+  const [user, setUser] = useState<User | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
   const [unlockedLevels, setUnlockedLevels] = useState<number>(1)
   const [isClient, setIsClient] = useState(false)
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
   const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false)
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false)
+  const router = useRouter()
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const storedUser = localStorage.getItem('user')
+      if (storedUser) {
+        const parsedUser = JSON.parse(storedUser)
+        setUser(parsedUser)
+        if (!parsedUser.hasPaid) {
+          router.push('/upgrade')
+        }
+      } else {
+        router.push('/auth')
+      }
+      setIsLoading(false)
+    }
+
+    checkAuth()
+  }, [router])
 
   useEffect(() => {
     setIsClient(true)
@@ -163,6 +192,16 @@ export default function MidTasksPage() {
           </div>
         )
     }
+  }
+
+  if (isLoading) {
+    return <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+      <div className="text-2xl font-bold text-indigo-600">Loading...</div>
+    </div>
+  }
+
+  if (!user || !user.hasPaid) {
+    return null // This will prevent the page content from flashing before redirect
   }
 
   return (

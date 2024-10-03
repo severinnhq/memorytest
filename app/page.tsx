@@ -6,10 +6,17 @@ import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Brain, Zap, Trophy, LogOut } from 'lucide-react'
+import { Brain, Zap, Trophy, LogOut, CreditCard } from 'lucide-react'
+
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+  hasPaid: boolean;
+}
 
 export default function Home() {
-  const [user, setUser] = useState<{ name: string; email: string } | null>(null)
+  const [user, setUser] = useState<User | null>(null)
   const router = useRouter()
 
   useEffect(() => {
@@ -25,10 +32,19 @@ export default function Home() {
     router.push('/auth')
   }
 
+  const handleUpgradeClick = () => {
+    if (user) {
+      router.push('/upgrade')
+    } else {
+      router.push('/auth')
+    }
+  }
+
   const features = [
     { icon: Brain, title: 'Memory Game', description: 'Engage in fun and challenging memory exercises' },
     { icon: Zap, title: 'Quick Recall', description: 'Improve your ability to quickly recall information' },
     { icon: Trophy, title: 'Track Progress', description: 'Monitor your improvement over time' },
+    { icon: CreditCard, title: 'Premium Features', description: 'Access advanced tasks and personalized training' },
   ]
 
   return (
@@ -78,7 +94,7 @@ export default function Home() {
           </p>
         </motion.div>
 
-        <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
@@ -100,23 +116,43 @@ export default function Home() {
         </div>
 
         <motion.div
-          className="mt-16 text-center"
+          className="mt-16 text-center space-y-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           {user ? (
-            <Link href="/games" passHref>
-              <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-white">
-                Start Training
-              </Button>
-            </Link>
+            <>
+              <Link href="/games" passHref>
+                <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-white mr-4">
+                  Start Training
+                </Button>
+              </Link>
+              {!user.hasPaid && (
+                <Button 
+                  size="lg" 
+                  className="bg-green-600 hover:bg-green-700 text-white"
+                  onClick={handleUpgradeClick}
+                >
+                  Upgrade to Premium
+                </Button>
+              )}
+            </>
           ) : (
-            <Link href="/auth" passHref>
-              <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-white">
-                Get Started
+            <>
+              <Link href="/auth" passHref>
+                <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-white mr-4">
+                  Get Started
+                </Button>
+              </Link>
+              <Button 
+                size="lg" 
+                className="bg-green-600 hover:bg-green-700 text-white"
+                onClick={handleUpgradeClick}
+              >
+                Upgrade to Premium
               </Button>
-            </Link>
+            </>
           )}
         </motion.div>
       </main>

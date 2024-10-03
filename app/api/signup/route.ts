@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import clientPromise from '@/lib/mongodb'
+import { User } from '@/lib/mongodb'
 
 export async function POST(request: Request) {
   try {
@@ -12,18 +13,21 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Email already in use' }, { status: 400 })
     }
 
-    await db.collection("users").insertOne({
+    const result = await db.collection("users").insertOne({
       name,
       email,
       password,  // In a real app, hash this password before storing
+      hasPaid: false
     })
 
-    return NextResponse.json({ 
-      user: { 
-        name,
-        email 
-      } 
-    })
+    const user: User = {
+      _id: result.insertedId.toString(),
+      name,
+      email,
+      hasPaid: false
+    }
+
+    return NextResponse.json({ user })
   } catch (e) {
     console.error('Sign up error:', e)
     return NextResponse.json({ error: 'An error occurred during sign up' }, { status: 500 })

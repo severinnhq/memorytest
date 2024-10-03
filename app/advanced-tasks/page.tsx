@@ -1,6 +1,7 @@
-"use client"
+'use client'
 
 import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { motion, AnimatePresence } from 'framer-motion'
@@ -14,13 +15,20 @@ import {
   Lock,
   CheckCircle2
 } from 'lucide-react'
-import AdvancedTask1 from '../../tasks/advanced-task1'
-import AdvancedTask2 from '../../tasks/advanced-task2'
-import AdvancedTask3 from '../../tasks/advanced-task3'
-import AdvancedTask4 from '../../tasks/advanced-task4'
-import AdvancedTask5 from '../../tasks/advanced-task5'
+import AdvancedTask1 from '@/tasks/advanced-task1'
+import AdvancedTask2 from '@/tasks/advanced-task2'
+import AdvancedTask3 from '@/tasks/advanced-task3'
+import AdvancedTask4 from '@/tasks/advanced-task4'
+import AdvancedTask5 from '@/tasks/advanced-task5'
 import TaskModal from '@/components/TaskModal'
 import TaskDescriptionModal from '@/components/TaskDescriptionModal'
+
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+  hasPaid: boolean;
+}
 
 interface Task {
   id: number;
@@ -40,37 +48,72 @@ const tasks: Task[] = [
 
 const STORAGE_KEY = 'advancedTasksUnlockedLevels'
 
-interface TaskCardProps {
+const TaskCard: React.FC<{
   task: Task;
   isUnlocked: boolean;
   onClick: () => void;
-}
-
-function TaskCard({ task, isUnlocked, onClick }: TaskCardProps) {
+}> = ({ task, isUnlocked, onClick }) => {
+  const Icon = task.icon
   return (
-    <div
-      className={`bg-white p-6 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105 ${
-        isUnlocked ? 'cursor-pointer' : 'opacity-50'
+    <motion.div
+      className={`bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 h-[280px] flex flex-col ${
+        isUnlocked ? 'hover:shadow-xl hover:-translate-y-1 cursor-pointer' : 'opacity-50'
       }`}
+      whileHover={isUnlocked ? { scale: 1.03 } : {}}
       onClick={isUnlocked ? onClick : undefined}
     >
-      <div className="flex items-center justify-between mb-4">
-        <task.icon className="w-10 h-10 text-indigo-600" />
-        {!isUnlocked && <Lock className="w-6 h-6 text-gray-400" />}
-        {isUnlocked && <CheckCircle2 className="w-6 h-6 text-green-500" />}
+      <div className="p-6 flex flex-col h-full">
+        <div className="flex items-center justify-between mb-4">
+          <div className="text-2xl font-bold text-indigo-600">{task.name}</div>
+          {isUnlocked ? (
+            <CheckCircle2 className="w-6 h-6 text-green-500 flex-shrink-0" />
+          ) : (
+            <Lock className="w-6 h-6 text-gray-400 flex-shrink-0" />
+          )}
+        </div>
+        <div className="flex items-center justify-center mb-4">
+          <div className="p-3 bg-indigo-100 rounded-full">
+            <Icon className="w-8 h-8 text-indigo-600" />
+          </div>
+        </div>
+        <div className="text-gray-600 text-sm mb-4 flex-grow h-[72px] overflow-hidden">
+          {task.description}
+        </div>
+        <div className="text-indigo-500 text-sm font-semibold mt-auto">
+          {isUnlocked ? 'Click to start' : 'Locked'}
+        </div>
       </div>
-      <h3 className="text-xl font-semibold mb-2 text-gray-800">{task.name}</h3>
-      <p className="text-gray-600 text-sm">{task.description}</p>
-    </div>
+    </motion.div>
   )
 }
 
 export default function AdvancedTasksPage() {
+  const [user, setUser] = useState<User | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
   const [unlockedLevels, setUnlockedLevels] = useState<number>(1)
   const [isClient, setIsClient] = useState(false)
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
   const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false)
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false)
+  const router = useRouter()
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const storedUser = localStorage.getItem('user')
+      if (storedUser) {
+        const parsedUser = JSON.parse(storedUser)
+        setUser(parsedUser)
+        if (!parsedUser.hasPaid) {
+          router.push('/upgrade')
+        }
+      } else {
+        router.push('/auth')
+      }
+      setIsLoading(false)
+    }
+
+    checkAuth()
+  }, [router])
 
   useEffect(() => {
     setIsClient(true)
@@ -137,6 +180,16 @@ export default function AdvancedTasksPage() {
     }
   }
 
+  if (isLoading) {
+    return <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+      <div className="text-2xl font-bold text-indigo-600">Loading...</div>
+    </div>
+  }
+
+  if (!user || !user.hasPaid) {
+    return null // This will prevent the page content from flashing before redirect
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-12">
       <div className="container mx-auto px-4">
@@ -156,7 +209,7 @@ export default function AdvancedTasksPage() {
         >
           Advanced Memory Master
         </motion.h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           <AnimatePresence>
             {tasks.map((task) => (
               <motion.div

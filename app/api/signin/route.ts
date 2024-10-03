@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import clientPromise from '@/lib/mongodb'
+import { User } from '@/lib/mongodb'
 
 export async function POST(request: Request) {
   try {
@@ -10,12 +11,13 @@ export async function POST(request: Request) {
     const user = await db.collection("users").findOne({ email })
 
     if (user && user.password === password) {  // In a real app, use proper password hashing
-      return NextResponse.json({ 
-        user: { 
-          name: user.name || email.split('@')[0],
-          email: user.email 
-        } 
-      })
+      const userResponse: User = {
+        _id: user._id.toString(),
+        name: user.name,
+        email: user.email,
+        hasPaid: user.hasPaid
+      }
+      return NextResponse.json({ user: userResponse })
     } else {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
     }
