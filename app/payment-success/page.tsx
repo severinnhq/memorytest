@@ -1,61 +1,68 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 
 export default function PaymentSuccessPage() {
-  const [isProcessing, setIsProcessing] = useState(true)
   const router = useRouter()
   const searchParams = useSearchParams()
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const processPayment = async () => {
+    const updatePaymentStatus = async () => {
       const sessionId = searchParams.get('session_id')
       if (!sessionId) {
-        console.error('No session ID found')
-        setIsProcessing(false)
+        setError('No session ID found')
+        setIsLoading(false)
         return
       }
 
       try {
         const response = await fetch('/api/payment-success', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+          },
           body: JSON.stringify({ session_id: sessionId }),
         })
 
-        if (response.ok) {
-          // Update local storage or state management
-          setIsProcessing(false)
-        } else {
-          console.error('Error processing payment')
-          setIsProcessing(false)
+        if (!response.ok) {
+          throw new Error('Failed to update payment status')
         }
-      } catch (error) {
-        console.error('Error processing payment:', error)
-        setIsProcessing(false)
+
+        // Update local storage
+        const user = JSON.parse(localStorage.getItem('user') || '{}')
+        user.hasPaid = true
+        localStorage.setItem('user', JSON.stringify(user))
+
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An unknown error occurred')
+      } finally {
+        setIsLoading(false)
       }
     }
 
-    processPayment()
+    updatePaymentStatus()
   }, [searchParams])
 
-  if (isProcessing) {
-    return <div>Processing payment...</div>
+  if (isLoading) {
+    return <div className="flex justify-center items-center h-screen">Loading...</div>
+  }
+
+  if (error) {
+    return <div className="flex justify-center items-center h-screen text-red-500">{error}</div>
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-12">
-      <div className="container mx-auto px-4 text-center">
-        <h1 className="text-4xl font-bold mb-8 text-indigo-800">Payment Successful!</h1>
-        <p className="mb-8 text-gray-600">
-          Thank you for upgrading to MemoryMaster Premium. You now have access to all advanced features.
-        </p>
-        <Button onClick={() => router.push('/')} className="bg-indigo-600 hover:bg-indigo-700 text-white">
-          Return to Home
-        </Button>
-      </div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+      <h1 className="text-4xl font-bold text-indigo-600 mb-4">Payment Successful!</h1>
+      <p className="text-xl text-gray-600 mb-8">Thank you for upgrading to MemoryMaster Premium.</p>
+      <Button onClick={() => router.push('/')} className="bg-indigo-600 hover:bg-indigo-700 text-white">
+        Return to Home
+      </Button>
     </div>
   )
 }
