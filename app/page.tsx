@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
-import { Brain, Zap, Trophy, CreditCard, LogOut, ChevronRight, Menu, X, User, Check } from 'lucide-react'
+import { Brain, Zap, Trophy, CreditCard, LogOut, Menu, User, Check } from 'lucide-react'
 
 interface User {
   _id: string;
@@ -203,7 +203,7 @@ export default function Home() {
               Nrglitch was born out of a passion for cognitive science and a desire to help people improve their memory and mental acuity. Our team of neuroscientists, software engineers, and game designers came together with a shared vision: to create engaging, scientifically-backed exercises that make memory training both fun and effective.
             </p>
             <p className="text-lg text-gray-700 mb-4">
-              We believe that a strong memory is fundamental to success in all areas of life. Whether you're a student trying to ace your exams, a professional looking to stay sharp in your career, or simply someone who wants to keep their mind agile as they age, Nrglitch is here to support your journey.
+              We believe that a strong memory is fundamental to success in all areas of life. Whether you&apos;re a student trying to ace your exams, a professional looking to stay sharp in your career, or simply someone who wants to keep their mind agile as they age, Nrglitch is here to support your journey.
             </p>
             <p className="text-lg text-gray-700">
               Join us in our mission to unlock the full potential of your mind. With Nrglitch, every day is an opportunity to challenge yourself, grow, and discover the incredible capabilities of your memory.
@@ -264,7 +264,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Features sectionn */}
+        {/* Features section */}
         <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {features.map((feature) => (
             <div key={feature.title} className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
