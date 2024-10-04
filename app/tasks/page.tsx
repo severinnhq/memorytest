@@ -90,7 +90,6 @@ export default function TasksPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [unlockedLevels, setUnlockedLevels] = useState<number>(1)
   const [isClient, setIsClient] = useState(false)
-  const [selectedTask, setSelectedTask] = useState<Task | null>(null)
   const router = useRouter()
 
   useEffect(() => {
@@ -124,7 +123,6 @@ export default function TasksPage() {
   }, [unlockedLevels, isClient])
 
   const handleTaskClick = (task: Task) => {
-    setSelectedTask(task)
     // For now, we'll just log the selected task. In the future, this is where you'd open a modal or navigate to the task page.
     console.log('Selected task:', task)
   }
