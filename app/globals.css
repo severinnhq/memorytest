@@ -82,7 +82,7 @@ html {
   -ms-text-size-adjust: 100%;
 }
 
-/* Remove usage of will-change */
+/* Remove usage of will-change  */
 * {
   will-change: auto;
 }
