@@ -3,10 +3,10 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { AnimatePresence, motion, useAnimation, useScroll, useTransform } from 'framer-motion'
+import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Brain, LogOut, Menu, User, Check, ArrowRight, ArrowLeft, Plus, Clock, Database, FileText, Film, Layers, Zap, Calendar, Sparkles, Play, BookOpen, Mail } from 'lucide-react'
+import { Brain, LogOut, Menu, User, Check, Plus, Clock, Database, FileText, Film, Layers, Zap, Calendar, Sparkles, Play, BookOpen, Mail } from 'lucide-react'
 import Image from 'next/image'
 
 interface User {
@@ -269,7 +269,7 @@ export default function Home() {
                   <span className="block">Of Your Memory</span>
                 </h1>
                 <p className="mt-4 text-lg sm:text-xl text-muted-foreground mb-8">
-                  Nrglitch: Sharpen your mind with engaging memory exercises backed by cognitive science.
+                  {"Nrglitch: Sharpen your mind with engaging memory exercises backed by cognitive science."}
                 </p>
                 <div className="relative inline-block">
                   <Button
@@ -277,9 +277,9 @@ export default function Home() {
                     onMouseEnter={() => setIsButtonHovered(true)}
                     onMouseLeave={() => setIsButtonHovered(false)}
                     className="relative z-10 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-bold text-white bg-[#4f46e5] hover:bg-[#4338ca] transition-colors duration-300"
+                  
                   >
                     Start the Test 🧠
-                  
                   </Button>
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                     <div className={`w-full h-full bg-[#4f46e5]/40 filter blur-md transition-all duration-300 ease-out ${isButtonHovered ? 'opacity-75 scale-105' : 'opacity-0 scale-100'}`}></div>
@@ -298,6 +298,148 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </motion.section>
+
+        {/* Our Story Section */}
+        <motion.section 
+          id="our-story" 
+          ref={containerRef}
+          className="py-24 overflow-hidden relative"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <motion.div 
+            className="absolute inset-0 bg-[url('/placeholder.svg?height=1080&width=1920')] bg-cover bg-center"
+            style={{ y, opacity }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/90 via-purple-50/90 to-pink-50/90" />
+          
+          <div className="container mx-auto px-4 relative z-10">
+            <motion.h2 
+              className="text-5xl font-bold mb-8 text-center text-gray-900"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              Our Extraordinary Journey
+            </motion.h2>
+
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+              <motion.div 
+                className="lg:w-1/2"
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              >
+                <Image
+                  src="/placeholder.svg?height=600&width=600"
+                  width={600}
+                  height={600}
+                  alt="Our Story"
+                  className="rounded-lg shadow-2xl transform -rotate-3 hover:rotate-0 transition-transform duration-300"
+                />
+              </motion.div>
+
+              <div className="lg:w-1/2">
+                <motion.p 
+                  className="text-xl mb-8 leading-relaxed text-muted-foreground"
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                >
+                  {"Since our inception, we've been on a relentless pursuit of excellence, pushing boundaries and redefining what's possible. Our story is one of passion, perseverance, and groundbreaking innovations that have shaped industries and touched lives across the globe."}
+                </motion.p>
+              </div>
+            </div>
+          </div>
+        </motion.section>
+
+        {/* Premium Section */}
+        <motion.section 
+          id="premium" 
+          className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">Premium Access</h2>
+          {user && user.hasPaid ? (
+            <div className="max-w-lg mx-auto text-center">
+              <h3 className="text-2xl font-bold mb-4">Welcome to Premium!</h3>
+              <p className="text-muted-foreground mb-8">You have access to all premium features.</p>
+              <Button
+                onClick={() => router.push('/premium-tasks')}
+                className="bg-gradient-to-r from-[#4f46e5] via-[#4338ca] to-[#3730a3] hover:from-[#4f46e5]/90 hover:via-[#4338ca]/90 hover:to-[#3730a3]/90 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105"
+              >
+                <Sparkles className="w-5 h-5 mr-2" />
+                Access Premium Tasks
+              </Button>
+            </div>
+          ) : (
+            <div className="max-w-lg mx-auto relative">
+              <div 
+                className="absolute inset-0 pointer-events-none transition-opacity duration-300"
+                style={{
+                  opacity: isHovering ? 1 : 0,
+                  background: `radial-gradient(circle 300px at ${glowPosition.x}px ${glowPosition.y}px, rgba(79, 70, 229, 0.4), transparent 70%)`,
+                  filter: 'blur(40px)',
+                  transform: 'translate(-20px, -20px)',
+                  width: 'calc(100% + 40px)',
+                  height: 'calc(100% + 40px)',
+                }}
+              />
+              <Card 
+                ref={cardRef}
+                className="relative bg-white rounded-2xl shadow-xl overflow-hidden"
+                onMouseMove={handleMouseMove}
+                onMouseEnter={() => setIsHovering(true)}
+                onMouseLeave={() => setIsHovering(false)}
+              >
+                <CardContent className="p-8">
+                  <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-2xl font-bold text-gray-800">Lifetime Deal</h3>
+                    <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-[#4f46e5] rounded-full">BEST VALUE</span>
+                  </div>
+                  <div className="flex items-end mb-6">
+                    <span className="text-5xl font-extrabold text-gray-900">€1.99</span>
+                    <span className="text-xl text-muted-foreground ml-2">/ lifetime</span>
+                  </div>
+                  <p className="text-muted-foreground mb-8">
+                    {"One-time payment for unlimited access to premium features"}
+                  </p>
+                  <ul className="space-y-4 mb-8">
+                    {[
+                      "50+ memory games covering all aspects",
+                      "Advanced progress tracking and analytics",
+                      "Personalized training plans",
+                      "Visual memory enhancement tasks",
+                      "Auditory memory improvement exercises",
+                      "Ad-free experience"
+                    ].map((feature, index) => (
+                      <motion.li 
+                        key={index}
+                        className="flex items-center space-x-3"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.3, delay: index * 0.1 }}
+                      >
+                        <Check className="h-5 w-5 text-green-500" />
+                        <span className="text-muted-foreground">{feature}</span>
+                      </motion.li>
+                    ))}
+                  </ul>
+                  <Button
+                    onClick={handleUpgradeClick}
+                    className="w-full bg-gradient-to-r from-[#4f46e5] via-[#4338ca] to-[#3730a3] hover:from-[#4f46e5]/90 hover:via-[#4338ca]/90 hover:to-[#3730a3]/90 text-white font-bold py-3 rounded-lg transition-all duration-300 transform hover:scale-105"
+                  >
+                    <Sparkles className="w-5 h-5 mr-2" />
+                    Upgrade Now
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          )}
         </motion.section>
 
         {/* Memory Types Section */}
@@ -356,146 +498,6 @@ export default function Home() {
                     </div>
                   </motion.div>
                 </AnimatePresence>
-              </div>
-            </div>
-          </div>
-        </motion.section>
-
-        {/* Premium Section */}
-        <motion.section 
-          id="premium" 
-          className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">Premium Access</h2>
-          {user && user.hasPaid ? (
-            <div className="max-w-lg mx-auto text-center">
-              <h3 className="text-2xl font-bold mb-4">Welcome to Premium!</h3>
-              <p className="text-muted-foreground mb-8">You have access to all premium features.</p>
-              <Button
-                onClick={() => router.push('/premium-tasks')}
-                className="bg-gradient-to-r from-[#4f46e5] via-[#4338ca] to-[#3730a3] hover:from-[#4f46e5]/90 hover:via-[#4338ca]/90 hover:to-[#3730a3]/90 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105"
-              >
-                <Sparkles className="w-5 h-5 mr-2" />
-                Access Premium Tasks
-              </Button>
-            </div>
-          ) : (
-            <div className="max-w-lg mx-auto relative">
-              <div 
-                className="absolute inset-0 pointer-events-none transition-opacity duration-300"
-                style={{
-                  opacity: isHovering ? 1 : 0,
-                  background: `radial-gradient(circle 300px at ${glowPosition.x}px ${glowPosition.y}px, rgba(79, 70, 229, 0.4), transparent 70%)`,
-                  filter: 'blur(40px)',
-                  transform: 'translate(-20px, -20px)',
-                  width: 'calc(100% + 40px)',
-                  height: 'calc(100% + 40px)',
-                }}
-              />
-              <Card 
-                ref={cardRef}
-                className="relative bg-white rounded-2xl shadow-xl overflow-hidden"
-                onMouseMove={handleMouseMove}
-                onMouseEnter={() => setIsHovering(true)}
-                onMouseLeave={() => setIsHovering(false)}
-              >
-                <CardContent className="p-8">
-                  <div className="flex justify-between items-center mb-6">
-                    <h3 className="text-2xl font-bold text-gray-800">Lifetime Deal</h3>
-                    <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-[#4f46e5] rounded-full">BEST VALUE</span>
-                  </div>
-                  <div className="flex items-end mb-6">
-                    <span className="text-5xl font-extrabold text-gray-900">€1.99</span>
-                    <span className="text-xl text-muted-foreground ml-2">/ lifetime</span>
-                  </div>
-                  <p className="text-muted-foreground mb-8">One-time payment for unlimited access to premium features</p>
-                  <ul className="space-y-4 mb-8">
-                    {[
-                      "50+ memory games covering all aspects",
-                      "Advanced progress tracking and analytics",
-                      "Personalized training plans",
-                      "Visual memory enhancement tasks",
-                      "Auditory memory improvement exercises",
-                      "Ad-free experience"
-                    ].map((feature, index) => (
-                      <motion.li 
-                        key={index}
-                        className="flex items-center space-x-3"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: index * 0.1 }}
-                      >
-                        <Check className="h-5 w-5 text-green-500" />
-                        <span className="text-muted-foreground">{feature}</span>
-                      </motion.li>
-                    ))}
-                  </ul>
-                  <Button
-                    onClick={handleUpgradeClick}
-                    className="w-full bg-gradient-to-r from-[#4f46e5] via-[#4338ca] to-[#3730a3] hover:from-[#4f46e5]/90 hover:via-[#4338ca]/90 hover:to-[#3730a3]/90 text-white font-bold py-3 rounded-lg transition-all duration-300 transform hover:scale-105"
-                  >
-                    <Sparkles className="w-5 h-5 mr-2" />
-                    Upgrade Now
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
-          )}
-        </motion.section>
-
-        {/* Our Story Section */}
-        <motion.section 
-          id="our-story" 
-          ref={containerRef}
-          className="py-24 overflow-hidden relative"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <motion.div 
-            className="absolute inset-0 bg-[url('/placeholder.svg?height=1080&width=1920')] bg-cover bg-center"
-            style={{ y, opacity }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/90 via-purple-50/90 to-pink-50/90" />
-          
-          <div className="container mx-auto px-4 relative z-10">
-            <motion.h2 
-              className="text-5xl font-bold mb-8 text-center text-gray-900"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              Our Extraordinary Journey
-            </motion.h2>
-
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-              <motion.div 
-                className="lg:w-1/2"
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-              >
-                <Image
-                  src="/placeholder.svg?height=600&width=600"
-                  width={600}
-                  height={600}
-                  alt="Our Story"
-                  className="rounded-lg shadow-2xl transform -rotate-3 hover:rotate-0 transition-transform duration-300"
-                />
-              </motion.div>
-
-              <div className="lg:w-1/2">
-                <motion.p 
-                  className="text-xl mb-8 leading-relaxed text-muted-foreground"
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.4 }}
-                >
-                  Since our inception, we've been on a relentless pursuit of excellence, pushing boundaries and redefining what's possible. Our story is one of passion, perseverance, and groundbreaking innovations that have shaped industries and touched lives across the globe.
-                </motion.p>
               </div>
             </div>
           </div>
