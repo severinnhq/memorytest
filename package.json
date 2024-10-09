@@ -39,6 +39,7 @@
     "three": "^0.168.0"
   },
   "devDependencies": {
+    "@shadcn/ui": "^0.0.4",
     "@types/node": "^22.7.4",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.0",
