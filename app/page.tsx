@@ -503,7 +503,7 @@ export default function Home() {
           </div>
         </motion.section>
 
-        {/* FAQ  Section   */}
+        {/* FAQ   Section   */}
         <motion.section 
           id="faq" 
           className="py-24"
