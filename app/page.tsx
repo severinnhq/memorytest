@@ -3,10 +3,10 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
+import { AnimatePresence, motion, useAnimation, useScroll, useTransform } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Brain, LogOut, Menu, User, Check, Plus, Clock, Database, FileText, Film, Layers, Zap, Calendar, Sparkles, Play, BookOpen, Mail } from 'lucide-react'
+import { Brain, LogOut, Menu, User, Check, ArrowRight, ArrowLeft, Plus, Clock, Database, FileText, Film, Layers, Zap, Calendar, Sparkles, Play, BookOpen, Mail } from 'lucide-react'
 import Image from 'next/image'
 
 interface User {
@@ -161,19 +161,17 @@ export default function Home() {
         className="bg-white shadow-md fixed top-0 left-0 right-0 z-50"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center py-4">
             <div className="flex-shrink-0">
               <Link href="/" className="flex items-center">
                 <Brain className="h-8 w-auto sm:h-10 text-[#4f46e5]" />
                 <span className="ml-2 text-2xl font-bold text-[#4f46e5]">Nrglitch</span>
               </Link>
             </div>
-            <nav className="hidden md:flex space-x-10 flex-grow justify-center items-center">
-              <Button variant="ghost" onClick={handleStartTest} className="text-base font-medium text-muted-foreground hover:text-[#4f46e5] transition-colors duration-200">
-                Start the Test
-              </Button>
-              <a href="#our-story" className="text-base font-medium text-muted-foreground hover:text-[#4f46e5] transition-colors duration-200">Our Story</a>
+            <nav className="hidden md:flex space-x-10 flex-grow justify-center">
+              <a href="" className="text-base font-medium text-muted-foreground hover:text-[#4f46e5] transition-colors duration-200">Test My Memory</a>
               <a href="#premium" className="text-base font-medium text-muted-foreground hover:text-[#4f46e5] transition-colors duration-200">Premium</a>
+              <a href="#our-story" className="text-base font-medium text-muted-foreground hover:text-[#4f46e5] transition-colors duration-200">Our Story</a>
             </nav>
             <div className="hidden md:flex items-center">
               {user ? (
@@ -221,11 +219,9 @@ export default function Home() {
             className="md:hidden fixed top-16 left-0 right-0 bg-white z-40 shadow-md"
           >
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              <Button variant="ghost" onClick={handleStartTest} className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:text-[#4f46e5] hover:bg-[#4f46e5]/10">
-                Start the Test
-              </Button>
-              <a href="#our-story" className="block px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:text-[#4f46e5] hover:bg-[#4f46e5]/10" onClick={toggleMenu}>Our Story</a>
+              <a href="" className="block px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:text-[#4f46e5] hover:bg-[#4f46e5]/10" onClick={toggleMenu}>Test My Memory</a>
               <a href="#premium" className="block px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:text-[#4f46e5] hover:bg-[#4f46e5]/10" onClick={toggleMenu}>Premium</a>
+              <a href="#our-story" className="block px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:text-[#4f46e5] hover:bg-[#4f46e5]/10" onClick={toggleMenu}>Our Story</a>
             </div>
             <div className="pt-4 pb-3 border-t border-gray-200">
               {user ? (
@@ -256,7 +252,7 @@ export default function Home() {
 
       {/* Main content */}
       <main className="pt-16">
-        {/* Hero Section with much bigger image */}
+        {/* Hero Section */}
         <motion.section 
           id="hero" 
           className="flex items-center justify-center min-h-screen py-20 lg:py-0"
@@ -283,79 +279,83 @@ export default function Home() {
                     className="relative z-10 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-bold text-white bg-[#4f46e5] hover:bg-[#4338ca] transition-colors duration-300"
                   >
                     Start the Test 🧠
+                  
                   </Button>
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    
                     <div className={`w-full h-full bg-[#4f46e5]/40 filter blur-md transition-all duration-300 ease-out ${isButtonHovered ? 'opacity-75 scale-105' : 'opacity-0 scale-100'}`}></div>
                   </div>
                 </div>
               </div>
               <div className="w-full lg:w-1/2 relative">
-                <div className="aspect-w-1 aspect-h-1 lg:aspect-w-4 lg:aspect-h-3">
-                  <Image
-                    src="/hero.png"
-                    alt="Illustration of various memory concepts"
-                    width={1200}
-                    height={900}
-                    className="w-full h-full object-contain"
-                    style={{ mixBlendMode: 'multiply' }}
-                  />
-                </div>
+                <Image
+                  src="/hero.png"
+                  alt="Illustration of various memory concepts"
+                  width={1000}
+                  height={1000}
+                  className="w-full h-auto object-contain"
+                  style={{ mixBlendMode: 'multiply' }}
+                />
               </div>
             </div>
           </div>
         </motion.section>
 
-        {/* Our Story Section */}
+        {/* Memory Types Section */}
         <motion.section 
-          id="our-story" 
-          ref={containerRef}
-          className="py-24 overflow-hidden relative"
+          id="memory-types" 
+          className="py-24"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <motion.div 
-            className="absolute inset-0 bg-[url('/placeholder.svg?height=1080&width=1920')] bg-cover bg-center"
-            style={{ y, opacity }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/90 via-purple-50/90 to-pink-50/90" />
-          
-          <div className="container mx-auto px-4 relative z-10">
-            <motion.h2 
-              className="text-5xl font-bold mb-8 text-center text-gray-900"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              Our Extraordinary Journey
-            </motion.h2>
-
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-              <motion.div 
-                className="lg:w-1/2"
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-              >
-                <Image
-                  src="/placeholder.svg?height=600&width=600"
-                  width={600}
-                  height={600}
-                  alt="Our Story"
-                  className="rounded-lg shadow-2xl transform -rotate-3 hover:rotate-0 transition-transform duration-300"
-                />
-              </motion.div>
-
-              <div className="lg:w-1/2">
-                <motion.p 
-                  className="text-xl mb-8 leading-relaxed text-muted-foreground"
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.4 }}
-                >
-                  Since our inception, we&apos;ve been on a relentless pursuit of excellence, pushing boundaries and redefining what&apos;s possible. Our story is one of passion, perseverance, and groundbreaking innovations that have shaped industries and touched lives across the globe.
-                </motion.p>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-4xl font-bold text-center mb-12 text-gray-900">Types of Memory</h2>
+            <div className="flex flex-col lg:flex-row bg-white rounded-lg shadow-lg overflow-hidden">
+              <div className="w-full lg:w-1/3 p-4 lg:p-6 lg:max-h-[600px] lg:overflow-y-auto">
+                <div className="grid grid-cols-2 lg:grid-cols-1 gap-2 lg:gap-4">
+                  {memoryTypes.map((type) => (
+                    <Button
+                      key={type.name}
+                      variant="ghost"
+                      className={`w-full justify-start text-left transition-colors duration-200 h-14 lg:h-16 text-sm lg:text-base ${
+                        activeMemoryType === type.name
+                          ? 'bg-[#4f46e5]/10 text-[#4f46e5] hover:bg-[#4f46e5]/10 hover:text-[#4f46e5]'
+                          : 'hover:bg-[#4f46e5]/10 hover:text-[#4f46e5]'
+                      }`}
+                      onClick={() => setActiveMemoryType(type.name)}
+                    >
+                      <div className="flex items-center space-x-2 lg:space-x-4">
+                        <div className={`p-1.5 lg:p-2 rounded-full ${
+                          activeMemoryType === type.name ? 'bg-[#4f46e5]/20' : 'bg-[#4f46e5]/10'
+                        }`}>
+                          {type.icon}
+                        </div>
+                        <span className="truncate">{type.name}</span>
+                      </div>
+                    </Button>
+                  ))}
+                </div>
+              </div>
+              <div className="w-full lg:w-2/3 bg-gray-100">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeMemoryType}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2, ease: "easeInOut" }}
+                    className="w-full h-full flex items-center justify-center"
+                  >
+                    <div className="relative w-full h-0" style={{ paddingBottom: '75%' }}>
+                      <Image
+                        src={memoryTypes.find(type => type.name === activeMemoryType)?.image || ''}
+                        alt={`${activeMemoryType} Memory`}
+                        layout="fill"
+                        objectFit="contain"
+                      />
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
               </div>
             </div>
           </div>
@@ -446,62 +446,56 @@ export default function Home() {
           )}
         </motion.section>
 
-        {/* Memory Types Section */}
+        {/* Our Story Section */}
         <motion.section 
-          id="memory-types" 
-          className="py-24"
+          id="our-story" 
+          ref={containerRef}
+          className="py-24 overflow-hidden relative"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-4xl font-bold text-center mb-12 text-gray-900">Types of Memory</h2>
-            <div className="flex flex-col lg:flex-row bg-white rounded-lg shadow-lg overflow-hidden">
-              <div className="w-full lg:w-1/3 p-4 lg:p-6 lg:max-h-[600px] lg:overflow-y-auto">
-                <div className="grid grid-cols-2 lg:grid-cols-1 gap-2 lg:gap-4">
-                  {memoryTypes.map((type) => (
-                    <Button
-                      key={type.name}
-                      variant="ghost"
-                      className={`w-full justify-start text-left transition-colors duration-200 h-14 lg:h-16 text-sm lg:text-base ${
-                        activeMemoryType === type.name
-                          ? 'bg-[#4f46e5]/10 text-[#4f46e5] hover:bg-[#4f46e5]/10 hover:text-[#4f46e5]'
-                          : 'hover:bg-[#4f46e5]/10 hover:text-[#4f46e5]'
-                      }`}
-                      onClick={() => setActiveMemoryType(type.name)}
-                    >
-                      <div className="flex items-center space-x-2 lg:space-x-4">
-                        <div className={`p-1.5 lg:p-2 rounded-full ${
-                          activeMemoryType === type.name ? 'bg-[#4f46e5]/20' : 'bg-[#4f46e5]/10'
-                        }`}>
-                          {type.icon}
-                        </div>
-                        <span className="truncate">{type.name}</span>
-                      </div>
-                    </Button>
-                  ))}
-                </div>
-              </div>
-              <div className="w-full lg:w-2/3 bg-gray-100">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeMemoryType}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2, ease: "easeInOut" }}
-                    className="w-full h-full flex items-center justify-center"
-                  >
-                    <div className="relative w-full h-0" style={{ paddingBottom: '75%' }}>
-                      <Image
-                        src={memoryTypes.find(type => type.name === activeMemoryType)?.image || ''}
-                        alt={`${activeMemoryType} Memory`}
-                        layout="fill"
-                        objectFit="contain"
-                      />
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
+          <motion.div 
+            className="absolute inset-0 bg-[url('/placeholder.svg?height=1080&width=1920')] bg-cover bg-center"
+            style={{ y, opacity }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/90 via-purple-50/90 to-pink-50/90" />
+          
+          <div className="container mx-auto px-4 relative z-10">
+            <motion.h2 
+              className="text-5xl font-bold mb-8 text-center text-gray-900"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              Our Extraordinary Journey
+            </motion.h2>
+
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+              <motion.div 
+                className="lg:w-1/2"
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              >
+                <Image
+                  src="/placeholder.svg?height=600&width=600"
+                  width={600}
+                  height={600}
+                  alt="Our Story"
+                  className="rounded-lg shadow-2xl transform -rotate-3 hover:rotate-0 transition-transform duration-300"
+                />
+              </motion.div>
+
+              <div className="lg:w-1/2">
+                <motion.p 
+                  className="text-xl mb-8 leading-relaxed text-muted-foreground"
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                >
+                  Since our inception, we've been on a relentless pursuit of excellence, pushing boundaries and redefining what's possible. Our story is one of passion, perseverance, and groundbreaking innovations that have shaped industries and touched lives across the globe.
+                </motion.p>
               </div>
             </div>
           </div>
@@ -579,7 +573,7 @@ export default function Home() {
                   Our Story
                 </Button>
               </Link>
-              <Link href="#contact"  passHref>
+              <Link href="#contact" passHref>
                 <Button variant="ghost" className="text-white hover:text-white hover:bg-white/20">
                   <Mail className="h-5 w-5 mr-2" />
                   Contact
