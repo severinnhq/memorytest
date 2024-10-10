@@ -107,7 +107,7 @@ const createTasks = (): Record<MemoryType, Task> => ({
         content: (
           <div>
             <p className="mb-4">Memorize these digits: <strong>{digits}</strong></p>
-            <p>Take your time to memorize. Click 'Ready' when you're prepared to recall.</p>
+            <p>Take your time to memorize. Click &apos;Ready&apos; when you&apos;re prepared to recall.</p>
           </div>
         ),
         answer: digits
@@ -148,7 +148,7 @@ const createTasks = (): Record<MemoryType, Task> => ({
             <ul className="list-disc list-inside mb-4">
               {wordPairs.map((pair, index) => <li key={index}>{pair.join(" - ")}</li>)}
             </ul>
-            <p>Take your time to memorize. Click 'Ready' when you're prepared to recall.</p>
+            <p>Take your time to memorize. Click &apos;Ready&apos; when you&apos;re prepared to recall.</p>
           </div>
         ),
         answer: wordPairs.map(pair => pair[1]).join(',')
@@ -183,8 +183,8 @@ const createTasks = (): Record<MemoryType, Task> => ({
           <div>
             <p className="mb-4">Memorize this sequence of numbers:</p>
             <p className="mb-4 text-2xl font-bold">{sequence.join(' ')}</p>
-            <p>For each number (starting from the third), you'll need to indicate if it matches the number that appeared 2 steps before it.</p>
-            <p>Take your time to memorize. Click 'Ready' when you're prepared to start the task.</p>
+            <p>For each number (starting from the third), you&apos;ll need to indicate if it matches the number that appeared 2 steps before it.</p>
+            <p>Take your time to memorize. Click &apos;Ready&apos; when you&apos;re prepared to start the task.</p>
           </div>
         ),
         answer: correct
@@ -215,7 +215,7 @@ const createTasks = (): Record<MemoryType, Task> => ({
       content: (
         <div>
           <p className="mb-4">Your task is to list as many animals as you can.</p>
-          <p>Take your time to think. Click 'Ready' when you're prepared to start listing animals.</p>
+          <p>Take your time to think. Click &apos;Ready&apos; when you&apos;re prepared to start listing animals.</p>
         </div>
       ),
       answer: "20" // Target number of animals
@@ -245,11 +245,11 @@ const createTasks = (): Record<MemoryType, Task> => ({
         <div>
           <p className="mb-4">Read the following story carefully:</p>
           <p className="mb-4">
-            "Sarah woke up early on Saturday morning. She packed her backpack with a water bottle, sunscreen, and a sandwich. 
+            &quot;Sarah woke up early on Saturday morning. She packed her backpack with a water bottle, sunscreen, and a sandwich. 
             At 9:30 AM, she met her friend Tom at the park. They hiked for two hours, reaching the top of Green Hill. 
-            There, they enjoyed their lunch while admiring the beautiful view of the lake below."
+            There, they enjoyed their lunch while admiring the beautiful view of the lake below.&quot;
           </p>
-          <p>Take your time to memorize the details. Click 'Ready' when you're prepared to answer questions about the story.</p>
+          <p>Take your time to memorize the details. Click &apos;Ready&apos; when you&apos;re prepared to answer questions about the story.</p>
         </div>
       ),
       answer: "Saturday,9:30 AM,Tom,Green Hill,lake"
@@ -282,7 +282,7 @@ const createTasks = (): Record<MemoryType, Task> => ({
           <div>
             <p className="mb-4">Memorize the following pattern of letters:</p>
             <p className="text-2xl font-bold mb-4">{pattern}</p>
-            <p>Take your time to memorize. Click 'Ready' when you're prepared to replicate the pattern.</p>
+            <p>Take your time to memorize. Click &apos;Ready&apos; when you&apos;re prepared to replicate the pattern.</p>
           </div>
         ),
         answer: pattern
@@ -323,7 +323,7 @@ const createTasks = (): Record<MemoryType, Task> => ({
                 </div>
               ))}
             </div>
-            <p>Take your time to memorize. Click 'Ready' when you're prepared to recall the symbols.</p>
+            <p>Take your time to memorize. Click &apos;Ready&apos; when you&apos;re prepared to recall the symbols.</p>
           </div>
         ),
         answer: grid.flat().join(',')
@@ -353,8 +353,8 @@ const createTasks = (): Record<MemoryType, Task> => ({
     execute: () => ({
       content: (
         <div>
-          <p className="mb-4">Your task is to remember to type "DONE" when you see the word "BLUE".</p>
-          <p>You'll see a series of random words. Click 'Ready' when you're prepared to start the task.</p>
+          <p className="mb-4">Your task is to remember to type &quot;DONE&quot; when you see the word &quot;BLUE&quot;.</p>
+          <p>You&apos;ll see a series of random words. Click &apos;Ready&apos; when you&apos;re prepared to start the task.</p>
         </div>
       ),
       answer: "DONE"
@@ -370,6 +370,7 @@ const createTasks = (): Record<MemoryType, Task> => ({
           speed,
           capacity,
           consistency: 100,
+          
           improvement: 0
         }
       }
@@ -377,7 +378,7 @@ const createTasks = (): Record<MemoryType, Task> => ({
   }
 })
 
-const memoryTypeIcons: Record<MemoryType, React.ReactNode> =   {
+const memoryTypeIcons: Record<MemoryType, React.ReactNode> = {
   "Short-Term": <Clock className="h-8 w-8 text-purple-500" />,
   "Long-Term": <Brain className="h-8 w-8 text-purple-500" />,
   "Working": <Activity className="h-8 w-8 text-purple-500" />,
