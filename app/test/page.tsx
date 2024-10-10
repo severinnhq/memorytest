@@ -130,48 +130,47 @@ const createTasks = (): Record<MemoryType, Task> => ({
     }
   },
   "Long-Term": {
-    name: "Word Pair Association",
-    description: "Memorize word pairs and recall the associated word",
-    execute: () => {
-      const wordPairs = [
-        ["dog", "bone"],
-        ["sky", "blue"],
-        ["apple", "red"],
-        ["book", "read"],
-        ["car", "drive"]
-      ]
-      const testPairs = wordPairs.map(pair => pair[0])
-      return {
-        content: (
-          <div>
-            <p className="mb-4">Memorize these word pairs:</p>
-            <ul className="list-disc list-inside mb-4">
-              {wordPairs.map((pair, index) => <li key={index}>{pair.join(" - ")}</li>)}
-            </ul>
-            <p>Take your time to memorize. Click &apos;Ready&apos; when you&apos;re prepared to recall.</p>
-          </div>
-        ),
-        answer: wordPairs.map(pair => pair[1]).join(',')
-      }
-    },
-    evaluate: (response, answer, startTime, endTime) => {
-      const userAnswers = response.toLowerCase().split(',').map(word => word.trim())
-      const correctAnswers = answer.split(',')
-      const accuracy = userAnswers.reduce((acc, ans, i) => acc + (ans === correctAnswers[i] ? 1 : 0), 0) / correctAnswers.length * 100
-      const speed = calculateSpeed(startTime, endTime)
-      const capacity = (userAnswers.length / correctAnswers.length) * 100
-      return {
-        score: (accuracy + speed + capacity) / 3,
-        metrics: {
-          accuracy,
-          speed,
-          capacity,
-          consistency: 100,
-          improvement: 0
-        }
-      }
+  name: "Word Pair Association",
+  description: "Memorize word pairs and recall the associated word",
+  execute: () => {
+    const wordPairs = [
+      ["dog", "bone"],
+      ["sky", "blue"],
+      ["apple", "red"],
+      ["book", "read"],
+      ["car", "drive"]
+    ]
+    return {
+      content: (
+        <div>
+          <p className="mb-4">Memorize these word pairs:</p>
+          <ul className="list-disc list-inside mb-4">
+            {wordPairs.map((pair, index) => <li key={index}>{pair.join(" - ")}</li>)}
+          </ul>
+          <p>Take your time to memorize. Click &apos;Ready&apos; when you&apos;re prepared to recall.</p>
+        </div>
+      ),
+      answer: wordPairs.map(pair => pair[1]).join(',')
     }
   },
+  evaluate: (response, answer, startTime, endTime) => {
+    const userAnswers = response.toLowerCase().split(',').map(word => word.trim())
+    const correctAnswers = answer.split(',')
+    const accuracy = userAnswers.reduce((acc, ans, i) => acc + (ans === correctAnswers[i] ? 1 : 0), 0) / correctAnswers.length * 100
+    const speed = calculateSpeed(startTime, endTime)
+    const capacity = (userAnswers.length / correctAnswers.length) * 100
+    return {
+      score: (accuracy + speed + capacity) / 3,
+      metrics: {
+        accuracy,
+        speed,
+        capacity,
+        consistency: 100,
+        improvement: 0
+      }
+    }
+  }
+},
   "Working": {
     name: "N-Back Task",
     description: "Identify if the current item matches the one N steps back",
