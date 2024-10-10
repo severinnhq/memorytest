@@ -1,41 +1,60 @@
 import { NextResponse } from 'next/server'
-import clientPromise from '@/lib/mongodb'
-import { User, UserCollection } from '@/models/User'
-import bcrypt from 'bcrypt'
+import { connectToDatabase } from '@/lib/mongodb'
+import { hash } from 'bcrypt'
+import { ObjectId } from 'mongodb'
 
-export async function POST(request: Request) {
+export async function POST(req: Request) {
   try {
-    const { name, email, password } = await request.json()
-
-    // Validate input
-    if (!name || !email || !password) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
-    }
-
-    const client = await clientPromise
-    const db = client.db()
+    const { name, email, password } = await req.json()
+    const { db } = await connectToDatabase()
 
     // Check if user already exists
-    const existingUser = await db.collection<User>(UserCollection).findOne({ email })
+    const existingUser = await db.collection('users').findOne({ email })
     if (existingUser) {
       return NextResponse.json({ error: 'User already exists' }, { status: 400 })
     }
 
     // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10)
+    const hashedPassword = await hash(password, 12)
 
-    // Create new user
-    const newUser: Omit<User, '_id'> = {
+    // Create a new user
+    const newUser = {
       name,
       email,
       password: hashedPassword,
+      hasPaid: false,
     }
 
-    const result = await db.collection<User>(UserCollection).insertOne(newUser as User)
+    // Insert the new user into the 'users' collection
+    const result = await db.collection('users').insertOne(newUser)
 
-    return NextResponse.json({ message: 'User created successfully', userId: result.insertedId }, { status: 201 })
+    // Create a session
+    const session = {
+      userId: result.insertedId,
+      createdAt: new Date(),
+      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
+    }
+
+    // Insert the session into the 'sessions' collection
+    const sessionResult = await db.collection('sessions').insertOne(session)
+
+    // Set the session cookie
+    const response = NextResponse.json({
+      user: { _id: result.insertedId.toString(), name: newUser.name, email: newUser.email, hasPaid: newUser.hasPaid },
+      message: 'User created successfully'
+    }, { status: 201 })
+
+    response.cookies.set('sessionId', sessionResult.insertedId.toString(), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 30 * 24 * 60 * 60, // 30 days
+      path: '/',
+    })
+
+    return response
   } catch (error) {
-    console.error('Sign up error:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    console.error('Signup error:', error)
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
   }
 }

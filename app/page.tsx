@@ -1,3 +1,4 @@
+
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
@@ -50,42 +51,42 @@ const memoryTypes: MemoryType[] = [
   { 
     name: 'Short-term', 
     icon: <Clock className="h-5 w-5" />,
-    image: "/placeholder.svg?height=600&width=800&text=Short-term+Memory"
+    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='800' height='600' fill='%23f0f0f0'/%3E%3Ctext x='400' y='300' font-family='Arial' font-size='24' fill='%23333' text-anchor='middle' dominant-baseline='middle'%3EShort-term Memory%3C/text%3E%3C/svg%3E"
   },
   { 
     name: 'Long-term', 
     icon: <Database className="h-5 w-5" />,
-    image: "/placeholder.svg?height=600&width=800&text=Long-term+Memory"
+    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='800' height='600' fill='%23f0f0f0'/%3E%3Ctext x='400' y='300' font-family='Arial' font-size='24' fill='%23333' text-anchor='middle' dominant-baseline='middle'%3ELong-term Memory%3C/text%3E%3C/svg%3E"
   },
   { 
     name: 'Working', 
     icon: <Brain className="h-5 w-5" />,
-    image: "/placeholder.svg?height=600&width=800&text=Working+Memory"
+    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='800' height='600' fill='%23f0f0f0'/%3E%3Ctext x='400' y='300' font-family='Arial' font-size='24' fill='%23333' text-anchor='middle' dominant-baseline='middle'%3EWorking Memory%3C/text%3E%3C/svg%3E"
   },
   { 
     name: 'Semantic', 
     icon: <FileText className="h-5 w-5" />,
-    image: "/placeholder.svg?height=600&width=800&text=Semantic+Memory"
+    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='800' height='600' fill='%23f0f0f0'/%3E%3Ctext x='400' y='300' font-family='Arial' font-size='24' fill='%23333' text-anchor='middle' dominant-baseline='middle'%3ESemantic Memory%3C/text%3E%3C/svg%3E"
   },
   { 
     name: 'Episodic', 
     icon: <Film className="h-5 w-5" />,
-    image: "/placeholder.svg?height=600&width=800&text=Episodic+Memory"
+    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='800' height='600' fill='%23f0f0f0'/%3E%3Ctext x='400' y='300' font-family='Arial' font-size='24' fill='%23333' text-anchor='middle' dominant-baseline='middle'%3EEpisodic Memory%3C/text%3E%3C/svg%3E"
   },
   { 
     name: 'Procedural', 
     icon: <Layers className="h-5 w-5" />,
-    image: "/placeholder.svg?height=600&width=800&text=Procedural+Memory"
+    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='800' height='600' fill='%23f0f0f0'/%3E%3Ctext x='400' y='300' font-family='Arial' font-size='24' fill='%23333' text-anchor='middle' dominant-baseline='middle'%3EProcedural Memory%3C/text%3E%3C/svg%3E"
   },
   { 
     name: 'Sensory', 
     icon: <Zap className="h-5 w-5" />,
-    image: "/placeholder.svg?height=600&width=800&text=Sensory+Memory"
+    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='800' height='600' fill='%23f0f0f0'/%3E%3Ctext x='400' y='300' font-family='Arial' font-size='24' fill='%23333' text-anchor='middle' dominant-baseline='middle'%3ESensory Memory%3C/text%3E%3C/svg%3E"
   },
   { 
     name: 'Prospective', 
     icon: <Calendar className="h-5 w-5" />,
-    image: "/placeholder.svg?height=600&width=800&text=Prospective+Memory"
+    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='800' height='600' fill='%23f0f0f0'/%3E%3Ctext x='400' y='300' font-family='Arial' font-size='24' fill='%23333' text-anchor='middle' dominant-baseline='middle'%3EProspective Memory%3C/text%3E%3C/svg%3E"
   },
 ]
 
@@ -113,7 +114,18 @@ export default function Home() {
   useEffect(() => {
     const storedUser = localStorage.getItem('user')
     if (storedUser) {
-      setUser(JSON.parse(storedUser))
+      try {
+        const parsedUser = JSON.parse(storedUser)
+        if (parsedUser && typeof parsedUser === 'object') {
+          setUser(parsedUser)
+        } else {
+          console.error('Invalid user data in localStorage')
+          localStorage.removeItem('user')
+        }
+      } catch (error) {
+        console.error('Error parsing user data:', error)
+        localStorage.removeItem('user')
+      }
     }
   }, [])
 
@@ -169,6 +181,7 @@ export default function Home() {
       setGlowPosition({ x, y })
     }
   }
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
@@ -287,8 +300,7 @@ export default function Home() {
                   <span className="block text-[#4f46e5]">Every Aspect</span>
                   <span className="block">Of Your Memory</span>
                 </h1>
-                <p className="mt-4 text-lg sm:text-xl text-gray-500 mb-8">
-                  
+                <p className="mt-4  text-lg sm:text-xl text-gray-500 mb-8">
                   {"Nrglitch: Sharpen your mind with engaging memory exercises backed by cognitive science."}
                 </p>
                 <div className="relative inline-block">
@@ -311,8 +323,8 @@ export default function Home() {
                   alt="Illustration of various memory concepts"
                   width={1000}
                   height={1000}
-                  className="w-full h-auto object-contain"
-                  style={{ mixBlendMode: 'multiply' }}
+                  style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+                  priority
                 />
               </div>
             </div>
@@ -329,7 +341,7 @@ export default function Home() {
           transition={{ duration: 0.5 }}
         >
           <motion.div 
-            className="absolute inset-0 bg-[url('/placeholder.svg?height=1080&width=1920')] bg-cover bg-center"
+            className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg xmlns=&apos;http://www.w3.org/2000/svg&apos; width=&apos;1920&apos; height=&apos;1080&apos; viewBox=&apos;0 0 1920 1080&apos;%3E%3Crect width=&apos;1920&apos; height=&apos;1080&apos; fill=&apos;%23f0f0f0&apos;/%3E%3Ctext x=&apos;960&apos; y=&apos;540&apos; font-family=&apos;Arial&apos; font-size=&apos;48&apos; fill=&apos;%23333&apos; text-anchor=&apos;middle&apos; dominant-baseline=&apos;middle&apos;%3EOur Story Background%3C/text%3E%3C/svg%3E')] bg-cover bg-center"
             style={{ y, opacity }}
           />
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/90 via-purple-50/90 to-pink-50/90" />
@@ -352,7 +364,7 @@ export default function Home() {
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
                 <Image
-                  src="/placeholder.svg?height=600&width=600"
+                  src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 600 600'%3E%3Crect width='600' height='600' fill='%23f0f0f0'/%3E%3Ctext x='300' y='300' font-family='Arial' font-size='24' fill='%23333' text-anchor='middle' dominant-baseline='middle'%3EOur Story Image%3C/text%3E%3C/svg%3E"
                   width={600}
                   height={600}
                   alt="Our Story"
@@ -549,8 +561,8 @@ export default function Home() {
                       <Image
                         src={memoryTypes.find(type => type.name === activeMemoryType)?.image || ''}
                         alt={`${activeMemoryType} Memory`}
-                        layout="fill"
-                        objectFit="contain"
+                        fill
+                        style={{ objectFit: 'contain' }}
                       />
                     </div>
                   </motion.div>
