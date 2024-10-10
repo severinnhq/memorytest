@@ -25,6 +25,7 @@
     "@react-three/drei": "^9.114.0",
     "@react-three/fiber": "^8.17.8",
     "@stripe/stripe-js": "^4.6.0",
+    "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "framer-motion": "^10.18.0",
@@ -43,6 +44,7 @@
   },
   "devDependencies": {
     "@shadcn/ui": "^0.0.4",
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "^22.7.4",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.0",
