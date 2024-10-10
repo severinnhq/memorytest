@@ -80,10 +80,16 @@ html {
   -webkit-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
-/* Remove usage of will-change  */
+/* Remove usage of will-change */
 * {
   will-change: auto;
 }
 
+/* Improve font rendering */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
