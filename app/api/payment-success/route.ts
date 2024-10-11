@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Payment not successful' }, { status: 400 })
     }
 
-    const userId = session.metadata?.userId
+    const userId = session.client_reference_id || session.metadata?.userId
 
     if (!userId) {
       return NextResponse.json({ error: 'User ID not found in session metadata' }, { status: 400 })
@@ -41,13 +41,13 @@ export async function GET(req: NextRequest) {
     }
 
     if (result.modifiedCount === 1) {
-      return NextResponse.json({ message: 'Payment status updated successfully' })
+      return NextResponse.json({ status: 'success', message: 'Payment status updated successfully' })
     } else {
-      return NextResponse.json({ error: 'Failed to update payment status' }, { status: 400 })
+      return NextResponse.json({ status: 'already-updated', message: 'Payment status was already updated' })
     }
   } catch (error: unknown) {
     console.error('Error processing payment success:', error)
     const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred'
-    return NextResponse.json({ error: 'Internal Server Error', details: errorMessage }, { status: 500 })
+    return NextResponse.json({ status: 'error', error: 'Internal Server Error', details: errorMessage }, { status: 500 })
   }
 }

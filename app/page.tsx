@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
@@ -148,15 +147,27 @@ export default function Home() {
           },
           body: JSON.stringify({ userId: user._id }),
         })
-
-        const { sessionId } = await response.json()
-
+  
+        const data = await response.json()
+  
+        if (!response.ok) {
+          throw new Error(data.error || data.details || 'Failed to create checkout session')
+        }
+  
+        const { sessionId } = data
+  
         const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
         if (stripe) {
-          await stripe.redirectToCheckout({ sessionId })
+          const { error } = await stripe.redirectToCheckout({ sessionId })
+          if (error) {
+            throw error
+          }
+        } else {
+          throw new Error('Failed to load Stripe')
         }
       } catch (error) {
         console.error('Error creating checkout session:', error)
+        alert(error instanceof Error ? error.message : 'An unexpected error occurred')
       } finally {
         setIsLoading(false)
       }
@@ -182,9 +193,8 @@ export default function Home() {
     }
   }
 
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 relative">
       {/* Header */}
       <motion.header 
         initial={{ y: -100 }}
@@ -229,7 +239,7 @@ export default function Home() {
             <div className="md:hidden">
               <Button
                 variant="ghost"
-                className="inline-flex items-center justify-center p-2 rounded-md text-[#4f46e5] hover:text-[#4f46e5] hover:bg-[#4f46e5]/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#4f46e5]"
+                className="inline-flex items-center justify-center p-2 rounded-md text-[#4f46e5]   hover:text-[#4f46e5] hover:bg-[#4f46e5]/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#4f46e5]"
                 onClick={toggleMenu}
               >
                 <span className="sr-only">Open menu</span>
@@ -472,13 +482,13 @@ export default function Home() {
                       "Visual memory enhancement tasks",
                       "Auditory memory improvement exercises",
                       "Ad-free experience"
-                    ].map((feature, index) => (
+                    ].map((feature,  index) => (
                       <motion.li 
                         key={index}
                         className="flex items-center space-x-3"
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: index * 0.1 }}
+                        transition={{ duration: 0.3,  delay: index * 0.1 }}
                       >
                         <Check className="h-5 w-5 text-green-500" />
                         <span className="text-gray-500">{feature}</span>
