@@ -9,7 +9,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Brain, LogOut, Menu, User, Check, Plus, Clock, Database, FileText, Film, Layers, Zap, Calendar, Sparkles, Play, BookOpen, Mail, Trophy, Star, BarChart } from 'lucide-react'
 import Image from 'next/image'
 import { loadStripe } from '@stripe/stripe-js'
-import { baseUrl } from './config'
 
 interface User {
   _id: string;
@@ -236,11 +235,10 @@ export default function Home() {
             <div className="md:hidden">
               <Button
                 variant="ghost"
-                className="inline-flex items-center justify-center p-2 rounded-md text-[#4f46e5] hover:text-[#4f46e5] hover:bg-[#4f46e5]/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#4f46e5]"
+                className="inline-flex items-center justify-center p-2 rounded-md text-[#4f46e5] hover:text-[#4f46e5] hover:bg-[#4f46e5]/10 focus:outline-none  focus:ring-2 focus:ring-inset focus:ring-[#4f46e5]"
                 onClick={toggleMenu}
               >
                 <span className="sr-only">Open menu</span>
-                
                 <Menu className="h-6 w-6" aria-hidden="true" />
               </Button>
             </div>

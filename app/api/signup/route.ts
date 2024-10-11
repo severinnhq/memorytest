@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { connectToDatabase } from '@/lib/mongodb'
 import { hash } from 'bcrypt'
-import { ObjectId } from 'mongodb'
+// import { ObjectId } from 'mongodb'
 
 export async function POST(req: Request) {
   try {
