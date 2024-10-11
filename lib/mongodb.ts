@@ -9,28 +9,21 @@ const options = {}
 
 let client: MongoClient
 let clientPromise: Promise<MongoClient>
-let db: Db
 
 declare global {
   var _mongoClientPromise: Promise<MongoClient> | undefined
 }
 
-if (process.env.NODE_ENV === 'development') {
-  if (!global._mongoClientPromise) {
-    client = new MongoClient(uri, options)
-    global._mongoClientPromise = client.connect()
-  }
-  clientPromise = global._mongoClientPromise
-} else {
+if (!global._mongoClientPromise) {
   client = new MongoClient(uri, options)
-  clientPromise = client.connect()
+  global._mongoClientPromise = client.connect()
 }
 
-export async function connectToDatabase() {
-  if (!db) {
-    const client = await clientPromise
-    db = client.db('memento') // Specify the 'memento' database
-  }
+clientPromise = global._mongoClientPromise!
+
+export async function connectToDatabase(): Promise<{ db: Db; client: MongoClient }> {
+  const client = await clientPromise
+  const db = client.db('memento') // Specify the 'memento' database
   return { db, client }
 }
 
