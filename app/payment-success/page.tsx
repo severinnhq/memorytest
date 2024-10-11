@@ -1,80 +1,89 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { motion } from 'framer-motion'
+import confetti from 'canvas-confetti'
+import { CheckCircle, Zap, Star, Trophy } from 'lucide-react'
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
-export default function PaymentSuccess() {
-  const [updateStatus, setUpdateStatus] = useState<'loading' | 'success' | 'error'>('loading')
-  const [errorMessage, setErrorMessage] = useState<string>('')
+export default function PaymentSuccessPage() {
   const router = useRouter()
-  const searchParams = useSearchParams()
 
   useEffect(() => {
-    const updatePaymentStatus = async () => {
-      try {
-        const sessionId = searchParams.get('session_id')
-        if (!sessionId) {
-          throw new Error('Session ID not found')
-        }
+    // Update local storage to reflect the new payment status
+    const user = JSON.parse(localStorage.getItem('user') || '{}')
+    user.hasPaid = true
+    localStorage.setItem('user', JSON.stringify(user))
 
-        const response = await fetch(`/api/payment-success?session_id=${sessionId}`)
-        const data = await response.json()
+    // Trigger confetti animation
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 }
+    })
+  }, [])
 
-        if (response.ok && data.status === 'success') {
-          setUpdateStatus('success')
-          // Update local storage
-          const userJson = localStorage.getItem('user')
-          if (userJson) {
-            const user = JSON.parse(userJson)
-            user.hasPaid = true
-            localStorage.setItem('user', JSON.stringify(user))
-          }
-        } else {
-          throw new Error(data.error || 'Failed to update payment status')
-        }
-      } catch (error: unknown) {
-        console.error('Error updating payment status:', error)
-        setUpdateStatus('error')
-        setErrorMessage(error instanceof Error ? error.message : 'An unexpected error occurred')
+  const containerVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.5,
+        delay: 0.2,
+        when: "beforeChildren",
+        staggerChildren: 0.1
       }
     }
+  }
 
-    updatePaymentStatus()
-  }, [searchParams])
-
-  const handleContinue = () => {
-    router.push('/')
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1
+    }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">Payment Status</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {updateStatus === 'loading' && <p className="text-center">Updating payment status...</p>}
-          {updateStatus === 'success' && (
-            <>
-              <p className="text-center text-green-600">Payment successful and status updated!</p>
-              <Button onClick={handleContinue} className="w-full">
-                Continue to Dashboard
-              </Button>
-            </>
-          )}
-          {updateStatus === 'error' && (
-            <>
-              <p className="text-center text-red-600">Failed to update payment status: {errorMessage}</p>
-              <p className="text-center">Please contact support with this error message.</p>
-              <Button onClick={handleContinue} className="w-full">
-                Return to Dashboard
-              </Button>
-            </>
-          )}
-        </CardContent>
-      </Card>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="bg-white rounded-lg shadow-2xl p-8 max-w-md w-full mx-4"
+      >
+        <motion.div variants={itemVariants} className="text-center">
+          <CheckCircle className="w-24 h-24 text-green-500 mx-auto mb-6" />
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Awesome! 🎉</h1>
+          <p className="text-xl text-gray-600 mb-8">Your payment was successful. Welcome to the premium club!</p>
+        </motion.div>
+
+        <motion.div variants={itemVariants} className="grid grid-cols-3 gap-4 mb-8">
+          <div className="text-center">
+            <Zap className="w-12 h-12 text-yellow-500 mx-auto mb-2" />
+            <p className="text-sm font-medium text-gray-600">Faster Learning</p>
+          </div>
+          <div className="text-center">
+            <Star className="w-12 h-12 text-purple-500 mx-auto mb-2" />
+            <p className="text-sm font-medium text-gray-600">Exclusive Content</p>
+          </div>
+          <div className="text-center">
+            <Trophy className="w-12 h-12 text-blue-500 mx-auto mb-2" />
+            <p className="text-sm font-medium text-gray-600">Achievements</p>
+          </div>
+        </motion.div>
+
+        <motion.div variants={itemVariants} className="text-center">
+          <Button
+            onClick={() => router.push('/')}
+            className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105"
+          >
+            Start Exploring
+          </Button>
+        </motion.div>
+      </motion.div>
     </div>
   )
 }

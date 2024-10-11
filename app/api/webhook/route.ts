@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
+import { connectToDatabase } from '@/lib/mongodb'
+import { ObjectId } from 'mongodb'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-09-30.acacia',
@@ -25,7 +27,6 @@ export async function POST(req: NextRequest) {
     switch (event.type) {
       case 'checkout.session.completed':
         const session = event.data.object as Stripe.Checkout.Session
-        // Update user's payment status
         await updateUserPaymentStatus(session)
         break
       // ... handle other event types
@@ -40,7 +41,13 @@ export async function POST(req: NextRequest) {
 }
 
 async function updateUserPaymentStatus(session: Stripe.Checkout.Session) {
-  // Implement your logic to update the user's payment status
-  // You might want to use the session.client_reference_id to identify the user
-  console.log('Updating payment status for session:', session.id)
+  const { db } = await connectToDatabase()
+  const userId = session.client_reference_id
+
+  if (userId) {
+    await db.collection('users').updateOne(
+      { _id: new ObjectId(userId) },
+      { $set: { hasPaid: true } }
+    )
+  }
 }
