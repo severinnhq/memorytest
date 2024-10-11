@@ -99,7 +99,7 @@ export default function TasksPage() {
         const parsedUser = JSON.parse(storedUser)
         setUser(parsedUser)
         if (!parsedUser.hasPaid) {
-          router.push('/upgrade')
+          router.push('/ade')
         }
       } else {
         router.push('/auth')

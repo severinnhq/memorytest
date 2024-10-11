@@ -104,7 +104,7 @@ export default function AdvancedTasksPage() {
         const parsedUser = JSON.parse(storedUser)
         setUser(parsedUser)
         if (!parsedUser.hasPaid) {
-          router.push('/upgrade')
+          router.push('/#premium')
         }
       } else {
         router.push('/auth')
@@ -194,10 +194,10 @@ export default function AdvancedTasksPage() {
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-12">
       <div className="container mx-auto px-4">
         <div className="mb-8">
-          <Link href="/" passHref>
+          <Link href="/premium-tasks" passHref>
             <Button variant="outline" className="flex items-center gap-2">
               <ArrowLeft className="h-4 w-4" />
-              Back to Home
+              Back to Hub
             </Button>
           </Link>
         </div>
