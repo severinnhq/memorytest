@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function PaymentSuccess() {
-  const [updateStatus, setUpdateStatus] = useState<'loading' | 'success' | 'error' | 'already-updated'>('loading')
-  const [message, setMessage] = useState<string>('')
+  const [updateStatus, setUpdateStatus] = useState<'loading' | 'success' | 'error'>('loading')
+  const [errorMessage, setErrorMessage] = useState<string>('')
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -22,9 +22,8 @@ export default function PaymentSuccess() {
         const response = await fetch(`/api/payment-success?session_id=${sessionId}`)
         const data = await response.json()
 
-        if (response.ok) {
-          setUpdateStatus(data.status)
-          setMessage(data.message)
+        if (response.ok && data.status === 'success') {
+          setUpdateStatus('success')
           // Update local storage
           const userJson = localStorage.getItem('user')
           if (userJson) {
@@ -38,7 +37,7 @@ export default function PaymentSuccess() {
       } catch (error: unknown) {
         console.error('Error updating payment status:', error)
         setUpdateStatus('error')
-        setMessage(error instanceof Error ? error.message : 'An unexpected error occurred')
+        setErrorMessage(error instanceof Error ? error.message : 'An unexpected error occurred')
       }
     }
 
@@ -59,15 +58,7 @@ export default function PaymentSuccess() {
           {updateStatus === 'loading' && <p className="text-center">Updating payment status...</p>}
           {updateStatus === 'success' && (
             <>
-              <p className="text-center text-green-600">{message}</p>
-              <Button onClick={handleContinue} className="w-full">
-                Continue to Dashboard
-              </Button>
-            </>
-          )}
-          {updateStatus === 'already-updated' && (
-            <>
-              <p className="text-center text-green-600">{message}</p>
+              <p className="text-center text-green-600">Payment successful and status updated!</p>
               <Button onClick={handleContinue} className="w-full">
                 Continue to Dashboard
               </Button>
@@ -75,9 +66,8 @@ export default function PaymentSuccess() {
           )}
           {updateStatus === 'error' && (
             <>
-              <p className="text-center text-red-600">Failed to update payment status: {message}</p>
-              <p className="text-center">Your payment may have been processed, but we couldn't update your account status.</p>
-              <p className="text-center">Please contact support with this error message if the issue persists.</p>
+              <p className="text-center text-red-600">Failed to update payment status: {errorMessage}</p>
+              <p className="text-center">Please contact support with this error message.</p>
               <Button onClick={handleContinue} className="w-full">
                 Return to Dashboard
               </Button>

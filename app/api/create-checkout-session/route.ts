@@ -11,11 +11,8 @@ export async function POST(req: Request) {
     const { userId } = await req.json()
 
     if (!userId) {
-      console.log('User ID is missing')
       return NextResponse.json({ error: 'User ID is required' }, { status: 400 })
     }
-
-    console.log('Creating checkout session for user:', userId)
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -26,7 +23,7 @@ export async function POST(req: Request) {
             product_data: {
               name: 'Nrglitch Premium',
             },
-            unit_amount: 50, // 0.50 EUR in cents (minimum amount required by Stripe)
+            unit_amount: 50, // 0.50 EUR in cents
           },
           quantity: 1,
         },
@@ -40,15 +37,9 @@ export async function POST(req: Request) {
       client_reference_id: userId,
     })
 
-    console.log('Checkout session created:', session.id)
-
     return NextResponse.json({ sessionId: session.id })
   } catch (error) {
     console.error('Error creating checkout session:', error)
-    return NextResponse.json({ 
-      error: 'Internal Server Error', 
-      details: error instanceof Error ? error.message : 'Unknown error',
-      stack: error instanceof Error ? error.stack : undefined
-    }, { status: 500 })
+    return NextResponse.json({ error: 'Internal Server Error', details: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 })
   }
 }

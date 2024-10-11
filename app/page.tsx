@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Brain, LogOut, Menu, User, Check, Plus, Clock, Database, FileText, Film, Layers, Zap, Calendar, Sparkles, Play, BookOpen, Mail, Trophy, Star, BarChart } from 'lucide-react'
 import Image from 'next/image'
 import { loadStripe } from '@stripe/stripe-js'
+import { baseUrl } from './config'
 
 interface User {
   _id: string;
@@ -147,27 +148,23 @@ export default function Home() {
           },
           body: JSON.stringify({ userId: user._id }),
         })
-  
-        const data = await response.json()
-  
+
         if (!response.ok) {
-          throw new Error(data.error || data.details || 'Failed to create checkout session')
+          throw new Error('Failed to create checkout session')
         }
-  
-        const { sessionId } = data
-  
+
+        const { sessionId } = await response.json()
+
         const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
         if (stripe) {
           const { error } = await stripe.redirectToCheckout({ sessionId })
           if (error) {
             throw error
           }
-        } else {
-          throw new Error('Failed to load Stripe')
         }
       } catch (error) {
         console.error('Error creating checkout session:', error)
-        alert(error instanceof Error ? error.message : 'An unexpected error occurred')
+        // Handle error (e.g., show error message to user)
       } finally {
         setIsLoading(false)
       }
@@ -194,7 +191,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 relative">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
       {/* Header */}
       <motion.header 
         initial={{ y: -100 }}
@@ -239,10 +236,11 @@ export default function Home() {
             <div className="md:hidden">
               <Button
                 variant="ghost"
-                className="inline-flex items-center justify-center p-2 rounded-md text-[#4f46e5]   hover:text-[#4f46e5] hover:bg-[#4f46e5]/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#4f46e5]"
+                className="inline-flex items-center justify-center p-2 rounded-md text-[#4f46e5] hover:text-[#4f46e5] hover:bg-[#4f46e5]/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#4f46e5]"
                 onClick={toggleMenu}
               >
                 <span className="sr-only">Open menu</span>
+                
                 <Menu className="h-6 w-6" aria-hidden="true" />
               </Button>
             </div>
@@ -468,7 +466,7 @@ export default function Home() {
                     <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-[#4f46e5] rounded-full">BEST VALUE</span>
                   </div>
                   <div className="flex items-end mb-6">
-                    <span className="text-5xl font-extrabold text-gray-900">€0.10</span>
+                    <span className="text-5xl font-extrabold text-gray-900">€0.50</span>
                     <span className="text-xl text-gray-500 ml-2">/ lifetime</span>
                   </div>
                   <p className="text-gray-500 mb-8">
@@ -482,7 +480,7 @@ export default function Home() {
                       "Visual memory enhancement tasks",
                       "Auditory memory improvement exercises",
                       "Ad-free experience"
-                    ].map((feature,  index) => (
+                    ].map((feature, index) => (
                       <motion.li 
                         key={index}
                         className="flex items-center space-x-3"
