@@ -138,7 +138,7 @@ export default function DigitSymbolSubstitution({ onComplete, onUnlockNext }: Di
   }
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-md max-w-md mx-auto">
+    <div className="p-4 sm:p-6 bg-white rounded-lg shadow-md max-w-full sm:max-w-md mx-auto">
       <h2 className="text-3xl font-bold mb-4 text-center text-indigo-800">Digit-Symbol Substitution</h2>
       <div className="mb-4 flex justify-between items-center">
         <div className="text-lg font-semibold text-indigo-600">Round {round}/{TOTAL_ROUNDS}</div>
@@ -181,11 +181,11 @@ export default function DigitSymbolSubstitution({ onComplete, onUnlockNext }: Di
         <Card className="mb-4">
           <CardContent className="p-4">
             <h3 className="text-lg font-semibold mb-2">Memorize these pairs:</h3>
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {pairs.map(({ symbol, digit }) => (
-                <div key={symbol} className="text-center">
+                <div key={symbol} className="flex justify-center items-center space-x-2">
                   <span className="text-2xl font-bold">{symbol}</span>
-                  <span className="text-lg"> = </span>
+                  <span className="text-lg">=</span>
                   <span className="text-2xl font-bold">{digit}</span>
                 </div>
               ))}
