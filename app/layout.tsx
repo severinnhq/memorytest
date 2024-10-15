@@ -24,6 +24,7 @@ export default function RootLayout({
       <body className={`${poppins.variable} font-sans`}>
         {children}
         <GlobalScript />
+        <Analytics />
       </body>
     </html>
   )
