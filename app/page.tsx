@@ -6,14 +6,9 @@ import { useRouter } from 'next/navigation'
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Brain, LogOut, Menu, User, Check, Plus, Clock, Database, FileText, Film, Layers, Zap, Calendar, Sparkles, Play, BookOpen, Mail, Trophy, Star, BarChart, Twitter } from 'lucide-react'
+import { Brain, LogOut, Menu, User, Check, Plus, Clock, Database, FileText, Film, Layers, Zap, Calendar, Sparkles, Play, BookOpen, Mail, Trophy, Star, BarChart, Twitter, HelpCircle } from 'lucide-react'
 import Image from 'next/image'
 import { loadStripe } from '@stripe/stripe-js'
-
-
-
-
-
 
 interface User {
   _id: string;
@@ -94,7 +89,7 @@ const memoryTypes: MemoryType[] = [
   },
 ]
 
-export default function Home() {
+export default function Component() {
   const [user, setUser] = useState<User | null>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isButtonHovered, setIsButtonHovered] = useState(false)
@@ -228,7 +223,7 @@ export default function Home() {
               </Link>
             </div>
             <nav className="hidden md:flex space-x-10 flex-grow justify-center">
-              <a href="" className="text-base font-medium text-gray-500 hover:text-[#4f46e5] transition-colors duration-200">Test My Memory</a>
+              <a href="#" className="text-base font-medium text-gray-500 hover:text-[#4f46e5] transition-colors duration-200">Test My Memory</a>
               <a href="#premium" className="text-base font-medium text-gray-500 hover:text-[#4f46e5] transition-colors duration-200">Premium</a>
               <a href="#our-story" className="text-base font-medium text-gray-500 hover:text-[#4f46e5] transition-colors duration-200">Our Story</a>
             </nav>
@@ -246,7 +241,7 @@ export default function Home() {
                 </div>
               ) : (
                 <Link href="/auth" passHref>
-                  <Button variant="outline" className="border-[#4f46e5] text-[#4f46e5] ">
+                  <Button variant="outline"   className="border-[#4f46e5] text-[#4f46e5]">
                     <User className="h-5 w-5 mr-2" />
                     Sign In / Sign Up
                   </Button>
@@ -278,7 +273,7 @@ export default function Home() {
             className="md:hidden fixed top-16 left-0 right-0 bg-white z-40 shadow-md"
           >
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              <a href="" className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-[#4f46e5] hover:bg-[#4f46e5]/10" onClick={toggleMenu}>Test My Memory</a>
+              <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-[#4f46e5] hover:bg-[#4f46e5]/10" onClick={toggleMenu}>Test My Memory</a>
               <a href="#premium" className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-[#4f46e5] hover:bg-[#4f46e5]/10" onClick={toggleMenu}>Premium</a>
               <a href="#our-story" className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-[#4f46e5] hover:bg-[#4f46e5]/10" onClick={toggleMenu}>Our Story</a>
             </div>
@@ -603,80 +598,59 @@ export default function Home() {
           </div>
         </motion.section>
 
-
-
-   
         <section id="contact" className="py-24">
-  <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
-    <h2 className="text-4xl font-bold text-center mb-8 text-gray-900">Contact Us</h2> {/* Centering the text */}
-    <div className="flex flex-col lg:flex-row lg:w-full">
-      <div className="lg:w-1/2 mb-8 lg:mb-0">
-        <div className="bg-white shadow-md p-8" style={{ 
-            borderTopLeftRadius: '12px', 
-            borderTopRightRadius: '24px', 
-            borderBottomRightRadius: '36px', 
-            borderBottomLeftRadius: '48px' 
-          }}>
-          <p className="text-center text-gray-600 mb-4">
-            Feel free to get in touch with us if you're interested in personalized tasks, have any recommendations, or are facing any issues!
-          </p>
-          
-          <div className="flex justify-center space-x-8 mb-6">
-            {/* Mail icon with link */}
-            <a href="mailto:nrglitchhq@gmail.com" target="_blank" rel="noopener noreferrer">
-              <Mail className="text-black hover:text-gray-700" size={32} />
-            </a>
-            {/* Twitter icon with link */}
-            <a href="https://x.com/severinnhq" target="_blank" rel="noopener noreferrer">
-              <Twitter className="text-black hover:text-gray-700" size={32} />
-            </a>
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+            <h2 className="text-4xl font-bold text-center mb-8 text-gray-900">Contact Us</h2>
+            <div className="flex flex-col lg:flex-row lg:w-full">
+              <div className="lg:w-1/2 mb-8 lg:mb-0">
+                <div className="bg-white shadow-md p-8" style={{ 
+                  borderTopLeftRadius: '12px', 
+                  borderTopRightRadius: '24px', 
+                  borderBottomRightRadius: '36px', 
+                  borderBottomLeftRadius: '48px' 
+                }}>
+                  <p className="text-center text-gray-600 mb-4">
+                    Feel free to get in touch with us if you&apos;re interested in personalized tasks, have any recommendations, or are facing any issues!
+                  </p>
+                  
+                  <div className="flex justify-center space-x-8 mb-6">
+                    {/* Mail icon with link */}
+                    <a href="mailto:nrglitchhq@gmail.com" target="_blank" rel="noopener noreferrer">
+                      <Mail className="text-black hover:text-gray-700" size={32} />
+                    </a>
+                    {/* Twitter icon with link */}
+                    <a href="https://x.com/severinnhq" target="_blank" rel="noopener noreferrer">
+                      <Twitter className="text-black hover:text-gray-700" size={32} />
+                    </a>
+                  </div>
+                  
+                  <p className="text-center text-gray-500">
+                    We look forward to hearing from you!
+                  </p>
+                </div>
+              </div>
+
+              <div className="lg:w-1/2 flex justify-center">
+                <Image 
+                  src="https://example.com/your-image.jpg" // Replace with your image URL
+                  alt="Contact Illustration"
+                  className="shadow-md border border-gray-200 w-full max-w-sm object-cover"
+                  style={{ 
+                    clipPath: 'polygon(0 0, 0% 100%, 100% 80%, 100% 0)', 
+                    borderTopLeftRadius: '12px', 
+                    borderTopRightRadius: '24px', 
+                    borderBottomRightRadius: '36px', 
+                    borderBottomLeftRadius: '48px' 
+                  }} 
+                  width={400} // Adjust width as necessary
+                  height={300} // Adjust height as necessary
+                />
+              </div>
+            </div>
           </div>
-          
-          <p className="text-center text-gray-500">
-            We look forward to hearing from you!
-          </p>
-        </div>
-      </div>
+        </section>
 
-      <div className="lg:w-1/2 flex justify-center">
-        <img 
-          src="https://example.com/your-image.jpg" // Replace with your image URL
-          alt="Contact Illustration"
-          className="shadow-md border border-gray-200 w-full max-w-sm object-cover"
-          style={{ 
-            clipPath: 'polygon(0 0, 0% 100%, 100% 80%, 100% 0)', 
-            borderTopLeftRadius: '12px', 
-            borderTopRightRadius: '24px', 
-            borderBottomRightRadius: '36px', 
-            borderBottomLeftRadius: '48px' 
-          }} 
-        />
-      </div>
-    </div>
-  </div>
-</section>
-
-
-
- {/* Fixed box for Twitter link */}
- <div className="fixed bottom-4 right-4 bg-white rounded-lg shadow-lg p-4 flex items-center space-x-2">
-    <img 
-      src="https://example.com/your-image.jpg" // Replace with your image URL
-      alt="Twitter Image"
-      className="w-12 h-12 rounded-full" // Adjust size as needed
-    />
-    <a 
-      href="https://x.com/severinnhq" 
-      target="_blank" 
-      rel="noopener noreferrer" 
-      className=""
-    >
-    Made by severinn
-    </a>
-  </div>
-
-
-        {/* FAQ Section    */}
+        {/* FAQ Section */}
         <motion.section 
           id="faq" 
           className="py-24"
@@ -721,49 +695,46 @@ export default function Home() {
             </div>
           </div>
         </motion.section>
-      </main>
 
-
-
-
-      {/* Footer */}
-      <footer className="bg-[#4f46e5] text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center justify-center gap-8">
-            <Link href="/" className="flex items-center">
-              <Brain className="h-8 w-auto sm:h-10 text-white" />
-              <span className="ml-2 text-2xl font-bold">Nrglitch</span>
-            </Link>
-            <nav className="flex flex-wrap justify-center gap-6">
-              <Button variant="ghost" className="text-white hover:text-white hover:bg-white/20" onClick={handleStartTest}>
-                <Play className="h-5 w-5 mr-2" />
-                Start the Test
-              </Button>
-              <Link href="#premium" passHref>
-                <Button variant="ghost" className="text-white hover:text-white hover:bg-white/20">
-                  <Sparkles className="h-5 w-5 mr-2" />
-                  Premium
-                </Button>
-              </Link>
-              <Link href="#our-story" passHref>
-                <Button variant="ghost" className="text-white hover:text-white hover:bg-white/20">
-                  <BookOpen className="h-5 w-5 mr-2" />
-                  Our Story
-                </Button>
-              </Link>
-              <Link href="#contact" passHref>
-                <Button variant="ghost" className="text-white hover:text-white hover:bg-white/20">
-                  <Mail className="h-5 w-5 mr-2" />
-                  Contact
-                </Button>
-              </Link>
-            </nav>
-          </div>
-          <div className="mt-8 border-t border-white/20 pt-8 text-center">
-            <p className="text-white/80">&copy; 2023 Nrglitch. All rights reserved.</p>
-          </div>
+        {/* Fixed Box */}
+        <div className="fixed bottom-10 right-10 bg-white shadow-lg p-4 flex items-center cursor-pointer" onClick={() => window.open('https://x.com/severinnhq', '_blank')}>
+          <Image src="/severinn.jpg" alt="Made by Severinn" width={50} height={50} />
+          <span className="ml-2 text-sm font-semibold">Made by Severinn</span>
         </div>
-      </footer>
+
+        {/* Footer */}
+        <footer className="bg-[#4f46e5] text-white py-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col items-center justify-center gap-8">
+              <Link href="/" className="flex items-center">
+                <Brain className="h-8 w-auto sm:h-10 text-white" />
+                <span className="ml-2 text-2xl font-bold">Nrglitch</span>
+              </Link>
+              <nav className="flex flex-wrap justify-center gap-6">
+                <Button variant="ghost" className="text-white hover:text-white hover:bg-white/20" onClick={handleStartTest}>
+                  <Play className="h-5 w-5 mr-2" />
+                  Start the Test
+                </Button>
+                <Link href="#premium" passHref>
+                  <Button variant="ghost" className="text-white hover:text-white hover:bg-white/20">
+                    <Sparkles className="h-5 w-5 mr-2" />
+                    Premium
+                  </Button>
+                </Link>
+                <Link href="#faq" passHref>
+                  <Button variant="ghost" className="text-white hover:text-white hover:bg-white/20">
+                    <HelpCircle className="h-5 w-5 mr-2" />
+                    FAQ
+                  </Button>
+                </Link>
+              </nav>
+              <p className="text-center text-sm text-gray-300 mt-6">
+                &copy; {new Date().getFullYear()} Nrglitch. All rights reserved.
+              </p>
+            </div>
+          </div>
+        </footer>
+      </main>
     </div>
   )
 }
