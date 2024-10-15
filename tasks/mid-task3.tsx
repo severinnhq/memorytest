@@ -174,7 +174,7 @@ export default function MidTask3({ onComplete, onUnlockNext }: MidTask3Props) {
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md max-w-md mx-auto">
-      <h2 className="text-3xl font-bold mb-4 text-center text-primary">Color Sequence Memory</h2>
+      <h2 className="text-2xl font-bold mb-4 text-center text-primary">Color Sequence Memory</h2>
       <div className="mb-4 flex justify-between items-center">
         <div className="text-lg font-semibold text-primary">Round {round}/{TOTAL_ROUNDS}</div>
         <div className="flex items-center">

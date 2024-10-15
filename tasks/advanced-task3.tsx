@@ -159,9 +159,9 @@ export default function AdvancedTask3({ onComplete, onUnlockNext }: AdvancedTask
   }
 
   return (
-    <div className="flex flex-col items-center justify-center p-8 space-y-6 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl shadow-2xl max-w-3xl mx-auto">
-      <h2 className="text-3xl font-bold text-gray-800">Advanced Sequence Recall Challenge</h2>
-      <p className="text-center text-gray-600 text-lg">
+    <div className="flex flex-col items-center justify-center p-8 space-y-6 bg-gradient-to-br  rounded-xl shadow-md max-w-3xl mx-auto">
+      <h2 className="text-2xl font-bold text-gray-800">Advanced Sequence Recall</h2>
+      <p className="text-center text-gray-600 text-sm">
         Remember the sequence of 4 shapes and colors, then recreate it! Each color has unique shapes.
       </p>
 

@@ -61,7 +61,7 @@ export default function TaskCompletionModal({
               Next Task
             </Button>
           ) : (
-            <Button onClick={onTryAgain} className="bg-blue-500 hover:bg-blue-600 text-white">
+            <Button onClick={onTryAgain} className="bg-[#4f46e5] hover:bg-[#4338ca] text-white">
               Try Again
             </Button>
           )}

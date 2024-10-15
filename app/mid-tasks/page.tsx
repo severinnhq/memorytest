@@ -44,14 +44,14 @@ interface Task {
 }
 
 const tasks: Task[] = [
-  { id: 1, name: "Dual N-Back", description: "Simultaneously remember visual and auditory stimuli N steps back.", icon: Brain, readinessPhrase: "Prepared to challenge your mind?" },
-  { id: 2, name: "Visual Pattern Recall", description: "Memorize and select the correct cells in a grid pattern, choosing each cell only once.", icon: Grid, readinessPhrase: "Ready to test your precise visual memory?" },
-  { id: 3, name: "Symbol Sequence Association", description: "Memorize symbol-color pairs and recall them in a timed sequence.", icon: Palette, readinessPhrase: "Ready to test your association skills?" },
-  { id: 4, name: "Multi-Dimensional Memory Matrix", description: "Memorize and recall a 3x3 grid of shapes, colors, and numbers.", icon: Grid, readinessPhrase: "Ready for a compact multi-dimensional memory challenge?" },
-  { id: 5, name: "3D Memory Maze", description: "Navigate a 3D maze, memorizing symbols and their locations, then recall the path and symbols in order.", icon: Box, readinessPhrase: "Ready to explore the depths of your spatial memory?" },
-  { id: 6, name: "Auditory Sequence Mastery", description: "Remember and reproduce complex rhythms and tone sequences.", icon: Music, readinessPhrase: "Set to tune your auditory memory?" },
-  { id: 7, name: "Multitasking Memory Challenge", description: "Switch between multiple memory tasks while maintaining accuracy.", icon: SwitchCamera, readinessPhrase: "Prepared to juggle mental tasks?" },
-  { id: 8, name: "Time Distortion Perception", description: "Estimate time intervals while engaged in memory tasks.", icon: Clock, readinessPhrase: "Ready to bend your perception of time?" },
+  { id: 1, name: "Grid Genius", description: "Recreate a 3x3 grid pattern across 3 rounds. Nail 3/3 to move on!", icon: Grid, readinessPhrase: "Prepared to challenge your mind?" },
+  { id: 2, name: "Memory Maestro", description: "Fill in missing digits from sequences across 3 rounds, with the challenge growing each time!", icon: Brain, readinessPhrase: "Ready to test your precise visual memory?" },
+  { id: 3, name: "Shade Shuffler", description: "Recreate color patterns through 3 tricky rounds—watch out for those sneaky shades!", icon: SwitchCamera, readinessPhrase: "Ready to test your association skills?" },
+  { id: 4, name: "Color Crafter", description: "Recreate color patterns on a 4x4 grid—3 flawless rounds to succeed!", icon: Palette, readinessPhrase: "Ready for a compact multi-dimensional memory challenge?" },
+  { id: 5, name: "Purple Jumper", description: "Track the jumping purple square on a 5x5 grid through 3 rounds and recreate its path!", icon: Grid, readinessPhrase: "Ready to explore the depths of your spatial memory?" },
+  { id: 6, name: "Sequence Spark", description: "Watch the 9 squares light up in random order—recreate the sequence perfectly to succeed!", icon: Box, readinessPhrase: "Set to tune your auditory memory?" },
+  { id: 7, name: "Shape Shifter", description: "Recreate the sequence of colorful shapes across 5 rounds—4 out of 5 is your ticket forward!", icon: ArrowLeft, readinessPhrase: "Prepared to juggle mental tasks?" },
+  { id: 8, name: "Pattern Perfection", description: "Spot and recreate patterns made from 5 identical icons—watch out, it gets trickier with each round!", icon: Box, readinessPhrase: "Ready to bend your perception of time?" },
 ]
 
 const STORAGE_KEY = 'unlockedMidLevels'

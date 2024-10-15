@@ -632,7 +632,7 @@ export default function Component() {
 
               <div className="lg:w-1/2 flex justify-center">
                 <Image 
-                  src="https://example.com/your-image.jpg" // Replace with your image URL
+                  src="/severinn.jpg" // Replace with your image URL
                   alt="Contact Illustration"
                   className="shadow-md border border-gray-200 w-full max-w-sm object-cover"
                   style={{ 

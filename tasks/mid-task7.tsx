@@ -150,8 +150,8 @@ export default function MidTask7({ onComplete, onUnlockNext }: MidTask7Props) {
 
   return (
     <div className="flex flex-col items-center justify-center p-2 space-y-2 bg-white rounded-lg shadow-md max-w-md w-full mx-auto">
-      <h2 className="text-xl font-bold text-gray-800 text-center">Sequence Sculptor</h2>
-      <p className="text-center text-gray-600 text-sm">Memorize and recreate the sequence.</p>
+      <h2 className="text-2xl font-bold text-black-800 text-center">Sequence Sculptor</h2>
+      <p className="text-center text-black-600 text-sm">Memorize and recreate the sequence.</p>
       
       <div className="h-16 flex items-center justify-center">
         {gameStatus === 'displaying' && currentIndex < sequence.length && (
@@ -225,7 +225,7 @@ export default function MidTask7({ onComplete, onUnlockNext }: MidTask7Props) {
             >
               <XCircle className="w-20 h-20 mx-auto text-red-500" />
             </motion.div>
-            <p className="mt-4 text-lg text-gray-700">
+            <p className="mt-4 text-md text-gray-700">
               Don't worry! Practice makes perfect. Keep trying to improve your memory.
             </p>
             <p className="mt-2 text-xl font-semibold text-gray-800">
@@ -235,7 +235,7 @@ export default function MidTask7({ onComplete, onUnlockNext }: MidTask7Props) {
           <div className="mt-8 flex justify-center">
             <Button 
               onClick={handleTryAgain}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 text-lg"
+              className="bg-[#4f46e5] hover:bg-[#4338ca] text-white px-6 py-2 text-sm"
             >
               Try Again
             </Button>

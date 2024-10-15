@@ -191,8 +191,8 @@ export default function VisualSequenceEncodingChallenge({ onComplete, onUnlockNe
   )
 
   return (
-    <div className="flex flex-col items-center justify-center p-6 space-y-6 bg-gray-100 rounded-xl shadow-lg max-w-lg mx-auto">
-      <h2 className="text-3xl font-bold text-gray-800">Visual Sequence Encoding</h2>
+    <div className="flex flex-col items-center justify-center p-6 space-y-6  rounded-xl shadow-md max-w-lg mx-auto">
+      <h2 className="text-2xl font-bold text-gray-800">Number Maze</h2>
       <p className="text-center text-gray-600 text-sm">
         Memorize the pattern of numbers and colors, then recreate it!
       </p>
@@ -230,7 +230,7 @@ export default function VisualSequenceEncodingChallenge({ onComplete, onUnlockNe
           {renderGrid(pattern)}
           <Button 
             onClick={handleStart}
-            className="px-6 py-3 bg-indigo-600 text-white text-lg rounded-full hover:bg-indigo-700 transition-colors duration-200"
+            className="px-6 py-3 bg-indigo-600 text-white   hover:bg-indigo-700 transition-colors duration-200"
           >
             I memorized, let's start!
           </Button>
@@ -240,7 +240,7 @@ export default function VisualSequenceEncodingChallenge({ onComplete, onUnlockNe
           {renderGrid(userPattern)}
           <Button 
             onClick={handleSubmit}
-            className="px-6 py-3 bg-indigo-600 text-white text-lg rounded-full hover:bg-indigo-700 transition-colors duration-200"
+            className="px-6 py-3 bg-indigo-600 text-white   hover:bg-indigo-700 transition-colors duration-200"
           >
             Submit
           </Button>

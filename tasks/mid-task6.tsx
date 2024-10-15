@@ -154,7 +154,7 @@ export default function TemporalMosaicReconstruction({ onComplete, onUnlockNext 
   }
 
   return (
-    <div className="bg-background rounded-xl shadow-lg p-6 max-w-md w-full">
+    <div className="bg-background rounded-xl shadow-md p-6 max-w-md w-full">
       <h2 className="text-2xl font-bold mb-4 text-primary text-center">Temporal Mosaic Reconstruction</h2>
       
       <div className="mb-4">
@@ -184,7 +184,7 @@ export default function TemporalMosaicReconstruction({ onComplete, onUnlockNext 
         <div className="flex justify-between mb-4">
           {gameStatus === 'input' && (
             <>
-              <Button onClick={handleSubmit} className="w-1/2 mr-2">Submit</Button>
+              <Button onClick={handleSubmit} className="w-1/2 mr-2 bg-[#4f46e5] hover:bg-[#4338ca]">Submit</Button>
               <Button onClick={handleReset} className="w-1/2 ml-2" variant="outline">
                 <RotateCcw className="w-4 h-4 mr-2" />
                 Reset

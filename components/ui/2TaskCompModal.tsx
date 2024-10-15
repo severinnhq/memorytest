@@ -1,5 +1,3 @@
-// File: c:/xampp/htdocs/nextmem/memory/components/ui/2TaskCompModal.tsx
-
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -46,7 +44,7 @@ export default function TwoTaskCompModal({
           </p>
         </div>
         <div className="mt-6 flex justify-center">
-          <Button onClick={onTryAgain} className="bg-blue-500 hover:bg-blue-600 text-white">
+          <Button onClick={onTryAgain} className="bg-[#4f46e5] hover:bg-[#4338ca] text-white">
             Try Again
           </Button>
         </div>

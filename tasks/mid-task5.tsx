@@ -200,8 +200,8 @@ export default function MidTask5({ onComplete, onUnlockNext }: MidTask5Props) {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl p-8 max-w-2xl w-full">
-      <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">Memory Maze</h2>
+    <div className="bg-white rounded-2xl shadow-md p-8 max-w-2xl w-full">
+      <h2 className="text-2xl font-bold mb-6 text-black-800 text-center">Memory Maze</h2>
       <div className="mb-6">
         <div className="grid grid-cols-5 gap-1 mb-4">
           {Array.from({ length: GRID_SIZE * GRID_SIZE }).map((_, index) => {
@@ -258,7 +258,7 @@ export default function MidTask5({ onComplete, onUnlockNext }: MidTask5Props) {
         )}
       </AnimatePresence>
       <motion.div 
-        className="text-xl font-semibold mb-6 text-gray-700 text-center h-8"
+        className="text-xl font-semibold mb-6 text-black-700 text-center h-8"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
@@ -270,8 +270,8 @@ export default function MidTask5({ onComplete, onUnlockNext }: MidTask5Props) {
         {gamePhase === 'completed' && message}
       </motion.div>
       <div className="flex items-center justify-between mb-4">
-        <span className="text-gray-600 font-semibold">Round: {round}/{TOTAL_ROUNDS}</span>
-        <span className="text-gray-600 font-semibold">Correct: {correctRounds}/{Math.max(0, round - 1)}</span>
+        <span className="text-black-600 font-semibold">Round: {round}/{TOTAL_ROUNDS}</span>
+        <span className="text-black-600 font-semibold">Correct: {correctRounds}/{Math.max(0, round - 1)}</span>
       </div>
       <Progress value={(correctRounds / TOTAL_ROUNDS) * 100} className="w-full mb-6" />
       {gamePhase === 'completed' && (

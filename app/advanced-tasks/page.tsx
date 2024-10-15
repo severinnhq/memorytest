@@ -39,11 +39,11 @@ interface Task {
 }
 
 const tasks: Task[] = [
-  { id: 1, name: "Complex Pattern Recognition", description: "Identify and recreate intricate visual patterns with varying elements and rules.", icon: Brain, readinessPhrase: "Ready to challenge your pattern recognition skills?" },
-  { id: 2, name: "Multi-Modal Memory Challenge", description: "Memorize and recall information across visual, auditory, and spatial domains simultaneously.", icon: Layers, readinessPhrase: "Prepared to test your multi-modal memory?" },
-  { id: 3, name: "Adaptive N-Back Task", description: "A dynamic working memory task that adjusts difficulty based on your performance.", icon: Zap, readinessPhrase: "Ready to push your working memory to its limits?" },
-  { id: 4, name: "Spatial-Temporal Sequence Reconstruction", description: "Memorize and reconstruct complex sequences of objects in both space and time.", icon: Grid, readinessPhrase: "Prepared for a spatial-temporal memory challenge?" },
-  { id: 5, name: "Dynamic Memory Matrix", description: "Memorize and manipulate a multi-dimensional matrix of changing information.", icon: Box, readinessPhrase: "Ready to tackle a dynamic memory challenge?" }
+  { id: 1, name: "Symbol Sync", description: "Memorize pairs of symbols and recreate the sequence—show your memory skills!", icon: Brain, readinessPhrase: "Ready to challenge your pattern recognition skills?" },
+  { id: 2, name: "Grid Recall", description: "Memorize the letters in a 4x4 grid and recall specific positions—can you remember them all?", icon: Grid, readinessPhrase: "Prepared to test your multi-modal memory?" },
+  { id: 3, name: "Icon Imitator", description: "Memorize a sequence of 4 random icons and reproduce it from 12 similar options!", icon: Zap, readinessPhrase: "Ready to push your working memory to its limits?" },
+  { id: 4, name: "Gridlock: Icon Edition", description: "Can you escape the gridlock? Memorize the colorful icons in a 5x5 grid and recreate the pattern!", icon: Grid, readinessPhrase: "Prepared for a spatial-temporal memory challenge?" },
+  { id: 5, name: "Colorful Number Maze", description: "Navigate through a 3x3 layout of colorful cells filled with random numbers and recreate the sequence!", icon: Box, readinessPhrase: "Ready to tackle a dynamic memory challenge?" }
 ]
 
 const STORAGE_KEY = 'advancedTasksUnlockedLevels'

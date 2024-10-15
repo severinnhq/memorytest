@@ -209,7 +209,7 @@ export default function DigitSymbolSubstitution({ onComplete, onUnlockNext }: Di
             placeholder="Enter digits here (spaces and commas allowed)"
             className="w-full mb-2"
           />
-          <Button onClick={handleSubmit} className="w-full">Submit</Button>
+          <Button onClick={handleSubmit} className="w-full bg-[#4f46e5] hover:bg-[#4338ca]">Submit</Button>
         </div>
       )}
       
@@ -221,7 +221,7 @@ export default function DigitSymbolSubstitution({ onComplete, onUnlockNext }: Di
             exit={{ opacity: 0 }}
             className="text-center"
           >
-            <Button onClick={() => setGameState('input')} className="mt-4">
+            <Button onClick={() => setGameState('input')} className="mt-4 bg-[#4f46e5] hover:bg-[#4338ca]" >
               Let's go 🚀
             </Button>
           </motion.div>

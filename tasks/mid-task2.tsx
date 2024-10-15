@@ -177,7 +177,7 @@ export default function MidTask2({ onComplete, onUnlockNext }: MidTask2Props) {
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md max-w-md mx-auto">
-      <h2 className="text-2xl font-bold mb-4 text-center text-indigo-800">Missing Digit Memory</h2>
+      <h2 className="text-2xl font-bold mb-4 text-center text-black-800">Missing Digit Memory</h2>
       <div className="mb-4 flex justify-between items-center">
         <div className="text-lg font-semibold text-indigo-600">Round {round}/{TOTAL_ROUNDS}</div>
         <div className="flex items-center">
@@ -268,7 +268,7 @@ export default function MidTask2({ onComplete, onUnlockNext }: MidTask2Props) {
           <p className="text-center text-lg font-semibold text-indigo-600 mb-4">
             Fill in the missing digit for each sequence!
           </p>
-          <Button onClick={handleSubmit} className="w-full">Submit</Button>
+          <Button onClick={handleSubmit} className="w-full bg-[#4f46e5] hover:bg-[#4338ca]">Submit</Button>
         </>
       )}
 

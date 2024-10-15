@@ -175,7 +175,7 @@ export default function LetterGrid({ onComplete, onUnlockNext }: LetterGridProps
             className="w-full"
             maxLength={POSITIONS_TO_RECALL}
           />
-          <Button onClick={handleSubmit} className="w-full">Submit</Button>
+          <Button onClick={handleSubmit} className="w-full bg-[#4f46e5] hover:bg-[#4338ca]">Submit</Button>
         </div>
       )}
 
@@ -187,8 +187,8 @@ export default function LetterGrid({ onComplete, onUnlockNext }: LetterGridProps
             exit={{ opacity: 0 }}
             className="text-center"
           >
-            <Button onClick={() => setGameState('input')} className="mt-4">
-              I'm ready
+            <Button onClick={() => setGameState('input')} className="mt-4 bg-[#4f46e5] hover:bg-[#4338ca]">
+              I memorized!
             </Button>
           </motion.div>
         )}

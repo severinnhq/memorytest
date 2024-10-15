@@ -272,7 +272,7 @@ export default function PatternRecognitionAndReconstruction({ onComplete, onUnlo
           <p className="text-center text-sm mb-4">
             Click to cycle through colors. Click again on the last color to unselect.
           </p>
-          <Button onClick={checkPattern} className="w-full">
+          <Button onClick={checkPattern} className="w-full bg-[#4f46e5] hover:bg-[#4338ca]">
             Submit Pattern
           </Button>
         </>
