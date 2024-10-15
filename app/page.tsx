@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Brain, LogOut, Menu, User, Check, Plus, Clock, Database, FileText, Film, Layers, Zap, Calendar, Sparkles, Play, Mail, Trophy, Star, BarChart, Twitter, HelpCircle, HouseIcon } from 'lucide-react'
+import { Brain, LogOut, Menu, User, Check, Plus, Clock, Database, FileText, Film, Layers, Zap, Calendar, Sparkles, Mail, Trophy, Star, BarChart, Twitter, HouseIcon } from 'lucide-react'
 import Image from 'next/image'
 import { loadStripe } from '@stripe/stripe-js'
 
