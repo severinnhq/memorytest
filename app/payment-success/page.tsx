@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import confetti from 'canvas-confetti'
 import { CheckCircle, Zap, Star, Trophy } from 'lucide-react'
@@ -9,20 +9,54 @@ import { Button } from "@/components/ui/button"
 
 export default function PaymentSuccessPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const [isValidPayment, setIsValidPayment] = useState(false)
 
   useEffect(() => {
-    // Update local storage to reflect the new payment status
-    const user = JSON.parse(localStorage.getItem('user') || '{}')
-    user.hasPaid = true
-    localStorage.setItem('user', JSON.stringify(user))
+    const verifyPayment = async () => {
+      const sessionId = searchParams.get('session_id')
+      if (!sessionId) {
+        router.push('/')
+        return
+      }
 
-    // Trigger confetti animation
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.6 }
-    })
-  }, [])
+      try {
+        const response = await fetch(`/api/verify-payment?session_id=${sessionId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          if (data.success) {
+            setIsValidPayment(true)
+            // Update local storage to reflect the new payment status
+            const user = JSON.parse(localStorage.getItem('user') || '{}')
+            user.hasPaid = true
+            localStorage.setItem('user', JSON.stringify(user))
+
+            // Trigger confetti animation
+            confetti({
+              particleCount: 100,
+              spread: 70,
+              origin: { y: 0.6 }
+            })
+          } else {
+            router.push('/')
+          }
+        } else {
+          router.push('/')
+        }
+      } catch (error) {
+        console.error('Error verifying payment:', error)
+        router.push('/')
+      }
+    }
+
+    verifyPayment()
+  }, [router, searchParams])
 
   const containerVariants = {
     hidden: { opacity: 0, scale: 0.8 },
@@ -44,6 +78,10 @@ export default function PaymentSuccessPage() {
       y: 0,
       opacity: 1
     }
+  }
+
+  if (!isValidPayment) {
+    return null // Or a loading spinner if you prefer
   }
 
   return (

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { config } from '@/app/config'
+import clientPromise from '@/lib/mongodb'
+import { ObjectId } from 'mongodb'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-09-30.acacia',
@@ -27,9 +29,19 @@ export async function POST(req: NextRequest) {
           },
         ],
         mode: 'payment',
-        success_url: `${config.baseUrl}/payment-success`,
+        success_url: `${config.baseUrl}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${config.baseUrl}/payment-cancelled`,
         client_reference_id: userId,
+      })
+
+      // Store the session ID in the database
+      const client = await clientPromise
+      const db = client.db("memento")
+      await db.collection("payments").insertOne({
+        userId: new ObjectId(userId),
+        sessionId: session.id,
+        status: 'pending',
+        createdAt: new Date()
       })
 
       return NextResponse.json({ sessionId: session.id })

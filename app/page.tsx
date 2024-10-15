@@ -97,7 +97,7 @@ export default function Home() {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
   const [glowPosition, setGlowPosition] = useState({ x: 0, y: 0 })
   const [isHovering, setIsHovering] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const cardRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
 
@@ -111,21 +111,37 @@ export default function Home() {
   const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.2, 1, 0.2])
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user')
-    if (storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser)
-        if (parsedUser && typeof parsedUser === 'object') {
-          setUser(parsedUser)
-        } else {
-          console.error('Invalid user data in localStorage')
+    const fetchUserData = async () => {
+      setIsLoading(true)
+      const storedUser = localStorage.getItem('user')
+      if (storedUser) {
+        try {
+          const parsedUser = JSON.parse(storedUser)
+          if (parsedUser && typeof parsedUser === 'object') {
+            // Fetch the latest user data from the server
+            const response = await fetch(`/api/user/${parsedUser._id}`)
+            if (response.ok) {
+              const userData = await response.json()
+              setUser(userData)
+              // Update local storage with the latest data
+              localStorage.setItem('user', JSON.stringify(userData))
+            } else {
+              console.error('Failed to fetch user data')
+              localStorage.removeItem('user')
+            }
+          } else {
+            console.error('Invalid user data in localStorage')
+            localStorage.removeItem('user')
+          }
+        } catch (error) {
+          console.error('Error parsing user data:', error)
           localStorage.removeItem('user')
         }
-      } catch (error) {
-        console.error('Error parsing user data:', error)
-        localStorage.removeItem('user')
       }
+      setIsLoading(false)
     }
+
+    fetchUserData()
   }, [])
 
   const handleSignOut = () => {
@@ -225,7 +241,7 @@ export default function Home() {
                 </div>
               ) : (
                 <Link href="/auth" passHref>
-                  <Button variant="outline" className="border-[#4f46e5] text-[#4f46e5] hover:bg-[#4f46e5] hover:text-white">
+                  <Button variant="outline" className="border-[#4f46e5] text-[#4f46e5] ">
                     <User className="h-5 w-5 mr-2" />
                     Sign In / Sign Up
                   </Button>
@@ -235,7 +251,7 @@ export default function Home() {
             <div className="md:hidden">
               <Button
                 variant="ghost"
-                className="inline-flex items-center justify-center p-2 rounded-md text-[#4f46e5] hover:text-[#4f46e5] hover:bg-[#4f46e5]/10 focus:outline-none  focus:ring-2 focus:ring-inset focus:ring-[#4f46e5]"
+                className="inline-flex items-center justify-center p-2 rounded-md text-[#4f46e5] hover:text-[#4f46e5] hover:bg-[#4f46e5]/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#4f46e5]"
                 onClick={toggleMenu}
               >
                 <span className="sr-only">Open menu</span>
@@ -401,7 +417,11 @@ export default function Home() {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">Premium Access</h2>
-          {user && user.hasPaid ? (
+          {isLoading ? (
+            <div className="flex justify-center items-center">
+              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+            </div>
+          ) : user && user.hasPaid ? (
             <div className="max-w-4xl mx-auto">
               <Card className="bg-gradient-to-br from-[#4f46e5]/10 to-[#4f46e5]/5 border-[#4f46e5]/20">
                 <CardHeader>
