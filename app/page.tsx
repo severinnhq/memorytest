@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Brain, LogOut, Menu, User, Check, Plus, Clock, Database, FileText, Film, Layers, Zap, Calendar, Sparkles, Play, BookOpen, Mail, Trophy, Star, BarChart, Twitter, HelpCircle } from 'lucide-react'
+import { Brain, LogOut, Menu, User, Check, Plus, Clock, Database, FileText, Film, Layers, Zap, Calendar, Sparkles, Play, Mail, Trophy, Star, BarChart, Twitter, HelpCircle } from 'lucide-react'
 import Image from 'next/image'
 import { loadStripe } from '@stripe/stripe-js'
 
@@ -241,7 +241,7 @@ export default function Component() {
                 </div>
               ) : (
                 <Link href="/auth" passHref>
-                  <Button variant="outline"   className="border-[#4f46e5] text-[#4f46e5]">
+                  <Button variant="outline" className="border-[#4f46e5]   text-[#4f46e5]">
                     <User className="h-5 w-5 mr-2" />
                     Sign In / Sign Up
                   </Button>
