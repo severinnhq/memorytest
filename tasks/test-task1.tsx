@@ -64,8 +64,8 @@ export default function PatternRecallTask({ onComplete }: { onComplete: (result:
   return (
     <Card className="w-full max-w-3xl mx-auto">
       <CardHeader>
-        <CardTitle>Pattern Recall Task</CardTitle>
-        <CardDescription>Memorize and recall the 5-color pattern</CardDescription>
+        <CardTitle className="text-lg">Color Recall Challenge</CardTitle>
+
       </CardHeader>
       <CardContent>
         <div className="space-y-4">

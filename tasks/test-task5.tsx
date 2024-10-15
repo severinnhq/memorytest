@@ -150,14 +150,13 @@ export default function EpisodicMemoryTask({ onComplete }: { onComplete: (result
   return (
     <Card className="w-full max-w-xl mx-auto">
       <CardHeader>
-        <CardTitle className="text-primary text-2xl">Deceptive Episodic Memory Task</CardTitle>
-        <CardDescription className="text-base">Remember the details carefully. Watch out for tricky questions!</CardDescription>
+        <CardTitle className="text-lg">Story Sleuth: Memory Quest</CardTitle>
       </CardHeader>
       <CardContent className="py-3">
         <div className="space-y-1">
           {stage === 'memorize' && currentEvent && (
             <>
-              <p className="text-lg font-semibold text-center mb-2 text-primary">
+              <p className="text-lg  text-center mb-2 text-gray">
                 Event: {currentEvent.description}
               </p>
               <div className="grid gap-2 max-h-[40vh] overflow-y-auto pr-2">

@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Brain, LogOut, Menu, User, Check, Plus, Clock, Database, FileText, Film, Layers, Zap, Calendar, Sparkles, Play, Mail, Trophy, Star, BarChart, Twitter, HelpCircle } from 'lucide-react'
+import { Brain, LogOut, Menu, User, Check, Plus, Clock, Database, FileText, Film, Layers, Zap, Calendar, Sparkles, Play, Mail, Trophy, Star, BarChart, Twitter, HelpCircle, HouseIcon } from 'lucide-react'
 import Image from 'next/image'
 import { loadStripe } from '@stripe/stripe-js'
 
@@ -223,9 +223,9 @@ export default function Component() {
               </Link>
             </div>
             <nav className="hidden md:flex space-x-10 flex-grow justify-center">
-              <a href="#" className="text-base font-medium text-gray-500 hover:text-[#4f46e5] transition-colors duration-200">Test My Memory</a>
-              <a href="#premium" className="text-base font-medium text-gray-500 hover:text-[#4f46e5] transition-colors duration-200">Premium</a>
-              <a href="#our-story" className="text-base font-medium text-gray-500 hover:text-[#4f46e5] transition-colors duration-200">Our Story</a>
+              <a href="/" className="text-base font-medium text-gray-500 hover:text-[#4f46e5] transition-colors duration-200">Home</a>
+              <a href="/#premium" className="text-base font-medium text-gray-500 hover:text-[#4f46e5] transition-colors duration-200">Premium</a>
+              <a href="/#our-story" className="text-base font-medium text-gray-500 hover:text-[#4f46e5] transition-colors duration-200">Our Story</a>
             </nav>
             <div className="hidden md:flex items-center">
               {user ? (
@@ -273,9 +273,9 @@ export default function Component() {
             className="md:hidden fixed top-16 left-0 right-0 bg-white z-40 shadow-md"
           >
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-[#4f46e5] hover:bg-[#4f46e5]/10" onClick={toggleMenu}>Test My Memory</a>
-              <a href="#premium" className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-[#4f46e5] hover:bg-[#4f46e5]/10" onClick={toggleMenu}>Premium</a>
-              <a href="#our-story" className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-[#4f46e5] hover:bg-[#4f46e5]/10" onClick={toggleMenu}>Our Story</a>
+              <a href="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-[#4f46e5] hover:bg-[#4f46e5]/10" onClick={toggleMenu}>Home</a>
+              <a href="/#premium" className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-[#4f46e5] hover:bg-[#4f46e5]/10" onClick={toggleMenu}>Premium</a>
+              <a href="/#our-story" className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-[#4f46e5] hover:bg-[#4f46e5]/10" onClick={toggleMenu}>Our Story</a>
             </div>
             <div className="pt-4 pb-3 border-t border-gray-200">
               {user ? (
@@ -711,20 +711,23 @@ export default function Component() {
                 <span className="ml-2 text-2xl font-bold">Nrglitch</span>
               </Link>
               <nav className="flex flex-wrap justify-center gap-6">
-                <Button variant="ghost" className="text-white hover:text-white hover:bg-white/20" onClick={handleStartTest}>
-                  <Play className="h-5 w-5 mr-2" />
-                  Start the Test
-                </Button>
-                <Link href="#premium" passHref>
+             
+                <Link href="/" passHref>
+                  <Button variant="ghost" className="text-white hover:text-white hover:bg-white/20">
+                    <HouseIcon className="h-5 w-5 mr-2" />
+                    Home
+                  </Button>
+                </Link>
+                <Link href="/#premium" passHref>
                   <Button variant="ghost" className="text-white hover:text-white hover:bg-white/20">
                     <Sparkles className="h-5 w-5 mr-2" />
                     Premium
                   </Button>
                 </Link>
-                <Link href="#faq" passHref>
+                <Link href="/#contact" passHref>
                   <Button variant="ghost" className="text-white hover:text-white hover:bg-white/20">
-                    <HelpCircle className="h-5 w-5 mr-2" />
-                    FAQ
+                    <Mail className="h-5 w-5 mr-2" />
+                    Contact
                   </Button>
                 </Link>
               </nav>

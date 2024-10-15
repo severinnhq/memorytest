@@ -134,8 +134,8 @@ export default function LongTermMemoryTask({ onComplete }: { onComplete: (result
   return (
     <Card className="w-full max-w-3xl mx-auto">
       <CardHeader>
-        <CardTitle>Long-Term Memory Task</CardTitle>
-        <CardDescription>Remember the names associated with these faces</CardDescription>
+        <CardTitle className="text-lg">Face It!</CardTitle>
+
       </CardHeader>
       <CardContent>
         <div className="space-y-4">

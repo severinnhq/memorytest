@@ -154,14 +154,14 @@ export default function SemanticMemoryTask({ onComplete }: { onComplete: (result
   return (
     <Card className="w-full max-w-3xl mx-auto">
       <CardHeader>
-        <CardTitle className="text-[#4f46e5]">Semantic Memory Task</CardTitle>
-        <CardDescription>Memorize and recall 8 words related to a given topic</CardDescription>
+        <CardTitle className="text-lg">Word Web: Topic Edition</CardTitle>
+
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           {stage === 'memorize' && currentTopic && (
             <>
-              <p className="text-xl font-semibold text-center mb-4 text-[#4f46e5]">
+              <p className="text-md  text-center mb-4 text-gray">
                 Topic: {currentTopic.name}
               </p>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">

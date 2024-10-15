@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
-import { AlertTriangle, Brain, Clock, Book, Calendar, Activity, Eye, Lightbulb, CheckCircle, Info, Trash2, Lock, Play, Sparkles, BookOpen, Mail, Menu, User as UserIcon, LogOut } from "lucide-react"
+import { AlertTriangle, Brain, Clock, Book, Calendar, Activity, Eye, Lightbulb, CheckCircle, Info, Trash2, Lock, Play, Sparkles, BookOpen, Mail, Menu, User as UserIcon, LogOut, HouseIcon } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import {
@@ -97,44 +97,44 @@ interface TaskComponent {
 
 const tasks: Record<MemoryType, TaskComponent> = {
   "Short-Term": {
-    name: "Test Task 1",
-    description: "Description for Test Task 1",
+    name: "Short-Term",
+    description: "Memorize and recall the 5-color pattern",
     component: TestTask1
   },
   "Long-Term": {
-    name: "Test Task 2",
-    description: "Description for Test Task 2",
+    name: "Long-Term",
+    description: "Remember the names associated with these faces",
     component: TestTask2
   },
   "Working": {
-    name: "Test Task 3",
-    description: "Description for Test Task 3",
+    name: "Working",
+    description: "Remember and manipulate the numbers you see",
     component: TestTask3
   },
   "Semantic": {
-    name: "Test Task 4",
-    description: "Description for Test Task 4",
+    name: "Semantic",
+    description: "Memorize and recall 8 words related to a given topic",
     component: TestTask4
   },
   "Episodic": {
-    name: "Test Task 5",
-    description: "Description for Test Task 5",
+    name: "Episodic",
+    description: "Remember the details carefully. Watch out for tricky questions!",
     component: TestTask5
   },
   "Procedural": {
-    name: "Test Task 6",
-    description: "Description for Test Task 6",
+    name: "Procedural",
+    description: "Memorize and reproduce the purple square's movement",
     component: TestTask6
   },
   "Sensory": {
-    name: "Test Task 7",
-    description: "Description for Test Task 7",
+    name: "Sensory",
+    description: "Memorize the emojis and their positions",
     component: TestTask7,
     isLocked: true
   },
   "Prospective": {
-    name: "Test Task 8",
-    description: "Description for Test Task 8",
+    name: "Prospective",
+    description: "Hardcore multitasking, complex all-in one task",
     component: TestTask8,
     isLocked: true
   }
@@ -362,9 +362,9 @@ export default function MemoryAssessmentSystem() {
               </Link>
             </div>
             <nav className="hidden md:flex space-x-10 flex-grow justify-center">
-              <a href="" className="text-base font-medium text-gray-500 hover:text-[#4f46e5] transition-colors duration-200">Test My Memory</a>
-              <a href="#premium" className="text-base font-medium text-gray-500 hover:text-[#4f46e5] transition-colors duration-200">Premium</a>
-              <a href="#our-story" className="text-base font-medium text-gray-500 hover:text-[#4f46e5] transition-colors duration-200">Our Story</a>
+              <a href="/" className="text-base font-medium text-gray-500 hover:text-[#4f46e5] transition-colors duration-200">Home</a>
+              <a href="/#premium" className="text-base font-medium text-gray-500 hover:text-[#4f46e5] transition-colors duration-200">Premium</a>
+              <a href="/#our-story" className="text-base font-medium text-gray-500 hover:text-[#4f46e5] transition-colors duration-200">Our Story</a>
             </nav>
             <div className="hidden md:flex items-center">
               {user ? (
@@ -656,23 +656,25 @@ export default function MemoryAssessmentSystem() {
               <span className="ml-2 text-2xl font-bold">Nrglitch</span>
             </Link>
             <nav className="flex flex-wrap justify-center gap-6">
-              <Button variant="ghost" className="text-white hover:text-white hover:bg-white/20" onClick={handleStartTest}>
-                <Play className="h-5 w-5 mr-2" />
-                Start the Test
-              </Button>
-              <Link href="#premium" passHref>
+               <Link href="/" passHref>
+                <Button variant="ghost" className="text-white hover:text-white hover:bg-white/20">
+                  <HouseIcon className="h-5 w-5 mr-2" />
+                  Home
+                </Button>
+              </Link>
+              <Link href="/#premium" passHref>
                 <Button variant="ghost" className="text-white hover:text-white hover:bg-white/20">
                   <Sparkles className="h-5 w-5 mr-2" />
                   Premium
                 </Button>
               </Link>
-              <Link href="#our-story" passHref>
+              <Link href="/#our-story" passHref>
                 <Button variant="ghost" className="text-white hover:text-white hover:bg-white/20">
                   <BookOpen className="h-5 w-5 mr-2" />
                   Our Story
                 </Button>
               </Link>
-              <Link href="#contact" passHref>
+              <Link href="/#contact" passHref>
                 <Button variant="ghost" className="text-white hover:text-white hover:bg-white/20">
                   <Mail className="h-5 w-5 mr-2" />
                   Contact
@@ -681,7 +683,7 @@ export default function MemoryAssessmentSystem() {
             </nav>
           </div>
           <div className="mt-8 border-t border-white/20 pt-8 text-center">
-            <p className="text-white/80">&copy; 2023 Nrglitch. All rights reserved.</p>
+            <p className="text-white/80">&copy; 2024 Nrglitch. All rights reserved.</p>
           </div>
         </div>
       </footer>

@@ -115,8 +115,7 @@ export default function MemoryMazeTask({ onComplete }: { onComplete: (result: Ta
   return (
     <Card className="w-full max-w-3xl mx-auto">
       <CardHeader>
-        <CardTitle>Memory Maze Task</CardTitle>
-        <CardDescription>Memorize and reproduce the purple square's movement</CardDescription>
+        <CardTitle className="text-lg">Memory Maze</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
