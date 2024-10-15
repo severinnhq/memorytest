@@ -6,9 +6,14 @@ import { useRouter } from 'next/navigation'
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Brain, LogOut, Menu, User, Check, Plus, Clock, Database, FileText, Film, Layers, Zap, Calendar, Sparkles, Play, BookOpen, Mail, Trophy, Star, BarChart } from 'lucide-react'
+import { Brain, LogOut, Menu, User, Check, Plus, Clock, Database, FileText, Film, Layers, Zap, Calendar, Sparkles, Play, BookOpen, Mail, Trophy, Star, BarChart, Twitter } from 'lucide-react'
 import Image from 'next/image'
 import { loadStripe } from '@stripe/stripe-js'
+
+
+
+
+
 
 interface User {
   _id: string;
@@ -598,6 +603,79 @@ export default function Home() {
           </div>
         </motion.section>
 
+
+
+   
+        <section id="contact" className="py-24">
+  <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+    <h2 className="text-4xl font-bold text-center mb-8 text-gray-900">Contact Us</h2> {/* Centering the text */}
+    <div className="flex flex-col lg:flex-row lg:w-full">
+      <div className="lg:w-1/2 mb-8 lg:mb-0">
+        <div className="bg-white shadow-md p-8" style={{ 
+            borderTopLeftRadius: '12px', 
+            borderTopRightRadius: '24px', 
+            borderBottomRightRadius: '36px', 
+            borderBottomLeftRadius: '48px' 
+          }}>
+          <p className="text-center text-gray-600 mb-4">
+            Feel free to get in touch with us if you're interested in personalized tasks, have any recommendations, or are facing any issues!
+          </p>
+          
+          <div className="flex justify-center space-x-8 mb-6">
+            {/* Mail icon with link */}
+            <a href="mailto:nrglitchhq@gmail.com" target="_blank" rel="noopener noreferrer">
+              <Mail className="text-black hover:text-gray-700" size={32} />
+            </a>
+            {/* Twitter icon with link */}
+            <a href="https://x.com/severinnhq" target="_blank" rel="noopener noreferrer">
+              <Twitter className="text-black hover:text-gray-700" size={32} />
+            </a>
+          </div>
+          
+          <p className="text-center text-gray-500">
+            We look forward to hearing from you!
+          </p>
+        </div>
+      </div>
+
+      <div className="lg:w-1/2 flex justify-center">
+        <img 
+          src="https://example.com/your-image.jpg" // Replace with your image URL
+          alt="Contact Illustration"
+          className="shadow-md border border-gray-200 w-full max-w-sm object-cover"
+          style={{ 
+            clipPath: 'polygon(0 0, 0% 100%, 100% 80%, 100% 0)', 
+            borderTopLeftRadius: '12px', 
+            borderTopRightRadius: '24px', 
+            borderBottomRightRadius: '36px', 
+            borderBottomLeftRadius: '48px' 
+          }} 
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+ {/* Fixed box for Twitter link */}
+ <div className="fixed bottom-4 right-4 bg-white rounded-lg shadow-lg p-4 flex items-center space-x-2">
+    <img 
+      src="https://example.com/your-image.jpg" // Replace with your image URL
+      alt="Twitter Image"
+      className="w-12 h-12 rounded-full" // Adjust size as needed
+    />
+    <a 
+      href="https://x.com/severinnhq" 
+      target="_blank" 
+      rel="noopener noreferrer" 
+      className=""
+    >
+    Made by severinn
+    </a>
+  </div>
+
+
         {/* FAQ Section    */}
         <motion.section 
           id="faq" 
@@ -644,6 +722,9 @@ export default function Home() {
           </div>
         </motion.section>
       </main>
+
+
+
 
       {/* Footer */}
       <footer className="bg-[#4f46e5] text-white py-12">
