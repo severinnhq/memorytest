@@ -167,7 +167,7 @@ export default function AuthPage() {
                   <Button 
                     variant="outline" 
                     onClick={toggleMode}
-                    className="border-indigo-600 bg-indigo-600 text-white hover:bg-white hover:text-indigo-600 transition-all duration-300 ease-in-out transform hover:scale-105"
+                    className="border-indigo-600 bg-white-600 text-indigo-600 hover:bg-white hover:text-indigo-600 transition-all duration-300 ease-in-out transform hover:scale-105"
                   >
                     {isSignIn ? 'Sign Up' : 'Sign In'}
                   </Button>
