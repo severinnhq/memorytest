@@ -10,9 +10,7 @@ import {
   Grid,
   Palette,
   Box,
-  Music,
   SwitchCamera,
-  Clock,
   ArrowLeft,
   Lock,
   CheckCircle2
