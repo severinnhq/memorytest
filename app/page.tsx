@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
+import { AnimatePresence, motion, useScroll } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Brain, LogOut, Menu, User, Check,  Plus, Clock, Database, FileText, Film, Layers, Zap, Calendar, Sparkles, Mail, Trophy, Star, BarChart, Twitter, HouseIcon, BookOpen, Lightbulb, Rocket, Users, } from 'lucide-react'
@@ -120,14 +120,9 @@ export default function Component() {
   const [isLoading, setIsLoading] = useState(true)
   const cardRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
-
+  
   const containerRef = useRef(null)
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  })
-
-
+  
   useEffect(() => {
     const fetchUserData = async () => {
       setIsLoading(true)
@@ -158,16 +153,16 @@ export default function Component() {
       }
       setIsLoading(false)
     }
-
+  
     fetchUserData()
   }, [])
-
+  
   const handleSignOut = () => {
     localStorage.removeItem('user')
     setUser(null)
     router.push('/auth')
   }
-
+  
   const handleUpgradeClick = async () => {
     if (!user) {
       router.push('/auth')
@@ -181,13 +176,13 @@ export default function Component() {
           },
           body: JSON.stringify({ userId: user._id }),
         })
-
+  
         if (!response.ok) {
           throw new Error('Failed to create checkout session')
         }
-
+  
         const { sessionId } = await response.json()
-
+  
         const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
         if (stripe) {
           const { error } = await stripe.redirectToCheckout({ sessionId })
@@ -203,6 +198,7 @@ export default function Component() {
       }
     }
   }
+  
 
   const handleStartTest = () => {
     router.push('/test')
