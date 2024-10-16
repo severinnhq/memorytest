@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { AnimatePresence, motion, useScroll } from 'framer-motion'
+import { AnimatePresence, motion, } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Brain, LogOut, Menu, User, Check,  Plus, Clock, Database, FileText, Film, Layers, Zap, Calendar, Sparkles, Mail, Trophy, Star, BarChart, Twitter, HouseIcon, BookOpen, Lightbulb, Rocket, Users, } from 'lucide-react'
