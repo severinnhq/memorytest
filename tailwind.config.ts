@@ -20,7 +20,7 @@ const config: Config = {
     },
     extend: {
       fontFamily: {
-        sans: ['var(--font-poppins)', ...fontFamily.sans],
+        sans: ['var(--font-raleway)', ...fontFamily.sans],
       },
       colors: {
         border: "hsl(var(--border))",

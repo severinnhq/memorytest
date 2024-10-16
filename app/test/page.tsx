@@ -98,7 +98,7 @@ interface TaskComponent {
 const tasks: Record<MemoryType, TaskComponent> = {
   "Short-Term": {
     name: "Short-Term",
-    description: "Memorize and recall the 5-color pattern",
+    description: "Memorize and recall the 5-color pattern, be careful, very similar shades",
     component: TestTask1
   },
   "Long-Term": {
@@ -128,7 +128,7 @@ const tasks: Record<MemoryType, TaskComponent> = {
   },
   "Sensory": {
     name: "Sensory",
-    description: "Memorize the emojis and their positions",
+    description: "Memorize the emojis and their exact positions, complex task",
     component: TestTask7,
     isLocked: true
   },

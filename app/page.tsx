@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Brain, LogOut, Menu, User, Check, Plus, Clock, Database, FileText, Film, Layers, Zap, Calendar, Sparkles, Mail, Trophy, Star, BarChart, Twitter, HouseIcon } from 'lucide-react'
+import { Brain, LogOut, Menu, User, Check,  Plus, Clock, Database, FileText, Film, Layers, Zap, Calendar, Sparkles, Mail, Trophy, Star, BarChart, Twitter, HouseIcon, BookOpen, Lightbulb, Rocket, Users, } from 'lucide-react'
 import Image from 'next/image'
 import { loadStripe } from '@stripe/stripe-js'
 
@@ -26,23 +26,15 @@ interface MemoryType {
 const faqItems = [
   {
     question: "What is Nrglitch?",
-    answer: "Nrglitch is an innovative memory training platform designed to help you improve various aspects of your memory through engaging exercises and personalized training plans."
+    answer: "Nrglitch is an innovative memory training platform designed to help you improve various aspects of your memory through engaging exercises."
   },
   {
-    question: "How does Nrglitch work?",
-    answer: "Nrglitch uses a combination of scientifically-backed memory exercises, progress tracking, and personalized training plans to help you enhance your memory skills. You'll engage in various tasks targeting different types of memory, such as short-term, long-term, and working memory."
-  },
-  {
-    question: "Is Nrglitch suitable for all ages?",
-    answer: "Yes, Nrglitch is designed for users of all ages. Whether you're a student looking to improve your study skills, a professional aiming to boost your work performance, or a senior citizen wanting to keep your mind sharp, Nrglitch has exercises tailored to your needs."
-  },
-  {
-    question: "How often should I use Nrglitch?",
-    answer: "For best results, we recommend using Nrglitch for at least 15-20 minutes a day, 3-5 times a week. Consistency is key when it comes to improving your memory, so regular practice will yield the best results."
+    question: "Is there a community or support team available?",
+    answer: "Yes, at the contact section you can find our contact details, please feel free to reach us if you have any question, recommendation or problem."
   },
   {
     question: "Can Nrglitch help with specific memory problems?",
-    answer: "Yes, Nrglitch offers a variety of exercises targeting different aspects of memory. Whether you struggle with remembering names, misplacing items, or recalling important information, our platform provides specific exercises to address these common memory challenges."
+    answer: "Yes, we already have a specific tasks for every aspect and the premium tests include them all. And in addition to these we are about release ASPECT BASED tests, and planning to make personalised tasks/tests."
   }
 ]
 
@@ -90,6 +82,34 @@ const memoryTypes: MemoryType[] = [
 ]
 
 export default function Component() {
+  const timelineItems = [
+    {
+      icon: <Rocket className="w-8 h-8 text-indigo-500" />,
+      title: "The Beginning",
+      content: "I've had experience in the online business world, having built a couple of successful ventures, and I used to do web development. However, I wasn't good at multitasking and couldn't imagine my life without a to-do list.",
+    },
+    {
+      icon: <Users className="w-8 h-8 text-purple-500" />,
+      title: "The Party Conversation",
+      content: "During a conversation at a party, people were discussing how they often forget things. A guy mentioned he had learned about the different components of memory. Intrigued by the discussion, I approached him, and the next day we had a more in-depth conversation on Discord.",
+    },
+    {
+      icon: <Brain className="w-8 h-8 text-pink-500" />,
+      title: "The Discovery",
+      content: "He explained that it's possible to identify which part of your memory is responsible for various types of forgetfulness in daily life, and that you can improve specific aspects of memory accordingly.",
+    },
+    {
+      icon: <Lightbulb className="w-8 h-8 text-yellow-500" />,
+      title: "The Experiment",
+      content: "I didn't experience significant forgetfulness myself, but I decided to try his method. I can confidently say it made a difference—I can now recall and remember things much faster and more effectively.",
+    },
+    {
+      icon: <Star className="w-8 h-8 text-green-500" />,
+      title: "The Solution",
+      content: "Nrglitch offers a basic test designed to evaluate different facets of your memory, providing scores and insights into your performance across eight key areas. Additionally, there are premium features that offer more challenging tasks to further enhance your memory skills.",
+    },
+  ]
+
   const [user, setUser] = useState<User | null>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isButtonHovered, setIsButtonHovered] = useState(false)
@@ -204,6 +224,7 @@ export default function Component() {
       setGlowPosition({ x, y })
     }
   }
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
@@ -305,7 +326,7 @@ export default function Component() {
       </AnimatePresence>
 
       {/* Main content */}
-      <main className="pt-16">
+      <main className="pt-8">
         {/* Hero Section */}
         <motion.section 
           id="hero" 
@@ -317,13 +338,34 @@ export default function Component() {
           <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col lg:flex-row justify-between items-center">
               <div className="text-container text-center lg:text-left w-full lg:w-1/2 mb-12 lg:mb-0">
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 tracking-tight mb-6">
-                  <span className="block">Master</span>
-                  <span className="block text-[#4f46e5]">Every Aspect</span>
-                  <span className="block">Of Your Memory</span>
+                <h1 className="text-4xl sm:text-5xl lg:text-5xl font-extrabold text-gray-900 tracking-tight mb-6">
+
+
+                <span className="block my-2">Always</span>
+<span className="block my-2">
+  <span className="relative inline-block">
+    <span className="absolute inset-0 bg-[#4f46e5] bg-opacity-45 transform -rotate-2 origin-center"></span>
+    <span className="relative text-black px-1">Forget</span>
+  </span> 
+  <span> 
+    <span className="text-black px-1"><u>Birthdays</u></span>
+  </span>
+</span>
+<span className="block">Or
+  <span className="text-black px-1"><u> Song  Titles?</u></span>
+ 
+</span>
+
+
+
+
+
+
+
                 </h1>
-                <p className="mt-4  text-lg sm:text-xl text-gray-500 mb-8">
-                  {"Nrglitch: Sharpen your mind with engaging memory exercises backed by cognitive science."}
+                
+                <p className=" text-lg sm:text-xl text-gray-500 mb-8">
+                  {"Discover which part of your memory is responsible, target it with science-backed tasks, and improve it step by step."}
                 </p>
                 <div className="relative inline-block">
                   <Button
@@ -353,62 +395,81 @@ export default function Component() {
           </div>
         </motion.section>
 
-        {/* Our Story Section */}
-        <motion.section 
-          id="our-story" 
-          ref={containerRef}
-          className="py-24 overflow-hidden relative"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+      {/* Our Story */}
+<motion.section 
+  id="our-story" 
+  className="py-24 overflow-hidden relative bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50"
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ duration: 0.8 }}
+>
+  <div className="container mx-auto px-4 relative z-10">
+    <motion.h2 
+      className="text-4xl font-bold mb-16 text-center text-gray-800"
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+    >
+      Our Journey
+    </motion.h2>
+
+    <div className="relative">
+      {timelineItems.map((item, index) => (
+        <motion.div 
+          key={index}
+          className={`flex items-center mb-16 md:flex-row ${
+            index % 2 === 0
+              ? 'md:flex-row-reverse md:pl-8' 
+              : 'md:pr-8'
+          }`}
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: index * 0.2 }}
+          style={{ gap: '16px' }}  // Add a gap to create space between items and line
         >
-          <motion.div 
-            className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg xmlns=&apos;http://www.w3.org/2000/svg&apos; width=&apos;1920&apos; height=&apos;1080&apos; viewBox=&apos;0 0 1920 1080&apos;%3E%3Crect width=&apos;1920&apos; height=&apos;1080&apos; fill=&apos;%23f0f0f0&apos;/%3E%3Ctext x=&apos;960&apos; y=&apos;540&apos; font-family=&apos;Arial&apos; font-size=&apos;48&apos; fill=&apos;%23333&apos; text-anchor=&apos;middle&apos; dominant-baseline=&apos;middle&apos;%3EOur Story Background%3C/text%3E%3C/svg%3E')] bg-cover bg-center"
-            style={{ y, opacity }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/90 via-purple-50/90 to-pink-50/90" />
-          
-          <div className="container mx-auto px-4 relative z-10">
-            <motion.h2 
-              className="text-5xl font-bold mb-8 text-center text-gray-900"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+          <div className="w-full md:w-1/2 md:px-4">
+            <motion.div 
+              className="bg-white p-6 rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300"
+              whileHover={{ scale: 1.05 }}
+              style={{ margin: '0 16px' }} // Add margin to further push boxes away from the line
             >
-              Our Extraordinary Journey
-            </motion.h2>
-
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-              <motion.div 
-                className="lg:w-1/2"
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-              >
-                <Image
-                  src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 600 600'%3E%3Crect width='600' height='600' fill='%23f0f0f0'/%3E%3Ctext x='300' y='300' font-family='Arial' font-size='24' fill='%23333' text-anchor='middle' dominant-baseline='middle'%3EOur Story Image%3C/text%3E%3C/svg%3E"
-                  width={600}
-                  height={600}
-                  alt="Our Story"
-                  className="rounded-lg shadow-2xl transform -rotate-3 hover:rotate-0 transition-transform duration-300"
-                />
-              </motion.div>
-
-              <div className="lg:w-1/2">
-                <motion.p 
-                  className="text-xl mb-8 leading-relaxed text-gray-500"
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.4 }}
-                >
-                  {"Since our inception, we've been on a relentless pursuit of excellence, pushing boundaries and redefining what's possible. Our story is one of passion, perseverance, and groundbreaking innovations that have shaped industries and touched lives across the globe."}
-                </motion.p>
+              <div className="flex items-center mb-4 justify-center">
+                {item.icon}
+                <h3 className="text-2xl font-semibold ml-2 text-gray-800">{item.title}</h3>
               </div>
-            </div>
+              <p className="text-gray-600">{item.content}</p>
+            </motion.div>
           </div>
-        </motion.section>
+          <div className="w-8 h-8 absolute left-0 md:left-1/2 transform md:translate-x-[-50%] -translate-y-4 rounded-full bg-indigo-500 border-4 border-white shadow"></div>
+        </motion.div>
+      ))}
+      <div className="absolute h-full w-1 bg-indigo-200 left-4 md:left-1/2 md:-translate-x-1/2 top-0"></div>
+    </div>
+
+    <motion.div 
+      className="mt-16 text-center"
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay: 1 }}
+    >
+      <h3 className="text-3xl font-bold mb-4 text-gray-800">Ready to Explore?</h3>
+      <p className="text-xl text-gray-700 mb-8">Try our basic test!</p>
+      <Button
+                    onClick={handleStartTest}
+                    onMouseEnter={() => setIsButtonHovered(true)}
+                    onMouseLeave={() => setIsButtonHovered(false)}
+                    className="relative z-10 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-bold text-white bg-[#4f46e5] hover:bg-[#4338ca] transition-colors duration-300"
+                  >
+                    Start the Test 🧠
+                  </Button>
+    </motion.div>
+  </div>
+</motion.section>
+
+
 
         {/* Premium Section */}
+        
         <motion.section 
           id="premium" 
           className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
@@ -478,60 +539,64 @@ export default function Component() {
                 onMouseEnter={() => setIsHovering(true)}
                 onMouseLeave={() => setIsHovering(false)}
               >
-                <CardContent className="p-8">
-                  <div className="flex justify-between items-center mb-6">
-                    <h3 className="text-2xl font-bold text-gray-800">Lifetime Deal</h3>
-                    <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-[#4f46e5] rounded-full">BEST VALUE</span>
-                  </div>
-                  <div className="flex items-end mb-6">
-                    <span className="text-5xl font-extrabold text-gray-900">€0.50</span>
-                    <span className="text-xl text-gray-500 ml-2">/ lifetime</span>
-                  </div>
-                  <p className="text-gray-500 mb-8">
-                    {"One-time payment for unlimited access to premium features"}
-                  </p>
-                  <ul className="space-y-4 mb-8">
-                    {[
-                      "50+ memory games covering all aspects",
-                      "Advanced progress tracking and analytics",
-                      "Personalized training plans",
-                      "Visual memory enhancement tasks",
-                      "Auditory memory improvement exercises",
-                      "Ad-free experience"
-                    ].map((feature, index) => (
-                      <motion.li 
-                        key={index}
-                        className="flex items-center space-x-3"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3,  delay: index * 0.1 }}
-                      >
-                        <Check className="h-5 w-5 text-green-500" />
-                        <span className="text-gray-500">{feature}</span>
-                      </motion.li>
-                    ))}
-                  </ul>
-                  <Button
-                    onClick={handleUpgradeClick}
-                    disabled={isLoading}
-                    className="w-full bg-[#4f46e5] hover:bg-[#4338ca] text-white font-bold py-3 rounded-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {isLoading ? (
-                      <span className="flex items-center justify-center">
-                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Processing...
-                      </span>
-                    ) : (
-                      <>
-                        <Sparkles className="w-5 h-5 mr-2" />
-                        {user ? "Upgrade Now" : "Sign In to Upgrade"}
-                      </>
-                    )}
-                  </Button>
-                </CardContent>
+              <CardContent className="p-8">
+  <div className="flex justify-between items-center mb-6">
+    <h3 className="text-2xl font-bold text-gray-800">Lifetime Deal</h3>
+    <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-[#4f46e5] rounded-full">BEST VALUE</span>
+  </div>
+  <div className="flex items-end mb-6">
+    <span className="text-5xl font-extrabold text-gray-900">€1.99</span>
+    <span className="text-xl text-gray-500 ml-2">/ lifetime</span>
+  </div>
+  <p className="text-gray-500 mb-8">
+    {"One-time payment for unlimited access to premium features"}
+  </p>
+  <ul className="space-y-4 mb-8">
+    {[
+      "Mid-Level memory test",
+      "Advanced-Level memory test",
+      "Every aspect of the memory covered",
+      "Automatic access to the fourthcoming ASPECT BASED tests",
+      "Automatic access to the upcoming AI memory detector"
+    ].map((feature, index) => (
+      <motion.li 
+        key={index}
+        className="flex items-center space-x-3"
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.3, delay: index * 0.1 }}
+      >
+        {feature.includes("ASPECT BASED") || feature.includes("AI memory") ? (
+          <Clock className="h-5 w-5 text-indigo-500" /> // Replace with your coming soon icon
+        ) : (
+          <Check className="h-5 w-5 text-green-500" />
+        )}
+        <span className="text-gray-500">{feature}</span>
+      </motion.li>
+    ))}
+  </ul>
+  <Button
+    onClick={handleUpgradeClick}
+    disabled={isLoading}
+    className="w-full bg-[#4f46e5] hover:bg-[#4338ca] text-white font-bold py-3 rounded-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+  >
+    {isLoading ? (
+      <span className="flex items-center justify-center">
+        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Processing...
+      </span>
+    ) : (
+      <>
+        <Sparkles className="w-5 h-5 mr-2" />
+        {user ? "Upgrade Now" : "Sign In to Upgrade"}
+      </>
+    )}
+  </Button>
+</CardContent>
+
               </Card>
             </div>
           )}
@@ -546,7 +611,7 @@ export default function Component() {
           transition={{ duration: 0.5 }}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-4xl font-bold text-center mb-12 text-gray-900">Types of Memory</h2>
+            <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">Types of Memory</h2>
             <div className="flex flex-col lg:flex-row bg-white rounded-lg shadow-lg overflow-hidden">
               <div className="w-full lg:w-1/3 p-4 lg:p-6 lg:max-h-[600px] lg:overflow-y-auto">
                 <div className="grid grid-cols-2 lg:grid-cols-1 gap-2 lg:gap-4">
@@ -598,57 +663,70 @@ export default function Component() {
           </div>
         </motion.section>
 
-        <section id="contact" className="py-24">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
-            <h2 className="text-4xl font-bold text-center mb-8 text-gray-900">Contact Us</h2>
-            <div className="flex flex-col lg:flex-row lg:w-full">
-              <div className="lg:w-1/2 mb-8 lg:mb-0">
-                <div className="bg-white shadow-md p-8" style={{ 
-                  borderTopLeftRadius: '12px', 
-                  borderTopRightRadius: '24px', 
-                  borderBottomRightRadius: '36px', 
-                  borderBottomLeftRadius: '48px' 
-                }}>
-                  <p className="text-center text-gray-600 mb-4">
-                    Feel free to get in touch with us if you&apos;re interested in personalized tasks, have any recommendations, or are facing any issues!
-                  </p>
-                  
-                  <div className="flex justify-center space-x-8 mb-6">
-                    {/* Mail icon with link */}
-                    <a href="mailto:nrglitchhq@gmail.com" target="_blank" rel="noopener noreferrer">
-                      <Mail className="text-black hover:text-gray-700" size={32} />
-                    </a>
-                    {/* Twitter icon with link */}
-                    <a href="https://x.com/severinnhq" target="_blank" rel="noopener noreferrer">
-                      <Twitter className="text-black hover:text-gray-700" size={32} />
-                    </a>
-                  </div>
-                  
-                  <p className="text-center text-gray-500">
-                    We look forward to hearing from you!
-                  </p>
-                </div>
-              </div>
 
-              <div className="lg:w-1/2 flex justify-center">
-                <Image 
-                  src="/severinn.jpg" // Replace with your image URL
-                  alt="Contact Illustration"
-                  className="shadow-md border border-gray-200 w-full max-w-sm object-cover"
-                  style={{ 
-                    clipPath: 'polygon(0 0, 0% 100%, 100% 80%, 100% 0)', 
-                    borderTopLeftRadius: '12px', 
-                    borderTopRightRadius: '24px', 
-                    borderBottomRightRadius: '36px', 
-                    borderBottomLeftRadius: '48px' 
-                  }} 
-                  width={400} // Adjust width as necessary
-                  height={300} // Adjust height as necessary
-                />
-              </div>
-            </div>
+
+
+        <section id="contact" className="py-24">
+  <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+    <h2 className="text-4xl font-bold text-center mb-8 text-gray-800">Contact Us</h2>
+    <div className="flex flex-col lg:flex-row lg:w-full">
+      <div className="lg:w-1/2 mb-8 lg:mb-0">
+        <div className="bg-white shadow-md p-8" style={{
+          borderTopLeftRadius: '24px',
+          borderTopRightRadius: '12px',
+          borderBottomRightRadius: '50%', // Very rounded bottom right corner (quarter circle)
+          borderBottomLeftRadius: '12px'
+        }}>
+          <p className="text-center text-gray-600 mb-4">
+            Feel free to get in touch with us if you&apos;re interested in personalized tasks, have any recommendations, or are facing any issues!
+          </p>
+
+          <div className="flex justify-center space-x-8 mb-6">
+            {/* Mail icon with link */}
+            <a href="mailto:nrglitchhq@gmail.com" target="_blank" rel="noopener noreferrer">
+              <Mail className="text-black hover:text-gray-700" size={32} />
+            </a>
+            {/* Twitter icon with link */}
+            <a href="https://x.com/severinnhq" target="_blank" rel="noopener noreferrer">
+              <Twitter className="text-black hover:text-gray-700" size={32} />
+            </a>
           </div>
-        </section>
+
+          <p className="text-center text-gray-500">
+            We look forward to hearing from you!
+          </p>
+        </div>
+      </div>
+
+      <div className="lg:w-1/2 flex justify-center">
+        <div className="bg-white shadow-md w-full max-w-sm flex items-start" style={{
+          height: '100%', // Match the height of the contact box
+          borderTopLeftRadius: '50%', // Very rounded top left corner (quarter circle)
+          borderTopRightRadius: '24px',
+          borderBottomRightRadius: '12px',
+          borderBottomLeftRadius: '12px',
+        }}>
+          
+          <Image
+            src="/hero.png" // Replace with your image URL
+            alt="Contact Illustration"
+            className="object-cover w-full h-full" // Fill the container
+            style={{
+              clipPath: 'polygon(0 0, 0% 100%, 100% 80%, 100% 0)',
+              borderTopLeftRadius: '50%', // Match the container
+              borderTopRightRadius: '24px',
+              borderBottomRightRadius: '12px',
+              borderBottomLeftRadius: '12px',
+            }}
+            width={400} // Adjust width as necessary
+            height={300} // Adjust height as necessary
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
         {/* FAQ Section */}
         <motion.section 
@@ -659,7 +737,7 @@ export default function Component() {
           transition={{ duration: 0.5 }}
         >
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-4xl font-bold text-center mb-12 text-gray-900">Frequently Asked Questions</h2>
+            <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">Frequently Asked Questions</h2>
             <div className="space-y-6">
               {faqItems.map((item, index) => (
                 <Card key={index} className="overflow-hidden">
@@ -696,11 +774,23 @@ export default function Component() {
           </div>
         </motion.section>
 
-        {/* Fixed Box */}
-        <div className="fixed bottom-10 right-10 bg-white shadow-lg p-4 flex items-center cursor-pointer" onClick={() => window.open('https://x.com/severinnhq', '_blank')}>
-          <Image src="/severinn.jpg" alt="Made by Severinn" width={50} height={50} />
-          <span className="ml-2 text-sm font-semibold">Made by Severinn</span>
-        </div>
+{/* Fixed Button */}
+<button
+  className="fixed bottom-5 right-5 bg-white shadow-lg p-2 flex items-center cursor-pointer z-50 rounded-md hover:shadow-xl transition-shadow duration-300 
+             sm:p-1 md:p-2 lg:p-3 
+             sm:text-xs md:text-sm lg:text-base"
+  onClick={() => window.open('https://x.com/severinnhq', '_blank')}
+>
+  <Image 
+    src="/severinn.png" 
+    alt="Made by Severinn" 
+    width={40} 
+    height={40} 
+    className="sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" // Adjusted size for different breakpoints
+  />
+  <span className="ml-2 text-xs sm:text-xs md:text-sm lg:text-base font-semibold">Made by severinn</span>
+</button>
+
 
         {/* Footer */}
         <footer className="bg-[#4f46e5] text-white py-12">
@@ -716,6 +806,12 @@ export default function Component() {
                   <Button variant="ghost" className="text-white hover:text-white hover:bg-white/20">
                     <HouseIcon className="h-5 w-5 mr-2" />
                     Home
+                  </Button>
+                </Link>
+                <Link href="/#our-story" passHref>
+                  <Button variant="ghost" className="text-white hover:text-white hover:bg-white/20">
+                    <BookOpen className="h-5 w-5 mr-2" />
+                    Our Story
                   </Button>
                 </Link>
                 <Link href="/#premium" passHref>
