@@ -127,8 +127,6 @@ export default function Component() {
     offset: ["start end", "end start"]
   })
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.2, 1, 0.2])
 
   useEffect(() => {
     const fetchUserData = async () => {
