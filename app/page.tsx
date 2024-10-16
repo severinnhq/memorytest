@@ -121,7 +121,7 @@ export default function Component() {
   const cardRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   
-  const containerRef = useRef(null)
+ 
   
   useEffect(() => {
     const fetchUserData = async () => {
