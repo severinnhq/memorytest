@@ -455,7 +455,7 @@ export default function MemoryAssessmentSystem() {
               <CardContent>
                 {results.length === 0 ? (
                   <div className="flex flex-col items-center justify-center space-y-4">
-                    <p className="text-lg pt-12 pb-12 text-gray-600">No tasks completed yet. Complete tasks to see your performance here.</p>
+                    <p className="text-lg pt-24 pb-24 text-gray-600">No tasks completed yet. Complete tasks to see your performance here.</p>
                     
                   </div>
                 ) : (
