@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { AnimatePresence, motion, } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Brain, LogOut, Menu, User, Check,  Plus, Clock, Database, FileText, Film, Layers, Zap, Sparkles, Mail, Trophy, Star, BarChart, Twitter, HouseIcon, BookOpen, Lightbulb, Rocket, Users, } from 'lucide-react'
+import { Brain, LogOut, Menu, User, Check,  Plus, Clock, Database, FileText, Film, Layers, Zap, Sparkles, Mail, Trophy, Star, Twitter, HouseIcon, BookOpen, Lightbulb, Rocket, Users, } from 'lucide-react'
 import Image from 'next/image'
 import { loadStripe } from '@stripe/stripe-js'
 
@@ -113,7 +113,7 @@ export default function Component() {
   const [user, setUser] = useState<User | null>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isButtonHovered, setIsButtonHovered] = useState(false)
-  const [activeMemoryType, setActiveMemoryType] = useState<string>(memoryTypes[0].name)
+  //const [activeMemoryType, setActiveMemoryType] = useState<string>(memoryTypes[0].name)
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
   const [glowPosition, setGlowPosition] = useState({ x: 0, y: 0 })
   const [isHovering, setIsHovering] = useState(false)
