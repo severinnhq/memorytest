@@ -18,12 +18,10 @@ const config: Config = {
         "2xl": "1400px",
       },
     },
-  
-      extend: {
-        fontFamily: {
-          sans: ['var(--font-montserrat)', ...fontFamily.sans],
-        },
-      
+    extend: {
+      fontFamily: {
+        sans: ['var(--font-raleway)', ...fontFamily.sans],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
