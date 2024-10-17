@@ -319,46 +319,51 @@ export default function Component() {
         )}
       </AnimatePresence>
 
-      {/* Main content */}
-      <main className="pt-8">
+       {/* Main content */}
+       <main className="pt-8 ">
         {/* Hero Section */}
         <motion.section 
           id="hero" 
-          className="flex items-center justify-center min-h-screen py-20 lg:py-0"
+          className="flex items-center justify-center min-h-screen py-20 lg:py-0 relative"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Background SVG */}
+          <div className="absolute inset-0 overflow-hidden">
+  <svg className="absolute w-full h-full" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#4f46e5" stopOpacity="0.05" /> {/* Reduced opacity for the first color stop */}
+        <stop offset="100%" stopColor="#7c3aed" stopOpacity="0.05" /> {/* Reduced opacity for the second color stop */}
+      </linearGradient>
+    </defs>
+    <path fill="url(#bg-gradient)" d="M998.7 439.2c1.7-26.5 1.7-52.7 0.1-78.5L401 399.9c0 0 0-0.1 0-0.1l587.6-116.9c-5.1-25.9-11.9-51.2-20.3-75.8L400.9 399.7c0 0 0-0.1 0-0.1l537.3-265c-11.6-23.5-24.8-46.2-39.3-67.9L400.8 399.5c0 0 0-0.1-0.1-0.1l450.4-395c-17.3-19.7-35.8-38.2-55.5-55.5l-395 450.4c0 0-0.1 0-0.1-0.1L733.4-99c-21.7-14.5-44.4-27.6-68-39.3l-265 537.4c0 0-0.1 0-0.1 0l192.6-567.4c-24.6-8.3-49.9-15.1-75.8-20.2L400.2 399c0 0-0.1 0-0.1 0l39.2-597.7c-26.5-1.7-52.7-1.7-78.5-0.1L399.9 399c0 0-0.1 0-0.1 0L282.9-188.6c-25.9 5.1-51.2 11.9-75.8 20.3l192.6 567.4c0 0-0.1 0-0.1 0l-265-537.3c-23.5 11.6-46.2 24.8-67.9 39.3l332.8 498.1c0 0-0.1 0-0.1 0.1L4.4-51.1C-15.3-33.9-33.8-15.3-51.1 4.4l450.4 395c0 0 0 0.1-0.1 0.1L-99 66.6c-14.5 21.7-27.6 44.4-39.3 68l537.4 265c0 0 0 0.1 0 0.1l-567.4-192.6c-8.3 24.6-15.1 49.9-20.2 75.8L399 399.8c0 0 0 0.1 0 0.1l-597.7-39.2c-1.7 26.5-1.7 52.7-0.1 78.5L399 400.1c0 0 0 0.1 0 0.1l-587.6 116.9c5.1 25.9 11.9 51.2 20.3 75.8l567.4-192.6c0 0 0 0.1 0 0.1l-537.3 265c11.6 23.5 24.8 46.2 39.3 67.9l498.1-332.8c0 0 0 0.1 0.1 0.1l-450.4 395c17.3 19.7 35.8 38.2 55.5 55.5l395-450.4c0 0 0.1 0 0.1 0.1L66.6 899c21.7 14.5 44.4 27.6 68 39.3l265-537.4c0 0 0.1 0 0.1 0L207.1 968.3c24.6 8.3 49.9 15.1 75.8 20.2L399.8 401c0 0 0.1 0 0.1 0l-39.2 597.7c26.5 1.7 52.7 1.7 78.5 0.1L400.1 401c0 0 0.1 0 0.1 0l116.9 587.6c25.9-5.1 51.2-11.9 75.8-20.3L400.3 400.9c0 0 0.1 0 0.1 0l265 537.3c23.5-11.6 46.2-24.8 67.9-39.3L400.5 400.8c0 0 0.1 0 0.1-0.1l395 450.4c19.7-17.3 38.2-35.8 55.5-55.5l-450.4-395c0 0 0-0.1 0.1-0.1L899 733.4c14.5-21.7 27.6-44.4 39.3-68l-537.4-265c0 0 0-0.1 0-0.1l567.4 192.6c8.3-24.6 15.1-49.9 20.2-75.8L401 400.2c0 0 0-0.1 0-0.1L998.7 439.2z"></path>
+  </svg>
+</div>
+
+          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="flex flex-col lg:flex-row justify-between items-center">
-              <div className="text-container text-center lg:text-left w-full lg:w-1/2 mb-12 lg:mb-0">
+              <motion.div 
+                className="text-container text-center lg:text-left w-full lg:w-1/2 mb-12 lg:mb-0"
+
+              >
                 <h1 className="text-4xl sm:text-5xl lg:text-5xl font-extrabold text-gray-900 tracking-tight mb-6">
-
-
-                <span className="block my-2">Always</span>
-<span className="block my-2">
-  <span className="relative inline-block">
-    <span className="absolute inset-0 bg-[#4f46e5] bg-opacity-45 transform -rotate-2 origin-center"></span>
-    <span className="relative text-black px-1">Forget</span>
-  </span> 
-  <span> 
-    <span className="text-black px-1"><u>Birthdays</u></span>
-  </span>
-</span>
-<span className="block">Or
-  <span className="text-black px-1"><u> Song  Titles?</u></span>
- 
-</span>
-
-
-
-
-
-
-
+                  <span className="block my-2">Always</span>
+                  <span className="block my-2">
+                    <span className="relative inline-block">
+                      <span className="absolute inset-0 bg-[#4f46e5] bg-opacity-45 transform -rotate-2 origin-center"></span>
+                      <span className="relative text-black px-1">Forget</span>
+                    </span> 
+                    <span> 
+                      <span className="text-black px-1"><u>Birthdays</u></span>
+                    </span>
+                  </span>
+                  <span className="block">Or
+                    <span className="text-black px-1"><u> Song  Titles?</u></span>
+                  </span>
                 </h1>
-                
-                <p className=" text-lg sm:text-xl text-gray-500 mb-8">
+                <p className="text-lg sm:text-xl text-gray-500 mb-8">
                   {"Discover which part of your memory is responsible, target it with science-backed tasks, and improve it step by step."}
                 </p>
                 <div className="relative inline-block">
@@ -374,8 +379,11 @@ export default function Component() {
                     <div className={`w-full h-full bg-[#4f46e5]/40 filter blur-md transition-all duration-300 ease-out ${isButtonHovered ? 'opacity-75 scale-105' : 'opacity-0 scale-100'}`}></div>
                   </div>
                 </div>
-              </div>
-              <div className="w-full lg:w-1/2 relative">
+              </motion.div>
+              <motion.div 
+                className="w-full lg:w-1/2 relative"
+    
+              >
                 <Image
                   src="/hero.png"
                   alt="Illustration of various memory concepts"
@@ -384,7 +392,7 @@ export default function Component() {
                   style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
                   priority
                 />
-              </div>
+              </motion.div>
             </div>
           </div>
         </motion.section>
@@ -392,12 +400,12 @@ export default function Component() {
       {/* Our Story */}
 <motion.section 
   id="our-story" 
-  className="py-24 overflow-hidden relative bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50"
+  className="py-24 mb-12 mt-12 overflow-hidden relative bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50"
   initial={{ opacity: 0 }}
   animate={{ opacity: 1 }}
   transition={{ duration: 0.8 }}
 >
-  <div className="container mx-auto px-4 relative z-10">
+  <div className="container  mx-auto px-4 relative z-10">
     <motion.h2 
       className="text-4xl font-bold mb-16 text-center text-gray-800"
       initial={{ opacity: 0, y: 50 }}
@@ -466,7 +474,8 @@ export default function Component() {
         
         <motion.section 
           id="premium" 
-          className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+          className="py-24 mt-12 mb-12 mx-auto w-full px-4 sm:px-6 lg:px-8  "
+
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -479,26 +488,24 @@ export default function Component() {
           ) : user && user.hasPaid ? (
             <div className="max-w-4xl mx-auto">
               <Card className="bg-gradient-to-br from-[#4f46e5]/10 to-[#4f46e5]/5 border-[#4f46e5]/20">
-                <CardHeader>
-                  <CardTitle className="text-3xl font-bold text-center text-[#4f46e5]">Welcome to Premium!</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-8">
+
+                <CardContent className="space-y-8 pt-12 pb-12">
                   <p className="text-xl text-center text-gray-600">You have full access to all premium features. Enhance your memory skills with our advanced tools and exercises.</p>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-md">
                       <Trophy className="h-12 w-12 text-[#4f46e5] mb-4" />
-                      <h3 className="text-lg font-semibold mb-2">Exclusive Exercises</h3>
-                      <p className="text-center text-gray-500">Access our full library of premium memory-enhancing exercises.</p>
-                    </div>
-                    <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-md">
-                      <BarChart className="h-12 w-12 text-[#4f46e5] mb-4" />
-                      <h3 className="text-lg font-semibold mb-2">Detailed Analytics</h3>
-                      <p className="text-center text-gray-500">Track your progress with in-depth performance analytics.</p>
+                      <h3 className="text-lg font-semibold mb-2">Mid-Level test</h3>
+                      <p className="text-center text-gray-500">Quite hard tasks, expect fast improvement.</p>
                     </div>
                     <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-md">
                       <Star className="h-12 w-12 text-[#4f46e5] mb-4" />
-                      <h3 className="text-lg font-semibold mb-2">Personalized Plans</h3>
-                      <p className="text-center text-gray-500">Get tailored training plans based on your performance.</p>
+                      <h3 className="text-lg font-semibold mb-2">Advanced-Level test</h3>
+                      <p className="text-center text-gray-500">Very challenging tasks. Elevate your improvement.</p>
+                    </div>
+                    <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-md">
+                      <Sparkles className="h-12 w-12 text-[#4f46e5] mb-4" />
+                      <h3 className="text-lg font-semibold mb-2">Upcoming AI access</h3>
+                      <p className="text-center text-gray-500">Train and improve the weakest part of your memory with our upcoming AI detector</p>
                     </div>
                   </div>
                   <div className="flex justify-center">
@@ -507,7 +514,7 @@ export default function Component() {
                       className="bg-[#4f46e5] hover:bg-[#4338ca] text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105"
                     >
                       <Sparkles className="w-5 h-5 mr-2" />
-                      Explore Premium Tasks
+                      Explore Premium Tests
                     </Button>
                   </div>
                 </CardContent>
@@ -595,8 +602,9 @@ export default function Component() {
             </div>
           )}
         </motion.section>
+        {/* Memory Types Section 
 
-        {/* Memory Types Section */}
+   
         <motion.section 
           id="memory-types" 
           className="py-24"
@@ -656,25 +664,37 @@ export default function Component() {
             </div>
           </div>
         </motion.section>
+    */}
 
 
 
 
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-white dark:from-gray-800 dark:to-gray-800">
-      <div className="container px-4 md:px-6">
+    <section className="w-full py-12 mt-12 mb-12 md:py-24 lg:py-32 relative overflow-hidden bg-gradient-to-br from-purple-100 to-pink-200">
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="w-[150%] h-[150%] bg-white transform rotate-12 origin-center"></div>
+      </div>
+      <div className="container px-4 md:px-6 relative z-10">
         <div className="flex flex-col items-center text-center space-y-4">
-          <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Get in touch</h2>
-          <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+          <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-gray-800">Get in touch</h2>
+          <p className="max-w-[600px] text-gray-600 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
             We&apos;re here to help and answer any question you might have. We look forward to hearing from you!
           </p>
           <div className="flex space-x-4 mt-4">
-            <a href="mailto:nrglitch@gmail.com" className="text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary">
+            <a
+              href="mailto:nrglitch@gmail.com"
+              className="text-gray-600 hover:text-primary transition-colors duration-200"
+              aria-label="Email"
+            >
               <Mail className="w-6 h-6" />
-              <span className="sr-only">Email</span>
             </a>
-            <a href="https://x.com/severinnhq" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary">
+            <a
+              href="https://x.com/severinnhq"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-600 hover:text-primary transition-colors duration-200"
+              aria-label="Twitter"
+            >
               <Twitter className="w-6 h-6" />
-              <span className="sr-only">Twitter</span>
             </a>
           </div>
         </div>
@@ -682,10 +702,13 @@ export default function Component() {
     </section>
 
 
+
+
+
         {/* FAQ Section */}
         <motion.section 
           id="faq" 
-          className="py-24"
+          className="py-24 mb-12 mt-12 "
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -728,22 +751,25 @@ export default function Component() {
           </div>
         </motion.section>
 
-{/* Fixed Button */}
-<button
-  className="fixed bottom-5 right-5 bg-white shadow-lg p-2 flex items-center cursor-pointer z-50 rounded-md hover:shadow-xl transition-shadow duration-300 
-             sm:p-1 md:p-2 lg:p-3 
-             sm:text-xs md:text-sm lg:text-base"
-  onClick={() => window.open('https://x.com/severinnhq', '_blank')}
->
-  <Image 
-    src="/severinn.png" 
-    alt="Made by Severinn" 
-    width={40} 
-    height={40} 
-    className="sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" // Adjusted size for different breakpoints
-  />
-  <span className="ml-2 text-xs sm:text-xs md:text-sm lg:text-base font-semibold">Made by severinn</span>
-</button>
+  
+
+
+    <button
+      className="fixed bottom-2 right-2 bg-white bg-opacity-70 shadow-lg flex items-center cursor-pointer z-50 rounded-md hover:shadow-xl transition-all duration-300 
+                 opacity-70 hover:opacity-100
+                 p-1 sm:p-1.5 md:p-2 lg:p-2.5
+                 text-[10px] sm:text-xs md:text-sm lg:text-base"
+      onClick={() => window.open('https://x.com/severinnhq', '_blank')}
+    >
+      <Image 
+        src="/severinn.png" 
+        alt="Made by Severinn" 
+        width={24} 
+        height={24} 
+        className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-10 lg:h-10"
+      />
+      <span className="ml-1 sm:ml-1.5 md:ml-2 font-semibold">Made by severinn</span>
+    </button>
 
 
         {/* Footer */}

@@ -10,8 +10,8 @@ const poppins = Poppins({
 })
 
 export const metadata = {
-  title: 'Memory Master',
-  description: 'Train your memory with engaging tasks',
+  title: 'Nrglitch',
+  description: 'Train the weekest part of your memory',
 }
 
 export default function RootLayout({
