@@ -8,7 +8,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
 import { AlertTriangle, Brain, Clock, Book, Calendar, Activity, Eye, Lightbulb, CheckCircle, Info, Trash2, Lock, Sparkles, BookOpen, Mail, Menu, User as UserIcon, LogOut, HouseIcon } from "lucide-react"
 import Link from "next/link"
-import Image from "next/image"
 import {
   Tooltip as UITooltip,
   TooltipContent,
@@ -98,7 +97,7 @@ interface TaskComponent {
 const tasks: Record<MemoryType, TaskComponent> = {
   "Short-Term": {
     name: "Short-Term",
-    description: "Memorize and recall the 5-color pattern, be careful, very similar shades",
+    description: "Memorize and recall the 5-color pattern",
     component: TestTask1
   },
   "Long-Term": {
@@ -314,9 +313,20 @@ export default function MemoryAssessmentSystem() {
   }
 
   const clearMemoryTypeData = (type: MemoryType) => {
-    setResults(prevResults => prevResults.filter(r => r.type !== type))
+    setResults(prevResults => {
+      const updatedResults = prevResults.filter(r => r.type !== type)
+  
+      // Update storage after filtering results
+      if (user) {
+        localStorage.setItem(`memoryResults_${user._id}`, JSON.stringify(updatedResults))
+      } else {
+        sessionStorage.setItem('memoryResults', JSON.stringify(updatedResults))
+      }
+  
+      return updatedResults
+    })
   }
-
+  
   const averageMetrics = calculateAverageMetrics(results)
   const averageScoresByType = calculateAverageScoreByType(results)
 
@@ -454,15 +464,9 @@ export default function MemoryAssessmentSystem() {
               </CardHeader>
               <CardContent>
                 {results.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center space-y-4">
+                  <div className="flex flex-col items-center justify-center space-y-4 pb-48 pt-48">
                     <p className="text-lg text-gray-600">No tasks completed yet. Complete tasks to see your performance here.</p>
-                    <Image
-                      src="/placeholder.svg?height=300&width=500"
-                      alt="No tasks completed"
-                      width={500}
-                      height={300}
-                      className="rounded-lg shadow-md max-w-full h-auto"
-                    />
+                    
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

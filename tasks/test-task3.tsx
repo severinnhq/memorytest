@@ -117,26 +117,21 @@ export default function WorkingMemoryTask({ onComplete }: { onComplete: (result:
 
   return (
     <Card className="w-full max-w-3xl mx-auto">
-      <CardHeader>
-        <CardTitle>Enhanced Working Memory Task</CardTitle>
-        <CardDescription>Remember and manipulate the numbers you see</CardDescription>
-      </CardHeader>
+
       <CardContent>
-        <div className="space-y-4">
+        <div className="space-y-4 pt-6 pb-6">
           {stage === 'instruction' && (
-            <div className="text-center space-y-4">
-              <div className="space-y-2">
-                <p className="text-lg font-semibold">Welcome to the Enhanced Working Memory Challenge!</p>
-                <p className="text-md">
-                  Your mission, should you choose to accept it, is to flex your mental muscles through a series of 6 rapid-fire number operations.
-                </p>
-                <ul className="list-none space-y-2 mt-4">
+            <div className="text-center space-y-4 ">
+              <div className="space-y-2 ">
+
+               
+                <ul className="list-none space-y-2 mt-4 pt-6 pb-3">
                   <li><span className="font-bold text-green-500">+</span> Add 2 to the number</li>
                   <li><span className="font-bold text-red-500">-</span> Subtract 1 from the number</li>
                   <li><span className="font-bold text-blue-500">×</span> Multiply the number by 2</li>
                   <li><span className="font-bold text-yellow-500">÷</span> Divide the number by 2</li>
                 </ul>
-                <p className="text-md mt-4">
+                <p className="text-md mt-4 pb-3">
                   Your goal: Calculate and memorize the result of each operation. Ready to put your working memory to the test?
                 </p>
               </div>

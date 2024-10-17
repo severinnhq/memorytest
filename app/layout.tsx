@@ -1,13 +1,16 @@
 import './globals.css'
-import { Poppins } from 'next/font/google'
+import { Montserrat } from 'next/font/google'
 import GlobalScript from '@/components/GlobalScript'
 import { Analytics } from "@vercel/analytics/react"
 
-const poppins = Poppins({ 
+
+
+const montserrat = Montserrat({ 
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-poppins',
+  weight: ['400', '500', '600', '700'], // You can adjust weights as needed
+  variable: '--font-montserrat',
 })
+
 
 export const metadata = {
   title: 'Nrglitch',
@@ -21,7 +24,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} font-sans`}>
+<body className={`${montserrat.variable} font-sans`}>
         {children}
         <GlobalScript />
         <Analytics />

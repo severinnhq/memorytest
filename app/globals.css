@@ -72,7 +72,9 @@
   }
   body {
     @apply bg-background text-foreground font-sans;
+    font-family: var(--font-montserrat);
   }
+  
 }
 
 /* Fix for -webkit-text-size-adjust and text-size-adjust errors */
@@ -83,10 +85,6 @@ html {
   text-size-adjust: 100%;
 }
 
-/* Remove usage of will-change */
-* {
-  will-change: auto;
-}
 
 /* Improve font rendering */
 body {
