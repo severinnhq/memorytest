@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
 import { AlertTriangle, Brain, Clock, Book, Calendar, Activity, Eye, Lightbulb, CheckCircle, Info, Trash2, Lock, Sparkles, BookOpen, Mail, Menu, User as UserIcon, LogOut, HouseIcon } from "lucide-react"
 import Link from "next/link"
-import Image from "next/image"
+
 import {
   Tooltip as UITooltip,
   TooltipContent,
