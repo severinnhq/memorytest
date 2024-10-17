@@ -220,6 +220,9 @@ export default function Component() {
   }
   
 
+
+
+    
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
       {/* Header */}
@@ -470,138 +473,141 @@ export default function Component() {
 
 
 
-        {/* Premium Section */}
-        
-        <motion.section 
-          id="premium" 
-          className="py-24 mt-12 mb-12 mx-auto w-full px-4 sm:px-6 lg:px-8  "
+          {/* Premium Section */}
+          
+          <motion.section 
+            id="premium" 
+            className="py-24 mt-12 mb-12 mx-auto w-full px-4 sm:px-6 lg:px-8  "
 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">Premium Access</h2>
+            {isLoading ? (
+              <div className="flex justify-center items-center">
+                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+              </div>
+            ) : user && user.hasPaid ? (
+              <div className="max-w-4xl mx-auto">
+                <Card className="bg-gradient-to-br from-[#4f46e5]/10 to-[#4f46e5]/5 border-[#4f46e5]/20">
+
+                  <CardContent className="space-y-8 pt-12 pb-12">
+                    <p className="text-xl text-center text-gray-600">You have full access to all premium features. Enhance your memory skills with our advanced tools and exercises.</p>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-md">
+                        <Trophy className="h-12 w-12 text-[#4f46e5] mb-4" />
+                        <h3 className="text-lg font-semibold mb-2">Mid-Level test</h3>
+                        <p className="text-center text-gray-500">Quite hard tasks, expect fast improvement.</p>
+                      </div>
+                      <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-md">
+                        <Star className="h-12 w-12 text-[#4f46e5] mb-4" />
+                        <h3 className="text-lg font-semibold mb-2">Advanced-Level test</h3>
+                        <p className="text-center text-gray-500">Very challenging tasks. Elevate your improvement.</p>
+                      </div>
+                      <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-md">
+                        <Sparkles className="h-12 w-12 text-[#4f46e5] mb-4" />
+                        <h3 className="text-lg font-semibold mb-2">Upcoming AI access</h3>
+                        <p className="text-center text-gray-500">Train and improve the weakest part of your memory with our upcoming AI detector</p>
+                      </div>
+                    </div>
+                    <div className="flex justify-center">
+                      <Button
+                        onClick={() => router.push('/premium-tasks')}
+                        className="bg-[#4f46e5] hover:bg-[#4338ca] text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105"
+                      >
+                        <Sparkles className="w-5 h-5 mr-2" />
+                        Explore Premium Tests
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            ) : (
+              <div className="max-w-lg mx-auto relative">
+                <div 
+                  className="absolute inset-0 pointer-events-none transition-opacity duration-300"
+                  style={{
+                    opacity: isHovering ? 1 : 0,
+                    background: `radial-gradient(circle 300px at ${glowPosition.x}px ${glowPosition.y}px, rgba(79, 70, 229, 0.4), transparent 70%)`,
+                    filter: 'blur(40px)',
+                    transform: 'translate(-20px, -20px)',
+                    width: 'calc(100% + 40px)',
+                    height: 'calc(100% + 40px)',
+                  }}
+                />
+                <Card 
+                  ref={cardRef}
+                  className="relative bg-white rounded-2xl shadow-xl overflow-hidden"
+                  onMouseMove={handleMouseMove}
+                  onMouseEnter={() => setIsHovering(true)}
+                  onMouseLeave={() => setIsHovering(false)}
+                >
+                <CardContent className="p-8">
+    <div className="flex justify-between items-center mb-6">
+      <h3 className="text-2xl font-bold text-gray-800">Lifetime Deal</h3>
+      <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-[#4f46e5] rounded-full">BEST VALUE</span>
+    </div>
+    <div className="flex items-end mb-6">
+      <span className="text-5xl font-extrabold text-gray-900">€1.99</span>
+      <span className="text-xl text-gray-500 ml-2">/ lifetime</span>
+    </div>
+    <p className="text-gray-500 mb-8">
+      {"One-time payment for unlimited access to premium features"}
+    </p>
+    <ul className="space-y-4 mb-8">
+      {[
+        "Mid-Level memory test",
+        "Advanced-Level memory test",
+        "Every aspect of the memory covered",
+        "Automatic access to the fourthcoming ASPECT BASED tests",
+        "Automatic access to the upcoming AI memory detector"
+      ].map((feature, index) => (
+        <motion.li 
+          key={index}
+          className="flex items-center space-x-3"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3, delay: index * 0.1 }}
         >
-          <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">Premium Access</h2>
-          {isLoading ? (
-            <div className="flex justify-center items-center">
-              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
-            </div>
-          ) : user && user.hasPaid ? (
-            <div className="max-w-4xl mx-auto">
-              <Card className="bg-gradient-to-br from-[#4f46e5]/10 to-[#4f46e5]/5 border-[#4f46e5]/20">
-
-                <CardContent className="space-y-8 pt-12 pb-12">
-                  <p className="text-xl text-center text-gray-600">You have full access to all premium features. Enhance your memory skills with our advanced tools and exercises.</p>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-md">
-                      <Trophy className="h-12 w-12 text-[#4f46e5] mb-4" />
-                      <h3 className="text-lg font-semibold mb-2">Mid-Level test</h3>
-                      <p className="text-center text-gray-500">Quite hard tasks, expect fast improvement.</p>
-                    </div>
-                    <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-md">
-                      <Star className="h-12 w-12 text-[#4f46e5] mb-4" />
-                      <h3 className="text-lg font-semibold mb-2">Advanced-Level test</h3>
-                      <p className="text-center text-gray-500">Very challenging tasks. Elevate your improvement.</p>
-                    </div>
-                    <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-md">
-                      <Sparkles className="h-12 w-12 text-[#4f46e5] mb-4" />
-                      <h3 className="text-lg font-semibold mb-2">Upcoming AI access</h3>
-                      <p className="text-center text-gray-500">Train and improve the weakest part of your memory with our upcoming AI detector</p>
-                    </div>
-                  </div>
-                  <div className="flex justify-center">
-                    <Button
-                      onClick={() => router.push('/premium-tasks')}
-                      className="bg-[#4f46e5] hover:bg-[#4338ca] text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105"
-                    >
-                      <Sparkles className="w-5 h-5 mr-2" />
-                      Explore Premium Tests
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+          {feature.includes("ASPECT BASED") || feature.includes("AI memory") ? (
+            <Clock className="h-5 w-5 text-indigo-500" /> // Replace with your coming soon icon
           ) : (
-            <div className="max-w-lg mx-auto relative">
-              <div 
-                className="absolute inset-0 pointer-events-none transition-opacity duration-300"
-                style={{
-                  opacity: isHovering ? 1 : 0,
-                  background: `radial-gradient(circle 300px at ${glowPosition.x}px ${glowPosition.y}px, rgba(79, 70, 229, 0.4), transparent 70%)`,
-                  filter: 'blur(40px)',
-                  transform: 'translate(-20px, -20px)',
-                  width: 'calc(100% + 40px)',
-                  height: 'calc(100% + 40px)',
-                }}
-              />
-              <Card 
-                ref={cardRef}
-                className="relative bg-white rounded-2xl shadow-xl overflow-hidden"
-                onMouseMove={handleMouseMove}
-                onMouseEnter={() => setIsHovering(true)}
-                onMouseLeave={() => setIsHovering(false)}
-              >
-              <CardContent className="p-8">
-  <div className="flex justify-between items-center mb-6">
-    <h3 className="text-2xl font-bold text-gray-800">Lifetime Deal</h3>
-    <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-[#4f46e5] rounded-full">BEST VALUE</span>
-  </div>
-  <div className="flex items-end mb-6">
-    <span className="text-5xl font-extrabold text-gray-900">€1.99</span>
-    <span className="text-xl text-gray-500 ml-2">/ lifetime</span>
-  </div>
-  <p className="text-gray-500 mb-8">
-    {"One-time payment for unlimited access to premium features"}
-  </p>
-  <ul className="space-y-4 mb-8">
-    {[
-      "Mid-Level memory test",
-      "Advanced-Level memory test",
-      "Every aspect of the memory covered",
-      "Automatic access to the fourthcoming ASPECT BASED tests",
-      "Automatic access to the upcoming AI memory detector"
-    ].map((feature, index) => (
-      <motion.li 
-        key={index}
-        className="flex items-center space-x-3"
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.3, delay: index * 0.1 }}
-      >
-        {feature.includes("ASPECT BASED") || feature.includes("AI memory") ? (
-          <Clock className="h-5 w-5 text-indigo-500" /> // Replace with your coming soon icon
-        ) : (
-          <Check className="h-5 w-5 text-green-500" />
-        )}
-        <span className="text-gray-500">{feature}</span>
-      </motion.li>
-    ))}
-  </ul>
-  <Button
-    onClick={handleUpgradeClick}
-    disabled={isLoading}
-    className="w-full bg-[#4f46e5] hover:bg-[#4338ca] text-white font-bold py-3 rounded-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
-  >
-    {isLoading ? (
-      <span className="flex items-center justify-center">
-        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-        Processing...
-      </span>
-    ) : (
-      <>
-        <Sparkles className="w-5 h-5 mr-2" />
-        {user ? "Upgrade Now" : "Sign In to Upgrade"}
-      </>
-    )}
-  </Button>
-</CardContent>
-
-              </Card>
-            </div>
+            <Check className="h-5 w-5 text-green-500" />
           )}
-        </motion.section>
+          <span className="text-gray-500">{feature}</span>
+        </motion.li>
+      ))}
+    </ul>
+    <Button
+      onClick={handleUpgradeClick}
+      disabled={isLoading}
+      className="w-full bg-[#4f46e5] hover:bg-[#4338ca] text-white font-bold py-3 rounded-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      {isLoading ? (
+        <span className="flex items-center justify-center">
+          <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          Processing...
+        </span>
+      ) : (
+        <>
+          <Sparkles className="w-5 h-5 mr-2" />
+          {user ? "Upgrade Now" : "Sign In to Upgrade"}
+        </>
+      )}
+    </Button>
+  </CardContent>
+
+                </Card>
+              </div>
+            )}
+          </motion.section>
+
+
+          
         {/* Memory Types Section 
 
    
@@ -668,8 +674,8 @@ export default function Component() {
 
 
 
-
-    <section className="w-full py-12 mt-12 mb-12 md:py-24 lg:py-32 relative overflow-hidden bg-gradient-to-br from-purple-100 to-pink-200">
+{/*Contact*/}
+    <section id="contact"  className="w-full py-12 mt-12 mb-12 md:py-24 lg:py-32 relative overflow-hidden bg-gradient-to-br from-purple-100 to-pink-200">
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="w-[150%] h-[150%] bg-white transform rotate-12 origin-center"></div>
       </div>
@@ -753,7 +759,7 @@ export default function Component() {
 
   
 
-
+        {/* Fixed box severinn mark */}
     <button
       className="fixed bottom-2 right-2 bg-white bg-opacity-70 shadow-lg flex items-center cursor-pointer z-50 rounded-md hover:shadow-xl transition-all duration-300 
                  opacity-70 hover:opacity-100
