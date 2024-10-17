@@ -42,7 +42,7 @@ const memoryTypes: MemoryType[] = [
   { 
     name: 'Short-term', 
     icon: <Clock className="h-5 w-5" />,
-    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='800' height='600' fill='%23f0f0f0'/%3E%3Ctext x='400' y='300' font-family='Arial' font-size='24' fill='%23333' text-anchor='middle' dominant-baseline='middle'%3EShort-term Memory%3C/text%3E%3C/svg%3E"
+    image: "/severinn.png"
   },
   { 
     name: 'Long-term', 
@@ -52,7 +52,7 @@ const memoryTypes: MemoryType[] = [
   { 
     name: 'Working', 
     icon: <Brain className="h-5 w-5" />,
-    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='800' height='600' fill='%23f0f0f0'/%3E%3Ctext x='400' y='300' font-family='Arial' font-size='24' fill='%23333' text-anchor='middle' dominant-baseline='middle'%3EWorking Memory%3C/text%3E%3C/svg%3E"
+    image: "/working-memory.png"
   },
   { 
     name: 'Semantic', 
@@ -76,7 +76,7 @@ const memoryTypes: MemoryType[] = [
   },
   { 
     name: 'Prospective', 
-    icon: <Calendar className="h-5 w-5" />,
+    icon: <Lightbulb className="h-5 w-5" />,
     image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='800' height='600' fill='%23f0f0f0'/%3E%3Ctext x='400' y='300' font-family='Arial' font-size='24' fill='%23333' text-anchor='middle' dominant-baseline='middle'%3EProspective Memory%3C/text%3E%3C/svg%3E"
   },
 ]
@@ -632,7 +632,7 @@ export default function Component() {
                   ))}
                 </div>
               </div>
-              <div className="w-full lg:w-2/3 bg-gray-100">
+              <div className="w-full lg:w-2/3 bg-white-100">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeMemoryType}
@@ -660,66 +660,26 @@ export default function Component() {
 
 
 
-        <section id="contact" className="py-24">
-  <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
-    <h2 className="text-4xl font-bold text-center mb-8 text-gray-800">Contact Us</h2>
-    <div className="flex flex-col lg:flex-row lg:w-full">
-      <div className="lg:w-1/2 mb-8 lg:mb-0">
-        <div className="bg-white shadow-md p-8" style={{
-          borderTopLeftRadius: '24px',
-          borderTopRightRadius: '12px',
-          borderBottomRightRadius: '50%', // Very rounded bottom right corner (quarter circle)
-          borderBottomLeftRadius: '12px'
-        }}>
-          <p className="text-center text-gray-600 mb-4">
-            Feel free to get in touch with us if you&apos;re interested in personalized tasks, have any recommendations, or are facing any issues!
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-white dark:from-gray-800 dark:to-gray-800">
+      <div className="container px-4 md:px-6">
+        <div className="flex flex-col items-center text-center space-y-4">
+          <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Get in touch</h2>
+          <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+            We're here to help and answer any question you might have. We look forward to hearing from you!
           </p>
-
-          <div className="flex justify-center space-x-8 mb-6">
-            {/* Mail icon with link */}
-            <a href="mailto:nrglitchhq@gmail.com" target="_blank" rel="noopener noreferrer">
-              <Mail className="text-black hover:text-gray-700" size={32} />
+          <div className="flex space-x-4 mt-4">
+            <a href="mailto:nrglitch@gmail.com" className="text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary">
+              <Mail className="w-6 h-6" />
+              <span className="sr-only">Email</span>
             </a>
-            {/* Twitter icon with link */}
-            <a href="https://x.com/severinnhq" target="_blank" rel="noopener noreferrer">
-              <Twitter className="text-black hover:text-gray-700" size={32} />
+            <a href="https://x.com/severinnhq" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary">
+              <Twitter className="w-6 h-6" />
+              <span className="sr-only">Twitter</span>
             </a>
           </div>
-
-          <p className="text-center text-gray-500">
-            We look forward to hearing from you!
-          </p>
         </div>
       </div>
-
-      <div className="lg:w-1/2 flex justify-center">
-        <div className="bg-white shadow-md w-full max-w-sm flex items-start" style={{
-          height: '100%', // Match the height of the contact box
-          borderTopLeftRadius: '50%', // Very rounded top left corner (quarter circle)
-          borderTopRightRadius: '24px',
-          borderBottomRightRadius: '12px',
-          borderBottomLeftRadius: '12px',
-        }}>
-          
-          <Image
-            src="/hero.png" // Replace with your image URL
-            alt="Contact Illustration"
-            className="object-cover w-full h-full" // Fill the container
-            style={{
-              clipPath: 'polygon(0 0, 0% 100%, 100% 80%, 100% 0)',
-              borderTopLeftRadius: '50%', // Match the container
-              borderTopRightRadius: '24px',
-              borderBottomRightRadius: '12px',
-              borderBottomLeftRadius: '12px',
-            }}
-            width={400} // Adjust width as necessary
-            height={300} // Adjust height as necessary
-          />
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
 
         {/* FAQ Section */}
