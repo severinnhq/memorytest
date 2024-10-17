@@ -132,101 +132,112 @@ export default function LongTermMemoryTask({ onComplete }: { onComplete: (result
   }
 
   return (
-    <Card className="w-full max-w-3xl mx-auto">
-      <CardHeader>
-        <CardTitle className="text-lg">Face It!</CardTitle>
-
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          {stage === 'learn' && (
-            <>
-              {gamePeople.length > 0 && (
-                <motion.div
-                  key={gamePeople[currentPersonIndex].id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.5 }}
-                  className="flex flex-col items-center space-y-4"
-                >
-                  <img src={gamePeople[currentPersonIndex].image} alt={gamePeople[currentPersonIndex].name} className="w-32 h-32 rounded-full object-cover" />
-                  <p className="text-2xl font-bold">{gamePeople[currentPersonIndex].name}</p>
-                  <p className="text-lg">Person {currentPersonIndex + 1} of {PEOPLE_PER_GAME}</p>
-                </motion.div>
-              )}
-              <div className="flex justify-between mt-4">
-                <Button
-                  onClick={handlePreviousPerson}
-                  disabled={currentPersonIndex === 0}
-                  className="flex-1 mr-2 text-white"
-                  
-                  style={{ backgroundColor: '#4f46e5', borderColor: '#4f46e5' }}
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back
-                </Button>
-                <Button
-                  onClick={handleNextPerson}
-                  className="flex-1 ml-2 text-white"
-                  style={{ backgroundColor: '#4f46e5', borderColor: '#4f46e5' }}
-                >
-                  {currentPersonIndex === PEOPLE_PER_GAME - 1 ? 'Start Test' : 'Next'}
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </div>
-            </>
+   <Card className="w-full max-w-3xl mx-auto p-4">
+  <CardHeader>
+    <CardTitle className="text-lg">Face It!</CardTitle>
+  </CardHeader>
+  <CardContent>
+    <div className="space-y-4">
+      {stage === 'learn' && (
+        <>
+          {gamePeople.length > 0 && (
+            <motion.div
+              key={gamePeople[currentPersonIndex].id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+              className="flex flex-col items-center space-y-2"
+            >
+              <img
+                src={gamePeople[currentPersonIndex].image}
+                alt={gamePeople[currentPersonIndex].name}
+                className="w-20 h-20 rounded-full object-cover md:w-32 md:h-32" 
+              />
+              <p className="text-xl font-bold md:text-2xl">
+                {gamePeople[currentPersonIndex].name}
+              </p>
+              <p className="text-sm md:text-lg">
+                Person {currentPersonIndex + 1} of {PEOPLE_PER_GAME}
+              </p>
+            </motion.div>
           )}
-          {stage === 'wait' && (
-            <div className="text-center">
-              <p className="text-xl font-semibold">Please wait for {timer} seconds...</p>
-              <p className="text-6xl mt-4">⏰</p>
-              <p className="text-lg mt-2">We'll test your memory soon!</p>
-            </div>
-          )}
-          {stage === 'recall' && (
-            <>
-              <div className="grid grid-cols-2 gap-4">
-                {shuffledPeople.map((person) => (
-                  <div key={person.id} className="flex flex-col items-center space-y-2">
-                    <img src={person.image} alt="Person" className="w-24 h-24 rounded-full object-cover" />
-                    <Input
-                      type="text"
-                      placeholder="Enter name"
-                      value={userAnswers[person.id] || ''}
-                      onChange={(e) => handleInputChange(person.id, e.target.value)}
-                      className="w-full"
-                    />
-                  </div>
-                ))}
-              </div>
-              <Button
-                onClick={() => {
-                  setEndTime(Date.now())
-                  setStage('result')
-                }}
-                className="w-full mt-4 text-white"
-                style={{ backgroundColor: '#4f46e5', borderColor: '#4f46e5' }}
-              >
-                Submit
-              </Button>
-            </>
-          )}
-          {stage === 'result' && (
-            <div className="space-y-4">
-              <p className="text-xl font-semibold">Your Result:</p>
-              <p className="text-3xl font-bold text-center">{calculateResult().score}/100</p>
-              <Button
-                onClick={() => onComplete(calculateResult())}
-                className="w-full text-white"
-                style={{ backgroundColor: '#4f46e5', borderColor: '#4f46e5' }}
-              >
-                Finish
-              </Button>
-            </div>
-          )}
+          <div className="flex justify-between mt-4">
+            <Button
+              onClick={handlePreviousPerson}
+              disabled={currentPersonIndex === 0}
+              className="flex-1 mr-2 text-white"
+              style={{ backgroundColor: '#4f46e5', borderColor: '#4f46e5' }}
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back
+            </Button>
+            <Button
+              onClick={handleNextPerson}
+              className="flex-1 ml-2 text-white"
+              style={{ backgroundColor: '#4f46e5', borderColor: '#4f46e5' }}
+            >
+              {currentPersonIndex === PEOPLE_PER_GAME - 1 ? 'Start Test' : 'Next'}
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          </div>
+        </>
+      )}
+      {stage === 'wait' && (
+        <div className="text-center">
+          <p className="text-lg font-semibold md:text-xl">Please wait for {timer} seconds...</p>
+          <p className="text-4xl mt-4 md:text-6xl">⏰</p>
+          <p className="text-sm mt-2 md:text-lg">We'll test your memory soon!</p>
         </div>
-      </CardContent>
-    </Card>
+      )}
+      {stage === 'recall' && (
+        <>
+          <div className="grid grid-cols-2 gap-2 md:gap-4">
+            {shuffledPeople.map((person) => (
+              <div key={person.id} className="flex flex-col items-center space-y-2">
+                <img
+                  src={person.image}
+                  alt="Person"
+                  className="w-16 h-16 rounded-full object-cover md:w-12 md:h-12"
+                />
+                <Input
+                  type="text"
+                  placeholder="Enter name"
+                  value={userAnswers[person.id] || ''}
+                  onChange={(e) => handleInputChange(person.id, e.target.value)}
+                  className="w-full text-xs md:text-base"
+                />
+              </div>
+            ))}
+          </div>
+          <Button
+            onClick={() => {
+              setEndTime(Date.now())
+              setStage('result')
+            }}
+            className="w-full mt-4 text-white"
+            style={{ backgroundColor: '#4f46e5', borderColor: '#4f46e5' }}
+          >
+            Submit
+          </Button>
+        </>
+      )}
+      {stage === 'result' && (
+        <div className="space-y-4">
+          <p className="text-lg font-semibold md:text-xl">Your Result:</p>
+          <p className="text-2xl font-bold text-center md:text-3xl">{calculateResult().score}/100</p>
+          <Button
+            onClick={() => onComplete(calculateResult())}
+            className="w-full text-white"
+            style={{ backgroundColor: '#4f46e5', borderColor: '#4f46e5' }}
+          >
+            Finish
+          </Button>
+        </div>
+      )}
+    </div>
+  </CardContent>
+</Card>
+
   )
 }
