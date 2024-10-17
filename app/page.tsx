@@ -37,7 +37,7 @@ const faqItems = [
     answer: "Yes, we already have a specific tasks for every aspect and the premium tests include them all. And in addition to these we are about release ASPECT BASED tests, and planning to make personalised tasks/tests."
   }
 ]
-
+    {/* Header 
 const memoryTypes: MemoryType[] = [
   { 
     name: 'Short-term', 
@@ -80,6 +80,7 @@ const memoryTypes: MemoryType[] = [
     image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='800' height='600' fill='%23f0f0f0'/%3E%3Ctext x='400' y='300' font-family='Arial' font-size='24' fill='%23333' text-anchor='middle' dominant-baseline='middle'%3EProspective Memory%3C/text%3E%3C/svg%3E"
   },
 ]
+*/}
 
 export default function Component() {
   const timelineItems = [
