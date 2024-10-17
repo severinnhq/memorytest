@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { AnimatePresence, motion, } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Brain, LogOut, Menu, User, Check,  Plus, Clock, Database, FileText, Film, Layers, Zap, Sparkles, Mail, Trophy, Star, Twitter, HouseIcon, BookOpen, Lightbulb, Rocket, Users, } from 'lucide-react'
+import { Brain, LogOut, Menu, User, Check,  Plus, Clock,  Sparkles, Mail, Trophy, Star, Twitter, HouseIcon, BookOpen, Lightbulb, Rocket, Users, } from 'lucide-react'
 import Image from 'next/image'
 import { loadStripe } from '@stripe/stripe-js'
 
@@ -16,13 +16,13 @@ interface User {
   email: string;
   hasPaid: boolean;
 }
-
+   {/* Header
 interface MemoryType {
   name: string;
   icon: React.ReactNode;
   image: string;
 }
-
+*/}
 const faqItems = [
   {
     question: "What is Nrglitch?",
@@ -81,7 +81,6 @@ const memoryTypes: MemoryType[] = [
   },
 ]
 */}
-
 export default function Component() {
   const timelineItems = [
     {
