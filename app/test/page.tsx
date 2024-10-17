@@ -456,13 +456,7 @@ export default function MemoryAssessmentSystem() {
                 {results.length === 0 ? (
                   <div className="flex flex-col items-center justify-center space-y-4">
                     <p className="text-lg text-gray-600">No tasks completed yet. Complete tasks to see your performance here.</p>
-                    <Image
-                      src="/placeholder.svg?height=300&width=500"
-                      alt="No tasks completed"
-                      width={500}
-                      height={300}
-                      className="rounded-lg shadow-md max-w-full h-auto"
-                    />
+                    
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
