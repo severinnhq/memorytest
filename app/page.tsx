@@ -42,7 +42,7 @@ const memoryTypes: MemoryType[] = [
   { 
     name: 'Short-term', 
     icon: <Clock className="h-5 w-5" />,
-    image: "/severinn.png"
+    image: "/severinn.png  "
   },
   { 
     name: 'Long-term', 
@@ -632,7 +632,7 @@ export default function Component() {
                   ))}
                 </div>
               </div>
-              <div className="w-full lg:w-2/3 bg-white-100">
+              <div className="w-full lg:w-2/3 bg-gray-100">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeMemoryType}
@@ -647,7 +647,7 @@ export default function Component() {
                         src={memoryTypes.find(type => type.name === activeMemoryType)?.image || ''}
                         alt={`${activeMemoryType} Memory`}
                         fill
-                        style={{ objectFit: 'contain' }}
+                        style={{ objectFit: 'fill' }}
                       />
                     </div>
                   </motion.div>
