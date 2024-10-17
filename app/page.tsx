@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { AnimatePresence, motion, } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Brain, LogOut, Menu, User, Check,  Plus, Clock, Database, FileText, Film, Layers, Zap, Calendar, Sparkles, Mail, Trophy, Star, BarChart, Twitter, HouseIcon, BookOpen, Lightbulb, Rocket, Users, } from 'lucide-react'
+import { Brain, LogOut, Menu, User, Check,  Plus, Clock, Database, FileText, Film, Layers, Zap, Sparkles, Mail, Trophy, Star, BarChart, Twitter, HouseIcon, BookOpen, Lightbulb, Rocket, Users, } from 'lucide-react'
 import Image from 'next/image'
 import { loadStripe } from '@stripe/stripe-js'
 
@@ -665,7 +665,7 @@ export default function Component() {
         <div className="flex flex-col items-center text-center space-y-4">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Get in touch</h2>
           <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-            We're here to help and answer any question you might have. We look forward to hearing from you!
+            We&apos;re here to help and answer any question you might have. We look forward to hearing from you!
           </p>
           <div className="flex space-x-4 mt-4">
             <a href="mailto:nrglitch@gmail.com" className="text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary">
