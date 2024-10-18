@@ -352,11 +352,11 @@ export default function Component() {
 
               >
                 <h1 className="text-4xl sm:text-5xl lg:text-5xl font-extrabold text-gray-900 tracking-tight mb-6">
-                  <span className="block my-2">Always</span>
+                  <span className="block my-2">Keep</span>
                   <span className="block my-2">
                     <span className="relative inline-block">
                       <span className="absolute inset-0 bg-[#4f46e5] bg-opacity-45 transform -rotate-2 origin-center"></span>
-                      <span className="relative text-black px-1">Forget</span>
+                      <span className="relative text-black px-1">Forgetting</span>
                     </span> 
                     <span> 
                       <span className="text-black px-1"><u>Birthdays</u></span>
