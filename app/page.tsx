@@ -351,12 +351,12 @@ export default function Component() {
                 className="text-container text-center lg:text-left w-full lg:w-1/2 mb-12 lg:mb-0"
 
               >
-                <h1 className="text-4xl sm:text-5xl lg:text-5xl font-extrabold text-gray-900 tracking-tight mb-6">
+                <h1 className="text-3xl sm:text-5xl lg:text-4.5xl font-extrabold text-gray-900 tracking-tight mb-6">
                   <span className="block my-2">Keep</span>
                   <span className="block my-2">
                     <span className="relative inline-block">
                       <span className="absolute inset-0 bg-[#4f46e5] bg-opacity-45 transform -rotate-2 origin-center"></span>
-                      <span className="relative text-black px-1">Forgetting</span>
+                      <span className="relative text-black-lg px-1">Forgetting</span>
                     </span> 
                     <span> 
                       <span className="text-black px-1"><u>Birthdays</u></span>

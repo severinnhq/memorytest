@@ -18,9 +18,13 @@ const config: Config = {
         "2xl": "1400px",
       },
     },
+    
     extend: {
       fontFamily: {
         sans: ['var(--font-montserrat)', ...fontFamily.sans],
+      },
+      fontSize: {
+        '4.5xl': '2.625rem', // Custom font size between 4xl and 5xl
       },
       colors: {
         border: "hsl(var(--border))",
