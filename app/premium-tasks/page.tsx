@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -20,7 +20,15 @@ import {
   Zap,
   Target,
   Lock,
+  Eye,
+  Clock,
+  Lightbulb,
+  Puzzle,
+  Compass,
 } from 'lucide-react'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { OrbitControls } from "@react-three/drei"
+import * as THREE from "three"
 
 interface User {
   _id: string;
@@ -39,6 +47,13 @@ interface TaskSet {
   comingSoon?: boolean;
 }
 
+interface MemoryAspect {
+  id: string;
+  name: string;
+  icon: React.ElementType;
+  color: string;
+}
+
 const taskSets: TaskSet[] = [
   {
     id: 'mid',
@@ -55,31 +70,83 @@ const taskSets: TaskSet[] = [
     icon: Brain,
     color: 'from-purple-500 to-pink-500',
     tasks: 5
-  },
-  {
-    id: 'aspect',
-    name: 'Aspect-Based Memory Tasks',
-    description: 'Automatic access: Tailored tasks focusing on specific aspects of memory.',
-    icon: Zap,
-    color: 'from-yellow-400 to-orange-500',
-    tasks: 0,
-    comingSoon: true
-  },
-  {
-    id: 'detector',
-    name: 'Memory Problem Detector AI',
-    description: 'Automatic access: AI-powered analysis to identify and improve weak areas of memory.',
-    icon: Target,
-    color: 'from-green-400 to-teal-500',
-    tasks: 0,
-    comingSoon: true
   }
 ]
+
+const memoryAspects: MemoryAspect[] = [
+  { id: 'short-term', name: 'Short-term Memory', icon: Zap, color: 'from-yellow-400 to-yellow-600' },
+  { id: 'long-term', name: 'Long-term Memory', icon: Clock, color: 'from-red-400 to-red-600' },
+  { id: 'working', name: 'Working Memory', icon: Brain, color: 'from-purple-400 to-purple-600' },
+  { id: 'semantic', name: 'Semantic Memory', icon: Lightbulb, color: 'from-green-400 to-green-600' },
+  { id: 'episodic', name: 'Episodic Memory', icon: Compass, color: 'from-blue-400 to-blue-600' },
+  { id: 'procedural', name: 'Procedural Memory', icon: Puzzle, color: 'from-pink-400 to-pink-600' },
+  { id: 'sensory', name: 'Sensory Memory', icon: Eye, color: 'from-indigo-400 to-indigo-600' },
+  { id: 'prospective', name: 'Prospective Memory', icon: Target, color: 'from-teal-400 to-teal-600' },
+]
+
+function AIIcon() {
+  const groupRef = useRef<THREE.Group>(null)
+
+  useFrame(({ clock }) => {
+    if (groupRef.current) {
+      // Start with 45 degree rotation and continue rotating
+      groupRef.current.rotation.y = Math.PI / 4 + clock.getElapsedTime() * 0.2
+    }
+  })
+
+  return (
+    <group ref={groupRef}>
+      {/* First ellipsoid (XY plane) */}
+      <mesh rotation={[0, 0, 0]} scale={[1, 0.75, 1]}>
+        <torusGeometry args={[0.7, 0.02, 16, 100, Math.PI * 2]} />
+        <meshStandardMaterial color="#a5b4fc" />
+      </mesh>
+
+      {/* Second ellipsoid (YZ plane) */}
+      <mesh rotation={[0, Math.PI / 2, 0]} scale={[1.2, 0.9, 1.2]}>
+        <torusGeometry args={[0.7, 0.02, 16, 100, Math.PI * 2]} />
+        <meshStandardMaterial color="#818cf8" />
+      </mesh>
+
+      {/* Dots on first ellipsoid */}
+      <mesh position={[0.7, 0, 0]}>
+        <sphereGeometry args={[0.08, 32, 32]} />
+        <meshStandardMaterial color="#4f46e5" />
+      </mesh>
+      <mesh position={[-0.7, 0, 0]}>
+        <sphereGeometry args={[0.08, 32, 32]} />
+        <meshStandardMaterial color="#4f46e5" />
+      </mesh>
+
+      {/* Dots on second ellipsoid */}
+      <mesh position={[0, 0, 0.84]}>
+        <sphereGeometry args={[0.08, 32, 32]} />
+        <meshStandardMaterial color="#4f46e5" />
+      </mesh>
+      <mesh position={[0, 0, -0.84]}>
+        <sphereGeometry args={[0.08, 32, 32]} />
+        <meshStandardMaterial color="#4f46e5" />
+      </mesh>
+    </group>
+  )
+}
+
+function AIIconWrapper() {
+  return (
+    <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
+      <ambientLight intensity={0.5} />
+      <pointLight position={[10, 10, 10]} />
+      <OrbitControls enableZoom={false} />
+      <AIIcon />
+    </Canvas>
+  )
+}
 
 export default function PremiumTasksHub() {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [hoveredAspect, setHoveredAspect] = useState<string | null>(null)
   const router = useRouter()
 
   useEffect(() => {
@@ -107,6 +174,10 @@ export default function PremiumTasksHub() {
   const handleSignOut = () => {
     localStorage.removeItem('user')
     router.push('/')
+  }
+
+  const handleAspectClick = (aspectId: string) => {
+    router.push(`/aspect-tasks/${aspectId}`)
   }
 
   if (isLoading) {
@@ -231,7 +302,7 @@ export default function PremiumTasksHub() {
                   </CardHeader>
                   <CardContent className="p-6">
                     <CardTitle className="text-2xl font-bold mb-2 text-gray-800">{set.name}</CardTitle>
-                    <CardDescription className="text-gray-600 mb-4">{set.description}</CardDescription>
+                    <CardDescription className="text-gray-600  mb-4">{set.description}</CardDescription>
                     <div className="flex justify-between items-center">
                       {set.comingSoon ? (
                         <span className="text-sm font-semibold text-gray-500">Coming Soon</span>
@@ -246,6 +317,61 @@ export default function PremiumTasksHub() {
                 </Card>
               </motion.div>
             ))}
+          </div>
+
+          <div className="mt-16">
+            <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">Aspect-Based Memory Tasks</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+              {memoryAspects.map((aspect) => (
+                <motion.div
+                  key={aspect.id}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onHoverStart={() => setHoveredAspect(aspect.id)}
+                  onHoverEnd={() => setHoveredAspect(null)}
+                  onClick={() => handleAspectClick(aspect.id)}
+                  className="relative cursor-pointer"
+                >
+                  <div className={`bg-gradient-to-br ${aspect.color} rounded-lg p-6 flex flex-col items-center justify-center h-40 transition-all duration-300 shadow-lg`}>
+                    <aspect.icon className="w-12 h-12 text-white mb-4" />
+                    <h3 className="text-lg font-semibold text-white text-center">{aspect.name}</h3>
+                  </div>
+                  <AnimatePresence>
+                    {hoveredAspect === aspect.id && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 20 }}
+                        className="absolute inset-0 bg-black bg-opacity-70 rounded-lg flex items-center justify-center"
+                      >
+                        <p className="text-white text-center px-4">
+                          Click to start tasks focused on {aspect.name.toLowerCase()}
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-16">
+            <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">AI Aspect Detector</h2>
+            <Card className="bg-white text-gray-800 p-6 shadow-xl">
+              <CardHeader>
+                <CardTitle className="text-2xl font-bold">Coming Soon: AI-Powered Memory Aspect Detection</CardTitle>
+              </CardHeader>
+              <CardContent className="flex flex-col md:flex-row items-center gap-6">
+                <div className="w-full md:w-1/2">
+                  <p className="text-lg">
+                    Our advanced AI will soon be able to analyze your performance and detect which aspects of memory you excel in and which need improvement. Stay tuned for personalized insights and tailored task recommendations!
+                  </p>
+                </div>
+                <div className="w-full md:w-1/2 h-80">
+                  <AIIconWrapper />
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
