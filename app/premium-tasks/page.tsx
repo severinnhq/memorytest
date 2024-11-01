@@ -89,26 +89,21 @@ function AIIcon() {
 
   useFrame(({ clock }) => {
     if (groupRef.current) {
-      // Start with 45 degree rotation and continue rotating
-      groupRef.current.rotation.y = Math.PI / 4 + clock.getElapsedTime() * 0.2
+      groupRef.current.rotation.x = Math.PI / 4
+      groupRef.current.rotation.y = clock.getElapsedTime() * 0.2
     }
   })
 
   return (
-    <group ref={groupRef}>
-      {/* First ellipsoid (XY plane) */}
+    <group ref={groupRef} scale={1.2}>
       <mesh rotation={[0, 0, 0]} scale={[1, 0.75, 1]}>
         <torusGeometry args={[0.7, 0.02, 16, 100, Math.PI * 2]} />
         <meshStandardMaterial color="#a5b4fc" />
       </mesh>
-
-      {/* Second ellipsoid (YZ plane) */}
       <mesh rotation={[0, Math.PI / 2, 0]} scale={[1.2, 0.9, 1.2]}>
         <torusGeometry args={[0.7, 0.02, 16, 100, Math.PI * 2]} />
         <meshStandardMaterial color="#818cf8" />
       </mesh>
-
-      {/* Dots on first ellipsoid */}
       <mesh position={[0.7, 0, 0]}>
         <sphereGeometry args={[0.08, 32, 32]} />
         <meshStandardMaterial color="#4f46e5" />
@@ -117,8 +112,6 @@ function AIIcon() {
         <sphereGeometry args={[0.08, 32, 32]} />
         <meshStandardMaterial color="#4f46e5" />
       </mesh>
-
-      {/* Dots on second ellipsoid */}
       <mesh position={[0, 0, 0.84]}>
         <sphereGeometry args={[0.08, 32, 32]} />
         <meshStandardMaterial color="#4f46e5" />
@@ -139,6 +132,44 @@ function AIIconWrapper() {
       <OrbitControls enableZoom={false} />
       <AIIcon />
     </Canvas>
+  )
+}
+
+function Timer() {
+  const targetDate = new Date('2024-11-08T00:00:00').getTime();
+  const [timeLeft, setTimeLeft] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const now = new Date().getTime();
+      const difference = targetDate - now;
+      setTimeLeft(difference > 0 ? difference : 0);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+  return (
+    <div className="flex space-x-4">
+      {[
+        { value: days, label: 'Days' },
+        { value: hours, label: 'Hours' },
+        { value: minutes, label: 'Minutes' },
+        { value: seconds, label: 'Seconds' }
+      ].map(({ value, label }) => (
+        <div key={label} className="flex flex-col items-center">
+          <div className="bg-white rounded-lg shadow-md p-3 w-16 h-16 flex items-center justify-center border border-indigo-200">
+            <span className="text-2xl font-bold text-indigo-800">{value.toString().padStart(2, '0')}</span>
+          </div>
+          <span className="text-sm mt-2 text-indigo-800 font-medium">{label}</span>
+        </div>
+      ))}
+    </div>
   )
 }
 
@@ -269,10 +300,10 @@ export default function PremiumTasksHub() {
         )}
       </AnimatePresence>
 
-      <div className="pt-24 pb-12 px-4 mt-12 mb-12">
+      <div className="pt-24 pb-12 px-4 mb-12">
         <div className="container mx-auto">
           <motion.h1 
-            className="text-4xl font-bold text-center mb-12 mt-16 text-gray-800"
+            className="text-4xl font-bold text-center mb-12 mt-24 text-gray-800"
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -280,6 +311,7 @@ export default function PremiumTasksHub() {
             Premium Memory Tasks Hub
           </motion.h1>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            
             {taskSets.map((set) => (
               <motion.div
                 key={set.id}
@@ -302,7 +334,7 @@ export default function PremiumTasksHub() {
                   </CardHeader>
                   <CardContent className="p-6">
                     <CardTitle className="text-2xl font-bold mb-2 text-gray-800">{set.name}</CardTitle>
-                    <CardDescription className="text-gray-600  mb-4">{set.description}</CardDescription>
+                    <CardDescription className="text-gray-600 mb-4">{set.description}</CardDescription>
                     <div className="flex justify-between items-center">
                       {set.comingSoon ? (
                         <span className="text-sm font-semibold text-gray-500">Coming Soon</span>
@@ -319,8 +351,8 @@ export default function PremiumTasksHub() {
             ))}
           </div>
 
-          <div className="mt-16">
-            <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">Aspect-Based Memory Tasks</h2>
+          <div className="mt-12 mb-12">
+            <h2 className="text-4xl font-bold text-center mt-48 mb-12 text-gray-800">Aspect-Based Memory Tasks</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
               {memoryAspects.map((aspect) => (
                 <motion.div
@@ -355,21 +387,14 @@ export default function PremiumTasksHub() {
             </div>
           </div>
 
-          <div className="mt-16">
-            <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">AI Aspect Detector</h2>
-            <Card className="bg-white text-gray-800 p-6 shadow-xl">
-              <CardHeader>
-                <CardTitle className="text-2xl font-bold">Coming Soon: AI-Powered Memory Aspect Detection</CardTitle>
-              </CardHeader>
-              <CardContent className="flex flex-col md:flex-row items-center gap-6">
-                <div className="w-full md:w-1/2">
-                  <p className="text-lg">
-                    Our advanced AI will soon be able to analyze your performance and detect which aspects of memory you excel in and which need improvement. Stay tuned for personalized insights and tailored task recommendations!
-                  </p>
-                </div>
-                <div className="w-full md:w-1/2 h-80">
+          <div className="mt-48">
+            <Card className="bg-white text-gray-800 p-8 shadow-2xl max-w-3xl mx-auto rounded-2xl border border-indigo-200">
+              <CardContent className="flex flex-col items-center gap-6">
+                <div className="w-full h-80 mb-4">
                   <AIIconWrapper />
                 </div>
+                <CardTitle className="text-3xl font-bold text-center mb-4 text-indigo-800">AI Features Launch</CardTitle>
+                <Timer />
               </CardContent>
             </Card>
           </div>
