@@ -74,14 +74,14 @@ const taskSets: TaskSet[] = [
 ]
 
 const memoryAspects: MemoryAspect[] = [
-  { id: 'short-term', name: 'Short-term Memory', icon: Zap, color: 'from-yellow-400 to-yellow-600' },
-  { id: 'long-term', name: 'Long-term Memory', icon: Clock, color: 'from-red-400 to-red-600' },
-  { id: 'working', name: 'Working Memory', icon: Brain, color: 'from-purple-400 to-purple-600' },
-  { id: 'semantic', name: 'Semantic Memory', icon: Lightbulb, color: 'from-green-400 to-green-600' },
-  { id: 'episodic', name: 'Episodic Memory', icon: Compass, color: 'from-blue-400 to-blue-600' },
-  { id: 'procedural', name: 'Procedural Memory', icon: Puzzle, color: 'from-pink-400 to-pink-600' },
-  { id: 'sensory', name: 'Sensory Memory', icon: Eye, color: 'from-indigo-400 to-indigo-600' },
-  { id: 'prospective', name: 'Prospective Memory', icon: Target, color: 'from-teal-400 to-teal-600' },
+  { id: 'short-term', name: 'Short-term', icon: Zap, color: 'from-yellow-400 to-yellow-600' },
+  { id: 'long-term', name: 'Long-term', icon: Clock, color: 'from-red-400 to-red-600' },
+  { id: 'working', name: 'Working', icon: Brain, color: 'from-purple-400 to-purple-600' },
+  { id: 'semantic', name: 'Semantic', icon: Lightbulb, color: 'from-green-400 to-green-600' },
+  { id: 'episodic', name: 'Episodic', icon: Compass, color: 'from-blue-400 to-blue-600' },
+  { id: 'procedural', name: 'Procedural', icon: Puzzle, color: 'from-pink-400 to-pink-600' },
+  { id: 'sensory', name: 'Sensory', icon: Eye, color: 'from-indigo-400 to-indigo-600' },
+  { id: 'prospective', name: 'Prospective', icon: Target, color: 'from-teal-400 to-teal-600' },
 ]
 
 function AIIcon() {
@@ -136,26 +136,26 @@ function AIIconWrapper() {
 }
 
 function Timer() {
-  const targetDate = new Date('2024-11-08T00:00:00').getTime();
-  const [timeLeft, setTimeLeft] = useState(0);
+  const targetDate = new Date('2024-11-08T00:00:00').getTime()
+  const [timeLeft, setTimeLeft] = useState(0)
 
   useEffect(() => {
     const timer = setInterval(() => {
-      const now = new Date().getTime();
-      const difference = targetDate - now;
-      setTimeLeft(difference > 0 ? difference : 0);
-    }, 1000);
+      const now = new Date().getTime()
+      const difference = targetDate - now
+      setTimeLeft(difference > 0 ? difference : 0)
+    }, 1000)
 
-    return () => clearInterval(timer);
-  }, []);
+    return () => clearInterval(timer)
+  }, [])
 
-  const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+  const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24))
+  const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+  const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60))
+  const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000)
 
   return (
-    <div className="flex space-x-4">
+    <div className="flex justify-center items-center space-x-3 sm:space-x-4 md:space-x-6">
       {[
         { value: days, label: 'Days' },
         { value: hours, label: 'Hours' },
@@ -163,10 +163,10 @@ function Timer() {
         { value: seconds, label: 'Seconds' }
       ].map(({ value, label }) => (
         <div key={label} className="flex flex-col items-center">
-          <div className="bg-white rounded-lg shadow-md p-3 w-16 h-16 flex items-center justify-center border border-indigo-200">
-            <span className="text-2xl font-bold text-indigo-800">{value.toString().padStart(2, '0')}</span>
+          <div className="bg-indigo-100 rounded-lg shadow p-2 sm:p-3 w-14 sm:w-16 md:w-20 h-14 sm:h-16 md:h-20 flex items-center justify-center">
+            <span className="text-sm sm:text-lg md:text-2xl lg:text-3xl font-bold text-indigo-800">{value.toString().padStart(2, '0')}</span>
           </div>
-          <span className="text-sm mt-2 text-indigo-800 font-medium">{label}</span>
+          <span className="text-[10px] sm:text-xs md:text-sm mt-1 text-indigo-600 font-medium">{label}</span>
         </div>
       ))}
     </div>
@@ -235,7 +235,7 @@ export default function PremiumTasksHub() {
           <div className="flex justify-between items-center py-4">
             <div className="flex-shrink-0">
               <Link href="/" className="flex items-center">
-                <Brain className="h-8 w-auto sm:h-10 text-[#4f46e5]" />
+                <Brain className="h-8 w-auto sm:h-10 text-[#4f46e5]" aria-hidden="true" />
                 <span className="ml-2 text-2xl font-bold text-[#4f46e5]">Nrglitch</span>
               </Link>
             </div>
@@ -246,13 +246,14 @@ export default function PremiumTasksHub() {
             </nav>
             <div className="hidden md:flex items-center">
               <div className="flex items-center space-x-4">
-                <UserIcon className="h-8 w-8 text-[#4f46e5]"  />
+                <UserIcon className="h-8 w-8 text-[#4f46e5]" aria-hidden="true" />
                 <div className="flex flex-col">
                   <span className="text-sm font-medium text-[#4f46e5]">{user.name}</span>
                   <span className="text-xs text-gray-500">{user.email}</span>
                 </div>
                 <Button variant="ghost" onClick={handleSignOut} className="p-1">
-                  <LogOut className="h-6 w-6 text-[#4f46e5]" />
+                  <LogOut className="h-6 w-6 text-[#4f46e5]" aria-hidden="true" />
+                  <span className="sr-only">Sign out</span>
                 </Button>
               </div>
             </div>
@@ -261,8 +262,10 @@ export default function PremiumTasksHub() {
                 variant="ghost"
                 className="inline-flex items-center justify-center p-2 rounded-md text-[#4f46e5] hover:text-[#4f46e5] hover:bg-[#4f46e5]/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#4f46e5]"
                 onClick={toggleMenu}
+                aria-expanded={isMenuOpen}
+                aria-controls="mobile-menu"
               >
-                <span className="sr-only">Open menu</span>
+                <span className="sr-only">{isMenuOpen ? 'Close menu' : 'Open menu'}</span>
                 <Menu className="h-6 w-6" aria-hidden="true" />
               </Button>
             </div>
@@ -278,6 +281,7 @@ export default function PremiumTasksHub() {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
             className="md:hidden fixed top-16 left-0 right-0 bg-white z-40 shadow-md"
+            id="mobile-menu"
           >
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               <Link href="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-[#4f46e5] hover:bg-[#4f46e5]/10" onClick={toggleMenu}>Home</Link>
@@ -286,13 +290,14 @@ export default function PremiumTasksHub() {
             </div>
             <div className="pt-4 pb-3 border-t border-gray-200">
               <div className="flex items-center px-5">
-                <UserIcon className="h-8 w-8 text-[#4f46e5]" />
+                <UserIcon className="h-8 w-8 text-[#4f46e5]" aria-hidden="true" />
                 <div className="ml-3">
                   <div className="text-base font-medium text-[#4f46e5]">{user.name}</div>
-                  <div className="text-sm font-medium text-gray-500">{user.email}</div>
+                  <div className="text-sm font-medium  text-gray-500">{user.email}</div>
                 </div>
                 <Button variant="ghost" onClick={handleSignOut} className="ml-auto p-1">
-                  <LogOut className="h-6 w-6 text-[#4f46e5]" />
+                  <LogOut className="h-6 w-6 text-[#4f46e5]" aria-hidden="true" />
+                  <span className="sr-only">Sign out</span>
                 </Button>
               </div>
             </div>
@@ -300,17 +305,17 @@ export default function PremiumTasksHub() {
         )}
       </AnimatePresence>
 
-      <div className="pt-24 pb-12 px-4 mb-12">
+      <main className="pt-24 pb-12 px-4 mb-12">
         <div className="container mx-auto">
           <motion.h1 
-            className="text-4xl font-bold text-center mb-12 mt-24 text-gray-800"
+            className="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-12 mt-16 sm:mt-24 text-gray-800"
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
             Premium Memory Tasks Hub
           </motion.h1>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-12">
             
             {taskSets.map((set) => (
               <motion.div
@@ -322,24 +327,24 @@ export default function PremiumTasksHub() {
                   className={`overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-xl ${set.comingSoon ? 'opacity-75' : ''}`}
                   onClick={() => !set.comingSoon && router.push(`/${set.id}-tasks`)}
                 >
-                  <CardHeader className={`bg-gradient-to-r ${set.color} p-6`}>
+                  <CardHeader className={`bg-gradient-to-r ${set.color} p-4 sm:p-6`}>
                     <div className="flex items-center justify-between">
-                      <set.icon className="w-12 h-12 text-white" />
+                      <set.icon className="w-8 h-8 sm:w-12 sm:h-12 text-white" aria-hidden="true" />
                       {set.comingSoon ? (
-                        <Lock className="w-6 h-6 text-white" />
+                        <Lock className="w-5 h-5 sm:w-6 sm:h-6 text-white" aria-hidden="true" />
                       ) : (
-                        <ChevronRight className="w-6 h-6 text-white" />
+                        <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-white" aria-hidden="true" />
                       )}
                     </div>
                   </CardHeader>
-                  <CardContent className="p-6">
-                    <CardTitle className="text-2xl font-bold mb-2 text-gray-800">{set.name}</CardTitle>
-                    <CardDescription className="text-gray-600 mb-4">{set.description}</CardDescription>
+                  <CardContent className="p-4 sm:p-6">
+                    <CardTitle className="text-xl sm:text-2xl font-bold mb-2 text-gray-800">{set.name}</CardTitle>
+                    <CardDescription className="text-sm sm:text-base text-gray-600 mb-4">{set.description}</CardDescription>
                     <div className="flex justify-between items-center">
                       {set.comingSoon ? (
-                        <span className="text-sm font-semibold text-gray-500">Coming Soon</span>
+                        <span className="text-xs sm:text-sm font-semibold text-gray-500">Coming Soon</span>
                       ) : (
-                        <span className="text-sm font-semibold text-gray-500">{set.tasks} tasks</span>
+                        <span className="text-xs sm:text-sm font-semibold text-gray-500">{set.tasks} tasks</span>
                       )}
                       <Button variant="outline" size="sm" disabled={set.comingSoon}>
                         {set.comingSoon ? 'Coming Soon' : 'Start Now'}
@@ -351,9 +356,9 @@ export default function PremiumTasksHub() {
             ))}
           </div>
 
-          <div className="mt-12 mb-12">
-            <h2 className="text-4xl font-bold text-center mt-48 mb-12 text-gray-800">Aspect-Based Memory Tasks</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+          <section className="mt-12 mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold text-center mt-32 sm:mt-48 mb-8 sm:mb-12 text-gray-800">Aspect-Based Memory Tasks</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
               {memoryAspects.map((aspect) => (
                 <motion.div
                   key={aspect.id}
@@ -364,9 +369,9 @@ export default function PremiumTasksHub() {
                   onClick={() => handleAspectClick(aspect.id)}
                   className="relative cursor-pointer"
                 >
-                  <div className={`bg-gradient-to-br ${aspect.color} rounded-lg p-6 flex flex-col items-center justify-center h-40 transition-all duration-300 shadow-lg`}>
-                    <aspect.icon className="w-12 h-12 text-white mb-4" />
-                    <h3 className="text-lg font-semibold text-white text-center">{aspect.name}</h3>
+                  <div className={`bg-gradient-to-br ${aspect.color} rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center h-32 sm:h-40 transition-all duration-300 shadow-lg`}>
+                    <aspect.icon className="w-8 h-8 sm:w-12 sm:h-12 text-white mb-2 sm:mb-4" aria-hidden="true" />
+                    <h3 className="text-sm sm:text-lg font-semibold text-white text-center">{aspect.name}</h3>
                   </div>
                   <AnimatePresence>
                     {hoveredAspect === aspect.id && (
@@ -376,7 +381,7 @@ export default function PremiumTasksHub() {
                         exit={{ opacity: 0, y: 20 }}
                         className="absolute inset-0 bg-black bg-opacity-70 rounded-lg flex items-center justify-center"
                       >
-                        <p className="text-white text-center px-4">
+                        <p className="text-white text-center text-xs sm:text-sm px-2 sm:px-4">
                           Click to start tasks focused on {aspect.name.toLowerCase()}
                         </p>
                       </motion.div>
@@ -385,51 +390,51 @@ export default function PremiumTasksHub() {
                 </motion.div>
               ))}
             </div>
-          </div>
+          </section>
 
-          <div className="mt-48">
-            <Card className="bg-white text-gray-800 p-8 shadow-2xl max-w-3xl mx-auto rounded-2xl border border-indigo-200">
-              <CardContent className="flex flex-col items-center gap-6">
-                <div className="w-full h-80 mb-4">
+          <section className="mt-32 sm:mt-48">
+            <Card className="bg-white text-gray-800 p-6 sm:p-8 shadow-2xl max-w-5xl mx-auto rounded-2xl border border-indigo-200">
+              <CardContent className="flex flex-col items-center gap-4 sm:gap-6">
+                <div className="w-full h-60 sm:h-80 mb-2 sm:mb-4">
                   <AIIconWrapper />
                 </div>
-                <CardTitle className="text-3xl font-bold text-center mb-4 text-indigo-800">AI Features Launch</CardTitle>
+                <CardTitle className="text-2xl sm:text-3xl font-bold text-center mb-2 sm:mb-4 text-indigo-800">AI Features Launch</CardTitle>
                 <Timer />
               </CardContent>
             </Card>
-          </div>
+          </section>
         </div>
-      </div>
+      </main>
 
       <footer className="bg-[#4f46e5] text-white py-12 mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-center gap-8">
             <Link href="/" className="flex items-center">
-              <Brain className="h-8 w-auto sm:h-10 text-white" />
+              <Brain className="h-8 w-auto sm:h-10 text-white" aria-hidden="true" />
               <span className="ml-2 text-2xl font-bold">Nrglitch</span>
             </Link>
             <nav className="flex flex-wrap justify-center gap-6">
               <Link href="/" passHref>
                 <Button variant="ghost" className="text-white hover:text-white hover:bg-white/20">
-                  <HouseIcon className="h-5 w-5 mr-2" />
+                  <HouseIcon className="h-5 w-5 mr-2" aria-hidden="true" />
                   Home
                 </Button>
               </Link>
               <Link href="/#premium" passHref>
                 <Button variant="ghost" className="text-white hover:text-white hover:bg-white/20">
-                  <Sparkles className="h-5 w-5 mr-2" />
+                  <Sparkles className="h-5 w-5 mr-2" aria-hidden="true" />
                   Premium
                 </Button>
               </Link>
               <Link href="/#our-story" passHref>
                 <Button variant="ghost" className="text-white hover:text-white hover:bg-white/20">
-                  <BookOpen className="h-5 w-5 mr-2" />
+                  <BookOpen className="h-5 w-5 mr-2" aria-hidden="true" />
                   Our Story
                 </Button>
               </Link>
               <Link href="/#contact" passHref>
                 <Button variant="ghost" className="text-white hover:text-white hover:bg-white/20">
-                  <Mail className="h-5 w-5 mr-2" />
+                  <Mail className="h-5 w-5 mr-2" aria-hidden="true" />
                   Contact
                 </Button>
               </Link>
