@@ -6,41 +6,37 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Brain, HomeIcon as HouseIcon, Sparkles, BookOpen, Mail, Grid, ChevronRight, Menu, UserIcon, LogOut, Zap, Target, Eye, Clock, Lightbulb, Puzzle, Compass, ArrowLeft, CheckCircle2, Lock, Palette, Headphones, Camera, Calendar, FileText, Briefcase, Calculator, Hand } from 'lucide-react'
+import { Brain, HomeIcon as HouseIcon, Sparkles, BookOpen, Mail, Grid, ChevronRight, Menu, UserIcon, LogOut, Zap, Target, Eye, Clock, Lightbulb, Puzzle, Compass, ArrowLeft, CheckCircle2, Lock, Palette, Headphones, Camera, Calendar, FileText, Briefcase, Hand } from 'lucide-react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls } from "@react-three/drei"
 import * as THREE from "three"
 import TaskModal from '@/components/TaskModal'
 import TaskDescriptionModal from '@/components/TaskDescriptionModal'
 
+// Import task components
 import ShortTermTask1 from '@/tasks/short-term-task1'
 import ShortTermTask2 from '@/tasks/short-term-task2'
 import ShortTermTask3 from '@/tasks/short-term-task3'
-
 import LongTermTask1 from '@/tasks/long-term-task1'
 import LongTermTask2 from '@/tasks/long-term-task2'
 import LongTermTask3 from '@/tasks/long-term-task3'
-
 import WorkingTask1 from '@/tasks/working-task1'
 import WorkingTask2 from '@/tasks/working-task2'
 import WorkingTask3 from '@/tasks/working-task3'
-
 import SemanticTask1 from '@/tasks/semantic-task1'
 import SemanticTask2 from '@/tasks/semantic-task2'
 import SemanticTask3 from '@/tasks/semantic-task3'
-
 import EpisodicTask1 from '@/tasks/episodic-task1'
 import EpisodicTask2 from '@/tasks/episodic-task2'
 import EpisodicTask3 from '@/tasks/episodic-task3'
-
 import ProceduralTask1 from '@/tasks/procedural-task1'
 import ProceduralTask2 from '@/tasks/procedural-task2'
 import ProceduralTask3 from '@/tasks/procedural-task3'
-
 import SensoryTask1 from '@/tasks/sensory-task1'
 import SensoryTask2 from '@/tasks/sensory-task2'
 import SensoryTask3 from '@/tasks/sensory-task3'
 
+// Type definitions
 interface User {
   _id: string;
   name: string;
@@ -74,6 +70,7 @@ interface Task {
   readinessPhrase: string;
 }
 
+// Constants
 const taskSets: TaskSet[] = [
   {
     id: 'mid',
@@ -199,8 +196,8 @@ function AIIconWrapper() {
 }
 
 function Timer() {
-  const targetDate = new Date('2024-11-16T00:00:00').getTime()
   const [timeLeft, setTimeLeft] = useState(0)
+  const targetDate = new Date('2024-11-16T00:00:00').getTime()
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -210,7 +207,7 @@ function Timer() {
     }, 1000)
 
     return () => clearInterval(timer)
-  }, [])
+  }, [targetDate])
 
   const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24))
   const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
@@ -276,13 +273,9 @@ export default function PremiumTasksHub() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [hoveredAspect, setHoveredAspect] = useState<string | null>(null)
   const [selectedAspect, setSelectedAspect] = useState<string | null>(null)
-  const [selectedAspectColor, setSelectedAspectColor] = useState<string>('#4f46e5')
-  const [isClient, setIsClient] = useState(false)
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
   const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false)
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false)
-  const [score, setScore] = useState(0)
-  const [showScore, setShowScore] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -303,10 +296,6 @@ export default function PremiumTasksHub() {
     checkAuth()
   }, [router])
 
-  useEffect(() => {
-    setIsClient(true)
-  }, [])
-
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }
@@ -320,8 +309,6 @@ export default function PremiumTasksHub() {
     const aspect = memoryAspects.find(a => a.id === aspectId)
     if (aspect && !aspect.comingSoon) {
       setSelectedAspect(aspectId)
-      const selectedAspectColor = aspect.color.split(' ')[1] || '#4f46e5'
-      setSelectedAspectColor(selectedAspectColor)
     }
   }
 
@@ -331,8 +318,6 @@ export default function PremiumTasksHub() {
 
   const handleTaskCompletion = (success: boolean) => {
     if (success) {
-      setScore(prevScore => prevScore + 10)
-      setShowScore(true)
       setSelectedTask(null)
       setIsTaskModalOpen(false)
     }
@@ -490,8 +475,8 @@ export default function PremiumTasksHub() {
               <div className="flex items-center px-5">
                 <UserIcon className="h-8 w-8 text-[#4f46e5]" aria-hidden="true" />
                 <div className="ml-3">
-                  <div  className="text-base font-medium text-[#4f46e5]">{user.name}</div>
-                  <div className="text-sm font-medium  text-gray-500">{user.email}</div>
+                  <div className="text-base font-medium text-[#4f46e5]">{user.name}</div>
+                  <div className="text-sm font-medium text-gray-500">{user.email}</div>
                 </div>
                 <Button variant="ghost" onClick={handleSignOut} className="ml-auto p-1">
                   <LogOut className="h-6 w-6 text-[#4f46e5]" aria-hidden="true" />
