@@ -2,7 +2,22 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['nrglitch.com', 'js.stripe.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/photo-**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'nrglitch.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'js.stripe.com',
+      },
+    ],
   },
   async headers() {
     return [

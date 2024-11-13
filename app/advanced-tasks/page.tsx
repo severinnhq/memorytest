@@ -195,9 +195,10 @@ export default function AdvancedTasksPage() {
       <div className="container mx-auto px-4">
         <div className="mb-8">
           <Link href="/premium-tasks" passHref>
-            <Button variant="outline" className="flex items-center gap-2">
-              <ArrowLeft className="h-4 w-4" />
-              Back to Hub
+            <Button variant="outline" className="flex items-center gap-2 bg-white text-indigo-600 border-indigo-600 hover:bg-indigo-50 transition-all duration-300 shadow-md hover:shadow-lg px-6 py-3 rounded-full"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                  <span className="font-semibold">Back to Hub</span>
             </Button>
           </Link>
         </div>

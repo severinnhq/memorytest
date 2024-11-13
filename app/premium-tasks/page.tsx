@@ -6,29 +6,40 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import {
-  Brain,
-  HouseIcon,
-  Sparkles,
-  BookOpen,
-  Mail,
-  Grid,
-  ChevronRight,
-  Menu,
-  User as UserIcon,
-  LogOut,
-  Zap,
-  Target,
-  Lock,
-  Eye,
-  Clock,
-  Lightbulb,
-  Puzzle,
-  Compass,
-} from 'lucide-react'
+import { Brain, HomeIcon as HouseIcon, Sparkles, BookOpen, Mail, Grid, ChevronRight, Menu, UserIcon, LogOut, Zap, Target, Eye, Clock, Lightbulb, Puzzle, Compass, ArrowLeft, CheckCircle2, Lock, Palette, Headphones, Camera, Calendar, FileText, Briefcase, Calculator, Hand } from 'lucide-react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls } from "@react-three/drei"
 import * as THREE from "three"
+import TaskModal from '@/components/TaskModal'
+import TaskDescriptionModal from '@/components/TaskDescriptionModal'
+
+import ShortTermTask1 from '@/tasks/short-term-task1'
+import ShortTermTask2 from '@/tasks/short-term-task2'
+import ShortTermTask3 from '@/tasks/short-term-task3'
+
+import LongTermTask1 from '@/tasks/long-term-task1'
+import LongTermTask2 from '@/tasks/long-term-task2'
+import LongTermTask3 from '@/tasks/long-term-task3'
+
+import WorkingTask1 from '@/tasks/working-task1'
+import WorkingTask2 from '@/tasks/working-task2'
+import WorkingTask3 from '@/tasks/working-task3'
+
+import SemanticTask1 from '@/tasks/semantic-task1'
+import SemanticTask2 from '@/tasks/semantic-task2'
+import SemanticTask3 from '@/tasks/semantic-task3'
+
+import EpisodicTask1 from '@/tasks/episodic-task1'
+import EpisodicTask2 from '@/tasks/episodic-task2'
+import EpisodicTask3 from '@/tasks/episodic-task3'
+
+import ProceduralTask1 from '@/tasks/procedural-task1'
+import ProceduralTask2 from '@/tasks/procedural-task2'
+import ProceduralTask3 from '@/tasks/procedural-task3'
+
+import SensoryTask1 from '@/tasks/sensory-task1'
+import SensoryTask2 from '@/tasks/sensory-task2'
+import SensoryTask3 from '@/tasks/sensory-task3'
 
 interface User {
   _id: string;
@@ -52,6 +63,15 @@ interface MemoryAspect {
   name: string;
   icon: React.ElementType;
   color: string;
+  comingSoon?: boolean;
+}
+
+interface Task {
+  id: number;
+  name: string;
+  description: string;
+  icon: React.ElementType;
+  readinessPhrase: string;
 }
 
 const taskSets: TaskSet[] = [
@@ -81,8 +101,51 @@ const memoryAspects: MemoryAspect[] = [
   { id: 'episodic', name: 'Episodic', icon: Compass, color: 'from-blue-400 to-blue-600' },
   { id: 'procedural', name: 'Procedural', icon: Puzzle, color: 'from-pink-400 to-pink-600' },
   { id: 'sensory', name: 'Sensory', icon: Eye, color: 'from-indigo-400 to-indigo-600' },
-  { id: 'prospective', name: 'Prospective', icon: Target, color: 'from-teal-400 to-teal-600' },
+  { id: 'prospective', name: 'Prospective', icon: Target, color: 'from-teal-400 to-teal-600', comingSoon: true },
 ]
+
+const midLevelTasks: { [key: string]: Task[] } = {
+  'short-term': [
+    { id: 1, name: "Digit Span", description: "Memorize and recall a sequence of digits in the correct order.", icon: Grid, readinessPhrase: "Ready to test your short-term memory?" },
+    { id: 2, name: "Visual Pattern", description: "Remember and reproduce a visual pattern of colored squares.", icon: Palette, readinessPhrase: "Prepared to challenge your visual memory?" },
+    { id: 3, name: "Word List", description: "Recall a list of words in the correct order after a brief presentation.", icon: FileText, readinessPhrase: "Ready to exercise your verbal memory?" },
+  ],
+  'long-term': [
+    { id: 1, name: "Fact Recall", description: "Answer questions about previously learned facts after a delay.", icon: Lightbulb, readinessPhrase: "Ready to test your long-term memory retrieval?" },
+    { id: 2, name: "Picture Recognition", description: "Identify previously seen images among new ones after a delay.", icon: Camera, readinessPhrase: "Prepared to challenge your visual long-term memory?" },
+    { id: 3, name: "Story Recall", description: "Retell a story you heard earlier, including as many details as possible.", icon: BookOpen, readinessPhrase: "Ready to exercise your narrative memory?" },
+  ],
+  'working': [
+    { id: 1, name: "Operation Span Task", description: "Solve math problems while remembering letters, then recall the sequence of letters and math results.", icon: Brain, readinessPhrase: "Ready to challenge your working memory?" },
+    { id: 2, name: "Grid Pattern Recall", description: "Memorize and recreate patterns on a grid while ignoring visual distractions.", icon: Grid, readinessPhrase: "Prepared to test your mental juggling skills?" },
+    { id: 3, name: "Auditory Sequence Recall", description: "Listen to a sequence of musical notes and recreate it by tapping the correct keys in order.", icon: Headphones, readinessPhrase: "Ready to exercise your spatial working memory?" },
+  ],
+  'semantic': [
+    { id: 1, name: "Random Category Word Recall", description: "Memorize words from a random category and recall them to test your semantic memory.", icon: Lightbulb, readinessPhrase: "Ready to test your semantic memory retrieval?" },
+    { id: 2, name: "Semantic Chain Challenge", description: "Memorize and recall a sequence of semantically related words and emojis to test your cognitive abilities.", icon: FileText, readinessPhrase: "Prepared to challenge your vocabulary knowledge?" },
+    { id: 3, name: "Fact Verification", description: "Quickly determine if presented statements are true or false based on general knowledge.", icon: CheckCircle2, readinessPhrase: "Ready to exercise your semantic memory speed?" },
+  ],
+  'episodic': [
+    { id: 1, name: "Event Recall", description: "Recall specific details about a previously described event or personal experience.", icon: Calendar, readinessPhrase: "Ready to test your episodic memory?" },
+    { id: 2, name: "Source Memory", description: "Remember not just the information, but where or how you learned it.", icon: Compass, readinessPhrase: "Prepared to challenge your source memory?" },
+    { id: 3, name: "Virtual Tour", description: "Navigate a virtual environment and later recall specific details about the locations visited.", icon: Eye, readinessPhrase: "Ready to exercise your spatial episodic memory?" },
+  ],
+  'procedural': [
+    { id: 1, name: "Color Sequence Memory", description: "Memorize and reproduce progressively longer sequences of colored buttons to test your procedural memory skills.", icon: Puzzle, readinessPhrase: "Ready to test your procedural memory?" },
+    { id: 2, name: "Mirror Tracing", description: "Trace a shape while only being able to see your hand and the shape in a mirror.", icon: Palette, readinessPhrase: "Prepared to challenge your motor learning?" },
+    { id: 3, name: "Rhythm Reproduction", description: "Listen to and then reproduce a rhythmic pattern by tapping.", icon: Headphones, readinessPhrase: "Ready to exercise your auditory-motor memory?" },
+  ],
+  'sensory': [
+    { id: 1, name: "Visual Pattern Recall", description: "Test your visual memory by observing and recreating colorful grid patterns of increasing complexity.", icon: Headphones, readinessPhrase: "Ready to test your auditory sensory memory?" },
+    { id: 2, name: "Tactile Pattern Memory", description: "Memorize and reproduce patterns of touch points on a shape diagram to test your tactile memory and spatial awareness.", icon: Hand, readinessPhrase: "Prepared to challenge your tactile memory?" },
+    { id: 3, name: "Iconic Memory", description: "Report details from a briefly flashed visual array.", icon: Eye, readinessPhrase: "Ready to exercise your visual sensory memory?" },
+  ],
+  'prospective': [
+    { id: 1, name: "Time-Based Task", description: "Remember to perform an action after a specific amount of time has passed.", icon: Clock, readinessPhrase: "Ready to test your time-based prospective memory?" },
+    { id: 2, name: "Event-Based Task", description: "Remember to perform an action when a specific event occurs.", icon: Calendar, readinessPhrase: "Prepared to challenge your event-based prospective memory?" },
+    { id: 3, name: "Intention Retention", description: "Maintain and execute a series of intended actions over a period of time.", icon: Briefcase, readinessPhrase: "Ready to exercise your intention retention skills?" },
+  ],
+}
 
 function AIIcon() {
   const groupRef = useRef<THREE.Group>(null)
@@ -136,7 +199,7 @@ function AIIconWrapper() {
 }
 
 function Timer() {
-  const targetDate = new Date('2024-11-08T00:00:00').getTime()
+  const targetDate = new Date('2024-11-16T00:00:00').getTime()
   const [timeLeft, setTimeLeft] = useState(0)
 
   useEffect(() => {
@@ -173,11 +236,53 @@ function Timer() {
   )
 }
 
+const TaskCard: React.FC<{
+  task: Task;
+  onClick: () => void;
+  borderColor: string;
+}> = ({ task, onClick, borderColor }) => {
+  const Icon = task.icon
+  return (
+    <motion.div
+      className="bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 h-[280px] flex flex-col hover:shadow-xl hover:-translate-y-1 cursor-pointer"
+      style={{ borderLeft: `4px solid ${borderColor}` }}
+      whileHover={{ scale: 1.03 }}
+      onClick={onClick}
+    >
+      <div className="p-6 flex flex-col h-full">
+        <div className="flex items-center justify-between mb-4">
+          <div className="text-2xl font-bold text-indigo-600">{task.name}</div>
+          <CheckCircle2 className="w-6 h-6 text-green-500 flex-shrink-0" />
+        </div>
+        <div className="flex items-center justify-center mb-4">
+          <div className="p-3 bg-indigo-100 rounded-full">
+            <Icon className="w-8 h-8 text-indigo-600" />
+          </div>
+        </div>
+        <div className="text-gray-600 text-sm mb-4 flex-grow h-[72px] overflow-hidden">
+          {task.description}
+        </div>
+        <div className="text-indigo-500 text-sm font-semibold mt-auto">
+          Click to start
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
 export default function PremiumTasksHub() {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [hoveredAspect, setHoveredAspect] = useState<string | null>(null)
+  const [selectedAspect, setSelectedAspect] = useState<string | null>(null)
+  const [selectedAspectColor, setSelectedAspectColor] = useState<string>('#4f46e5')
+  const [isClient, setIsClient] = useState(false)
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null)
+  const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false)
+  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false)
+  const [score, setScore] = useState(0)
+  const [showScore, setShowScore] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -198,6 +303,10 @@ export default function PremiumTasksHub() {
     checkAuth()
   }, [router])
 
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }
@@ -208,7 +317,96 @@ export default function PremiumTasksHub() {
   }
 
   const handleAspectClick = (aspectId: string) => {
-    router.push(`/aspect-tasks/${aspectId}`)
+    const aspect = memoryAspects.find(a => a.id === aspectId)
+    if (aspect && !aspect.comingSoon) {
+      setSelectedAspect(aspectId)
+      const selectedAspectColor = aspect.color.split(' ')[1] || '#4f46e5'
+      setSelectedAspectColor(selectedAspectColor)
+    }
+  }
+
+  const handleBackToAspects = () => {
+    setSelectedAspect(null)
+  }
+
+  const handleTaskCompletion = (success: boolean) => {
+    if (success) {
+      setScore(prevScore => prevScore + 10)
+      setShowScore(true)
+      setSelectedTask(null)
+      setIsTaskModalOpen(false)
+    }
+  }
+
+  const handleTaskClick = (task: Task) => {
+    setSelectedTask(task)
+    setIsDescriptionModalOpen(true)
+  }
+
+  const handleTaskStart = () => {
+    setIsDescriptionModalOpen(false)
+    setIsTaskModalOpen(true)
+  }
+
+  const handleCloseTaskModal = () => {
+    setIsTaskModalOpen(false)
+    setSelectedTask(null)
+  }
+
+  const renderTaskComponent = (task: Task) => {
+    if (selectedAspect === 'short-term' && task.id === 1) {
+      return <ShortTermTask1 onComplete={handleTaskCompletion} />
+    } else if (selectedAspect === 'short-term' && task.id === 2) {
+      return <ShortTermTask2 onComplete={handleTaskCompletion} />
+    } else if (selectedAspect === 'short-term' && task.id === 3) {
+      return <ShortTermTask3 onComplete={handleTaskCompletion} />
+    } else if (selectedAspect === 'long-term' && task.id === 1) {
+      return <LongTermTask1 onComplete={handleTaskCompletion} />
+    } else if (selectedAspect === 'long-term' && task.id === 2) {
+      return <LongTermTask2 onComplete={handleTaskCompletion} />
+    } else if (selectedAspect === 'long-term' && task.id === 3) {
+      return <LongTermTask3 onComplete={handleTaskCompletion} />
+    } else if (selectedAspect === 'working' && task.id === 1) {
+      return <WorkingTask1 onComplete={handleTaskCompletion} />
+    } else if (selectedAspect === 'working' && task.id === 2) {
+      return <WorkingTask2 onComplete={handleTaskCompletion} />
+    } else if (selectedAspect === 'working' && task.id === 3) {
+      return <WorkingTask3 onComplete={handleTaskCompletion} />
+    } else if (selectedAspect === 'semantic' && task.id === 1) {
+      return <SemanticTask1 onComplete={handleTaskCompletion} />
+    } else if (selectedAspect === 'semantic' && task.id === 2) {
+      return <SemanticTask2 onComplete={handleTaskCompletion} />
+    } else if (selectedAspect === 'semantic' && task.id === 3) {
+      return <SemanticTask3 onComplete={handleTaskCompletion} />
+    } else if (selectedAspect === 'episodic' && task.id === 1) {
+      return <EpisodicTask1 onComplete={handleTaskCompletion} />
+    } else if (selectedAspect === 'episodic' && task.id === 2) {
+      return <EpisodicTask2 onComplete={handleTaskCompletion} />
+    } else if (selectedAspect === 'episodic' && task.id === 3) {
+      return <EpisodicTask3 onComplete={handleTaskCompletion} />
+    } else if (selectedAspect === 'procedural' && task.id === 1) {
+      return <ProceduralTask1 onComplete={handleTaskCompletion} />
+    } else if (selectedAspect === 'procedural' && task.id === 2) {
+      return <ProceduralTask2 onComplete={handleTaskCompletion} />
+    } else if (selectedAspect === 'procedural' && task.id === 3) {
+      return <ProceduralTask3 onComplete={handleTaskCompletion} />
+    } else if (selectedAspect === 'sensory' && task.id === 1) {
+      return <SensoryTask1 onComplete={handleTaskCompletion} />
+    } else if (selectedAspect === 'sensory' && task.id === 2) {
+      return <SensoryTask2 onComplete={handleTaskCompletion} />
+    } else if (selectedAspect === 'sensory' && task.id === 3) {
+      return <SensoryTask3 onComplete={handleTaskCompletion} />
+    }
+
+    // For all other tasks
+    return (
+      <div className="p-4">
+        <h2 className="text-2xl font-bold mb-4 text-indigo-800">{task.name}</h2>
+        <p className="mb-4 text-gray-700">{task.description}</p>
+        <p className="text-gray-600">This task is not yet implemented.</p>
+        <Button onClick={() => handleTaskCompletion(true)}>Complete Task (Demo)</Button>
+      </div>
+    )
   }
 
   if (isLoading) {
@@ -292,7 +490,7 @@ export default function PremiumTasksHub() {
               <div className="flex items-center px-5">
                 <UserIcon className="h-8 w-8 text-[#4f46e5]" aria-hidden="true" />
                 <div className="ml-3">
-                  <div className="text-base font-medium text-[#4f46e5]">{user.name}</div>
+                  <div  className="text-base font-medium text-[#4f46e5]">{user.name}</div>
                   <div className="text-sm font-medium  text-gray-500">{user.email}</div>
                 </div>
                 <Button variant="ghost" onClick={handleSignOut} className="ml-auto p-1">
@@ -315,8 +513,8 @@ export default function PremiumTasksHub() {
           >
             Premium Memory Tasks Hub
           </motion.h1>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-12">
-            
             {taskSets.map((set) => (
               <motion.div
                 key={set.id}
@@ -356,41 +554,87 @@ export default function PremiumTasksHub() {
             ))}
           </div>
 
-          <section className="mt-12 mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-center mt-32 sm:mt-48 mb-8 sm:mb-12 text-gray-800">Aspect-Based Memory Tasks</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
-              {memoryAspects.map((aspect) => (
-                <motion.div
-                  key={aspect.id}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onHoverStart={() => setHoveredAspect(aspect.id)}
-                  onHoverEnd={() => setHoveredAspect(null)}
-                  onClick={() => handleAspectClick(aspect.id)}
-                  className="relative cursor-pointer"
-                >
-                  <div className={`bg-gradient-to-br ${aspect.color} rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center h-32 sm:h-40 transition-all duration-300 shadow-lg`}>
-                    <aspect.icon className="w-8 h-8 sm:w-12 sm:h-12 text-white mb-2 sm:mb-4" aria-hidden="true" />
-                    <h3 className="text-sm sm:text-lg font-semibold text-white text-center">{aspect.name}</h3>
-                  </div>
-                  <AnimatePresence>
-                    {hoveredAspect === aspect.id && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 20 }}
-                        className="absolute inset-0 bg-black bg-opacity-70 rounded-lg flex items-center justify-center"
-                      >
-                        <p className="text-white text-center text-xs sm:text-sm px-2 sm:px-4">
-                          Click to start tasks focused on {aspect.name.toLowerCase()}
-                        </p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              ))}
-            </div>
-          </section>
+          {!selectedAspect ? (
+            <section className="mt-12 mb-12">
+              <h2 className="text-3xl sm:text-4xl font-bold text-center mt-32 sm:mt-48 mb-8 sm:mb-12 text-gray-800">Aspect-Based Memory Tasks</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
+                {memoryAspects.map((aspect) => (
+                  <motion.div
+                    key={aspect.id}
+                    whileHover={{ scale: aspect.comingSoon ? 1 : 1.05 }}
+                    whileTap={{ scale: aspect.comingSoon ? 1 : 0.95 }}
+                    onHoverStart={() => setHoveredAspect(aspect.id)}
+                    onHoverEnd={() => setHoveredAspect(null)}
+                    onClick={() => !aspect.comingSoon && handleAspectClick(aspect.id)}
+                    className={`relative ${aspect.comingSoon ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                  >
+                    <div className={`bg-gradient-to-br ${aspect.color} rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center h-32 sm:h-40 transition-all duration-300 shadow-lg ${aspect.comingSoon ? 'opacity-50' : ''}`}>
+                      <aspect.icon className="w-8 h-8 sm:w-12 sm:h-12 text-white mb-2 sm:mb-4" aria-hidden="true" />
+                      <h3 className="text-sm sm:text-lg font-semibold text-white text-center">{aspect.name}</h3>
+                      {aspect.comingSoon && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-lg">
+                          <Lock className="w-8 h-8 text-white" />
+                        </div>
+                      )}
+                    </div>
+                    <AnimatePresence>
+                      {hoveredAspect === aspect.id && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 20 }}
+                          className="absolute inset-0 bg-black bg-opacity-70 rounded-lg flex items-center justify-center"
+                        >
+                          <p className="text-white text-center text-xs sm:text-sm px-2 sm:px-4">
+                            {aspect.comingSoon
+                              ? `${aspect.name} tasks coming soon!`
+                              : `Click to start tasks focused on ${aspect.name.toLowerCase()}`}
+                          </p>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+                ))}
+              </div>
+            </section>
+          ) : (
+            <section className="mt-48 mb-12 container mx-auto px-4">
+              <div className="flex flex-col items-center mb-12">
+                <div className="w-full flex justify-between items-center mb-6">
+                  <Button
+                    variant="outline"
+                    onClick={handleBackToAspects}
+                    className="flex items-center gap-2 bg-white text-indigo-600 border-indigo-600 hover:bg-indigo-50 transition-all duration-300 shadow-md hover:shadow-lg px-6 py-3 rounded-full"
+                  >
+                    <ArrowLeft className="w-5 h-5" />
+                    <span className="font-semibold">Back to Memory Hub</span>
+                  </Button>
+                </div>
+                <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-800">
+                  {selectedAspect.charAt(0).toUpperCase() + selectedAspect.slice(1)} Memory Tasks
+                </h2>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <AnimatePresence>
+                  {midLevelTasks[selectedAspect].map((task) => (
+                    <motion.div
+                      key={task.id}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <TaskCard
+                        task={task}
+                        onClick={() => handleTaskClick(task)}
+                        borderColor={memoryAspects.find(a => a.id === selectedAspect)?.color.split(' ')[1] || '#4f46e5'}
+                      />
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
+            </section>
+          )}
 
           <section className="mt-32 sm:mt-48">
             <Card className="bg-white text-gray-800 p-6 sm:p-8 shadow-2xl max-w-5xl mx-auto rounded-2xl border border-indigo-200">
@@ -445,6 +689,23 @@ export default function PremiumTasksHub() {
           </div>
         </div>
       </footer>
+
+      {selectedTask && (
+        <TaskDescriptionModal
+          isOpen={isDescriptionModalOpen}
+          onClose={() => setIsDescriptionModalOpen(false)}
+          onSubmit={handleTaskStart}
+          task={selectedTask}
+        />
+      )}
+      {selectedTask && (
+        <TaskModal
+          isOpen={isTaskModalOpen}
+          onClose={handleCloseTaskModal}
+        >
+          {renderTaskComponent(selectedTask)}
+        </TaskModal>
+      )}
     </div>
   )
 }
