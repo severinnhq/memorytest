@@ -169,7 +169,7 @@ const WorkingTask1: React.FC<WorkingTask1Props> = ({ onComplete }) => {
                 <Button onClick={() => onComplete(true)} className="w-full mt-4">Finish</Button>
               </motion.div>
             )}
-          </motion.div>
+          </motion.div> 
         )}
       </AnimatePresence>
     </Card>
