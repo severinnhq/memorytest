@@ -3,7 +3,7 @@ import clientPromise from '@/lib/mongodb'
 import Stripe from 'stripe'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-09-30.acacia',
+  apiVersion: '2024-11-20.acacia', // Use the exact expected version string
 })
 
 export async function GET(req: NextRequest) {
